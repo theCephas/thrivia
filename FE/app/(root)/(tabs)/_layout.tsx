@@ -1,14 +1,19 @@
+import Finance from "@/assets/svg/Finance";
+import Home from "@/assets/svg/Home";
+import People from "@/assets/svg/People";
+import Profile from "@/assets/svg/Profile";
 import { Tabs } from "expo-router";
-import { Image, ImageSourcePropType, View } from "react-native";
-
-import { icons } from "@/constants";
+import { Text, View } from "react-native";
+import { SvgProps } from "react-native-svg";
 
 const TabIcon = ({
-  source,
+  Icon, // Expect a React component for the icon
   focused,
+  label,
 }: {
-  source: ImageSourcePropType;
+  Icon: React.ComponentType<SvgProps>;
   focused: boolean;
+  label: string;
 }) => (
   <View
     className={`flex flex-row justify-center items-center rounded-full ${
@@ -17,15 +22,17 @@ const TabIcon = ({
   >
     <View
       className={`w-12 h-12 items-center justify-center ${
-        focused ? "border-b-primary border-b-2 w-[20px] font-bold" : ""
+        focused ? "border-b-primary border-b-2 w-[45px] font-bold" : ""
       }`}
     >
-      <Image
-        source={source}
-        tintColor={focused ? "white" : ""}
-        resizeMode="contain"
-        className="w-7 h-7"
-      />
+      <Icon width={24} height={24} stroke={focused ? "white" : "#939090"} />
+      <Text
+        className={`text-xs mt-1 ${
+          focused ? "text-white font-bold" : "text-[#aaa]"
+        }`}
+      >
+        {label}
+      </Text>
     </View>
   </View>
 );
@@ -64,7 +71,7 @@ export default function Layout() {
           title: "Home",
           headerShown: false,
           tabBarIcon: ({ focused }) => (
-            <TabIcon source={icons.home} focused={focused} />
+            <TabIcon label="Home" Icon={Home} focused={focused} />
           ),
         }}
       />
@@ -74,7 +81,7 @@ export default function Layout() {
           title: "Finance",
           headerShown: false,
           tabBarIcon: ({ focused }) => (
-            <TabIcon source={icons.finance} focused={focused} />
+            <TabIcon label="Finance" Icon={Finance} focused={focused} />
           ),
         }}
       />
@@ -84,7 +91,7 @@ export default function Layout() {
           title: "Community",
           headerShown: false,
           tabBarIcon: ({ focused }) => (
-            <TabIcon source={icons.people} focused={focused} />
+            <TabIcon label="Community" Icon={People} focused={focused} />
           ),
         }}
       />
@@ -94,7 +101,7 @@ export default function Layout() {
           title: "Profile",
           headerShown: false,
           tabBarIcon: ({ focused }) => (
-            <TabIcon source={icons.profile} focused={focused} />
+            <TabIcon label="Profile" Icon={Profile} focused={focused} />
           ),
         }}
       />

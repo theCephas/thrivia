@@ -60,7 +60,7 @@ const Welcome = () => {
         className={"w-11/12 mt-16 m-auto mb-6"}
       />
       <View className="flex items-center justify-center mb-8">
-        <Link href={"/(auth)/(manager)/sign-in"} className="text-white">
+        <Link href={"/(auth)/(member)/sign-in"} className="text-white">
           Already have an account? <Text className="text-primary">Log in</Text>
         </Link>
       </View>

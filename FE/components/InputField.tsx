@@ -6,9 +6,9 @@ import {
   TextInput,
   TouchableWithoutFeedback,
   View,
-  Image,
   Animated,
   StyleSheet,
+  Text,
 } from "react-native";
 import { InputFieldProps } from "@/types/type";
 
@@ -19,7 +19,7 @@ const InputField = ({
   inputStyle,
   labelStyle,
   className,
-  icon,
+  icon: Icon, // Receive the icon as a React component
   iconStyle,
   value,
   ...props
@@ -45,7 +45,7 @@ const InputField = ({
 
   const animatedLabelStyle = {
     position: "absolute" as "absolute",
-    left: icon ? 50 : 16,
+    left: Icon ? 50 : 16,
     top: animatedIsFocused.interpolate({
       inputRange: [0, 1.5],
       outputRange: [30, 0],
@@ -72,10 +72,12 @@ const InputField = ({
             <Animated.Text style={[animatedLabelStyle, styles.placeholder]}>
               {placeholder}
             </Animated.Text>
-            {icon && (
-              <View className="border-r border-white mt-6 p-2">
-                <Image source={icon} className={`w-5 h-5 ml-2 ${iconStyle}`} />
-              </View>
+            {Icon && (
+              // <View">
+              <Text className="border-r border-white mt-6 p-2">
+                <Icon style={[{ width: 20, height: 20 }, iconStyle]} />
+              </Text>
+              // </View>
             )}
             <TextInput
               style={styles.input}
@@ -103,7 +105,6 @@ const styles = StyleSheet.create({
   },
   placeholder: {
     position: "absolute",
-
     left: 60,
   },
 });

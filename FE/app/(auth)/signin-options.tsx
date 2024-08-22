@@ -1,6 +1,8 @@
-import { icons } from "@/constants";
+// import { icons } from "@/constants";
+import Arrowright from "@/assets/svg/Arrowright";
 import { Link } from "expo-router";
 import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
+// import Arrowright from "@/assets/icons/arrow-right.svg";
 
 const SignInOptions = () => {
   return (
@@ -30,7 +32,7 @@ const SignInOptions = () => {
                 </Text>
               </View>
               <View>
-                <Image source={icons.arrowRight} />
+                <Arrowright />
               </View>
             </View>
           </Link>
@@ -48,7 +50,7 @@ const SignInOptions = () => {
                 </Text>
               </View>
               <View>
-                <Image source={icons.arrowRight} />
+                <Arrowright />
               </View>
             </View>
           </Link>

@@ -1,24 +1,97 @@
-import arrowRight from "@/assets/icons/arrow-right.png";
-import call from "@/assets/icons/call.png";
-import email from "@/assets/icons/email.png";
-import lock from "@/assets/icons/lock.png";
-import user from "@/assets/icons/user.png";
-import finance from "@/assets/icons/finance.png";
-import home from "@/assets/icons/homee.png";
-import people from "@/assets/icons/people.png";
-import profile from "@/assets/icons/profile.png";
+import ArrowLeftBottom from "@/assets/svg/ArrowLeftBottom";
+import Arrowright from "@/assets/svg/Arrowright";
+import ArrowRightTop from "@/assets/svg/ArrowRightTop";
+import Call from "@/assets/svg/Call";
+import Email from "@/assets/svg/Email";
+import Finance from "@/assets/svg/Finance";
+import Home from "@/assets/svg/Home";
+import Lock from "@/assets/svg/Lock";
+import Notification from "@/assets/svg/Notification";
+import People from "@/assets/svg/People";
+import Profile from "@/assets/svg/Profile";
+import user from "@/assets/svg/User";
 
-export const icons = {
-  arrowRight,
-  call,
-  email,
-  lock,
+export const Icons = {
+  Arrowright,
+  Call,
+  Email,
+  Lock,
   user,
-  finance,
-  home,
-  people,
-  profile,
+  Finance,
+  Home,
+  People,
+  Profile,
+  Notification,
 };
+
+export const publicBalance = [
+  {
+    id: 1,
+    title: "Your contributions balance",
+    balance: "₦0.00",
+    action: "+ Add money",
+  },
+  {
+    id: 2,
+    title: "Your savings balance",
+    balance: "₦0.00",
+    action: "+ Add money",
+  },
+];
+
+export const publicBlDeets = [
+  {
+    id: 1,
+    title: "Recent transactions",
+    data: [
+      {
+        id: 1,
+        type: "Sent to Freedom Cooper..",
+        time: "14:40 PM",
+        amount: "3, 000",
+        icon: ArrowRightTop,
+      },
+      {
+        id: 2,
+        type: "Received from Freedom Co..",
+        time: "12 - 05 - 2024",
+        amount: "3, 000",
+        icon: ArrowLeftBottom,
+      },
+      {
+        id: 3,
+        type: "Sent to Freedom Cooper...",
+        time: "14:40 PM",
+        amount: "3, 000",
+        icon: ArrowRightTop,
+      },
+    ],
+  },
+  {
+    id: 2,
+    title: "Loan history",
+    data: [
+      {
+        type: "Sent to Freedom Cooper..",
+        time: "14:40 PM",
+        amount: "3, 000",
+        icon: ArrowRightTop,
+      },
+      {
+        type: "Received from Freedom Co..",
+        time: "12 - 05 - 2024",
+        amount: "3, 000",
+        icon: ArrowLeftBottom,
+      },
+      {
+        type: "Sent to Freedom Cooper...",
+        time: "14:40 PM",
+        amount: "3, 000",
+        icon: ArrowRightTop,
+      },
+    ],
+  },
+];
 
 export const onboarding = [
   {

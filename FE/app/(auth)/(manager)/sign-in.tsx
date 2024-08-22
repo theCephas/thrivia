@@ -1,6 +1,9 @@
+import Call from "@/assets/svg/Call";
+import Lock from "@/assets/svg/Lock";
 import CustomButton from "@/components/CustomButton";
 import InputField from "@/components/InputField";
-import { icons } from "@/constants";
+import { Icons } from "@/constants";
+
 import { Link } from "expo-router";
 // import { Ionicons } from "@expo/vector-icons";
 import { useState } from "react";
@@ -14,7 +17,7 @@ const SignIn = () => {
 
   // const onSignUpPress = async () => {};
   return (
-    <ScrollView className="flex-1 bg-[#1d2128]">
+    <ScrollView className="relative h-full flex-1 bg-[#1d2128]">
       <View className="flex-1 items-center justify-center flex-col gap-8 bg-[#1d2128] mt-[60px]">
         <View>
           <Image source={require("@/assets/images/thrivia.png")} className="" />
@@ -28,10 +31,10 @@ const SignIn = () => {
           </Text>
         </View>
       </View>
-      <View className="p-5">
+      <View className="p-5 mt-8">
         <InputField
           placeholder={`Phone Number`}
-          icon={icons.call}
+          icon={Call}
           value={form.phoneNumber}
           onChangeText={(value) => setForm({ ...form, phoneNumber: value })}
         />
@@ -39,7 +42,7 @@ const SignIn = () => {
           placeholder={`Create Password`}
           secureTextEntry={true}
           value={form.password}
-          icon={icons.lock}
+          icon={Lock}
           onChangeText={(value) => setForm({ ...form, password: value })}
         />
 
@@ -51,7 +54,7 @@ const SignIn = () => {
           />
           <View className="flex items-center justify-center mb-8">
             <Link
-              href={"/(auth)/(manager)/sign-up"}
+              href={"/(auth)/(member)/sign-up"}
               className="text-white text-[16px] font-bold"
             >
               Don't have an account?{" "}

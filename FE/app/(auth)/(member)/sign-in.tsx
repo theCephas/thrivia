@@ -1,6 +1,8 @@
+import Call from "@/assets/svg/Call";
+import Lock from "@/assets/svg/Lock";
 import CustomButton from "@/components/CustomButton";
 import InputField from "@/components/InputField";
-import { icons } from "@/constants";
+
 import { Link } from "expo-router";
 // import { Ionicons } from "@expo/vector-icons";
 import { useState } from "react";
@@ -31,7 +33,7 @@ const SignIn = () => {
       <View className="p-5 mt-8">
         <InputField
           placeholder={`Phone Number`}
-          icon={icons.call}
+          icon={Call}
           value={form.phoneNumber}
           onChangeText={(value) => setForm({ ...form, phoneNumber: value })}
         />
@@ -39,7 +41,7 @@ const SignIn = () => {
           placeholder={`Create Password`}
           secureTextEntry={true}
           value={form.password}
-          icon={icons.lock}
+          icon={Lock}
           onChangeText={(value) => setForm({ ...form, password: value })}
         />
 

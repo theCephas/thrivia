@@ -1,6 +1,13 @@
+import Arrowright from "@/assets/svg/Arrowright";
+import Call from "@/assets/svg/Call";
+import Email from "@/assets/svg/Email";
+import Lock from "@/assets/svg/Lock";
+import User from "@/assets/svg/User";
+import user from "@/assets/svg/User";
 import CustomButton from "@/components/CustomButton";
 import InputField from "@/components/InputField";
-import { icons } from "@/constants";
+import { Icons } from "@/constants";
+
 import { Link, router } from "expo-router";
 // import { Ionicons } from "@expo/vector-icons";
 import { useState } from "react";
@@ -35,25 +42,25 @@ const SignUp = () => {
       <View className="p-5">
         <InputField
           placeholder={`First Name`}
-          icon={icons.user}
+          icon={User}
           value={form.firstName}
           onChangeText={(value) => setForm({ ...form, firstName: value })}
         />
         <InputField
           placeholder={`Last Name`}
-          icon={icons.user}
+          icon={User}
           value={form.lastName}
           onChangeText={(value) => setForm({ ...form, lastName: value })}
         />
         <InputField
           placeholder={`Email`}
-          icon={icons.email}
+          icon={Email}
           value={form.email}
           onChangeText={(value) => setForm({ ...form, email: value })}
         />
         <InputField
           placeholder={`Phone Number`}
-          icon={icons.call}
+          icon={Call}
           value={form.phoneNumber}
           onChangeText={(value) => setForm({ ...form, phoneNumber: value })}
         />
@@ -61,13 +68,13 @@ const SignUp = () => {
           placeholder={`Create Password`}
           secureTextEntry={true}
           value={form.createPassword}
-          icon={icons.lock}
+          icon={Lock}
           onChangeText={(value) => setForm({ ...form, createPassword: value })}
         />
         <InputField
           placeholder={`Confirm Password`}
           secureTextEntry={true}
-          icon={icons.lock}
+          icon={Lock}
           value={form.confirmPassword}
           onChangeText={(value) => setForm({ ...form, confirmPassword: value })}
         />
