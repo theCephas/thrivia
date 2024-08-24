@@ -2,6 +2,7 @@ import Arrowright from "@/assets/svg/Arrowright";
 import Call from "@/assets/svg/Call";
 import Email from "@/assets/svg/Email";
 import Lock from "@/assets/svg/Lock";
+import Thrivia from "@/assets/svg/Thrivia";
 import User from "@/assets/svg/User";
 import user from "@/assets/svg/User";
 import CustomButton from "@/components/CustomButton";
@@ -28,7 +29,7 @@ const SignUp = () => {
     <ScrollView className="flex-1 bg-[#1d2128]">
       <View className="flex-1 items-center justify-center flex-col gap-8 bg-[#1d2128] mt-[60px]">
         <View>
-          <Image source={require("@/assets/images/thrivia.png")} className="" />
+          <Thrivia />
         </View>
         <View>
           <Text className="text-3xl font-bold text-center text-white">

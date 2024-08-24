@@ -1,15 +1,14 @@
-import Arrowright from "@/assets/svg/Arrowright";
 import Call from "@/assets/svg/Call";
 import Email from "@/assets/svg/Email";
 import Lock from "@/assets/svg/Lock";
+import Thrivia from "@/assets/svg/Thrivia";
 import User from "@/assets/svg/User";
-import user from "@/assets/svg/User";
+
 import CustomButton from "@/components/CustomButton";
 import InputField from "@/components/InputField";
-import { Icons } from "@/constants";
 
 import { Link, router } from "expo-router";
-// import { Ionicons } from "@expo/vector-icons";
+
 import { useState } from "react";
 import { Image, ScrollView, Text, View } from "react-native";
 
@@ -28,7 +27,7 @@ const SignUp = () => {
     <ScrollView className="flex-1 bg-[#1d2128]">
       <View className="flex-1 items-center justify-center flex-col gap-8 bg-[#1d2128] mt-[60px]">
         <View>
-          <Image source={require("@/assets/images/thrivia.png")} className="" />
+          <Thrivia />
         </View>
         <View>
           <Text className="text-3xl font-bold text-center text-white">
@@ -81,7 +80,9 @@ const SignUp = () => {
 
         <CustomButton
           title="Create account"
-          onPress={() => router.push("/(root)/(tabs)/home")}
+          onPress={() =>
+            router.push("/(auth)/(manager)/(registerstages)/registerstages")
+          }
           className="mt-6"
         />
 
