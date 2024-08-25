@@ -43,24 +43,28 @@ const SignUp = () => {
           placeholder={`First Name`}
           icon={User}
           value={form.firstName}
+          keyboardType="default"
           onChangeText={(value) => setForm({ ...form, firstName: value })}
         />
         <InputField
           placeholder={`Last Name`}
           icon={User}
           value={form.lastName}
+          keyboardType="default"
           onChangeText={(value) => setForm({ ...form, lastName: value })}
         />
         <InputField
           placeholder={`Email`}
           icon={Email}
           value={form.email}
+          keyboardType="email-address"
           onChangeText={(value) => setForm({ ...form, email: value })}
         />
         <InputField
           placeholder={`Phone Number`}
           icon={Call}
           value={form.phoneNumber}
+          keyboardType="phone-pad"
           onChangeText={(value) => setForm({ ...form, phoneNumber: value })}
         />
         <InputField
@@ -88,7 +92,7 @@ const SignUp = () => {
 
         <View className="flex items-center justify-center mb-8">
           <Link
-            href={"/(auth)/(member)/sign-in"}
+            href={"/(auth)/(manager)/sign-in"}
             className="text-white text-[16px] font-bold"
           >
             Already have an account?{" "}

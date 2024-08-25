@@ -7,13 +7,25 @@ import { Image, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRef, useState } from "react";
-import { publicBalance, publicBlDeets } from "@/constants";
+import { managerBlDeets, publicBalance, publicBlDeets } from "@/constants";
 import BgStyling from "@/assets/svg/BgStyling";
+import CustomButton from "@/components/CustomButton";
+import InviteModal from "@/components/InviteModal";
 
 const Home = () => {
   const swiperRef = useRef<Swiper>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const isLastSlide = activeIndex === publicBalance.length - 1;
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const onSubmit = () => {
+    setIsModalVisible(true);
+  };
+
+  // const handleFileSelected = (file: any) => {
+  //   console.log("Selected file:", file);
+  //   // Handle file processing here
+  // };
 
   return (
     <SafeAreaView className="flex-1 bg-[#1d2128]">
@@ -24,7 +36,7 @@ const Home = () => {
             <View>
               <Text className="text-white/80 text-xl">Welcome,</Text>
               <Text className="text-white text-2xl font-semibold">
-                Hi, Chinonye
+                Freedom Cooperative
               </Text>
             </View>
           </View>
@@ -82,50 +94,67 @@ const Home = () => {
             ))}
           </Swiper>
         </View>
-        <View className="absolute top-[320px] w-full pl-4">
-          <View className="flex-1 flex-row items-center justify-between border-b border-[#939090] pb-1 ">
-            <Text className="text-white text-3xl font-semibold ">
-              {publicBlDeets[activeIndex].title}
-            </Text>
-            <Text className="text-primary font-bold text-xl pl-12">
-              View all
-            </Text>
-          </View>
 
-          <View className="flex flex-col gap-y-6 mt-1">
-            {publicBlDeets[activeIndex].data.map((item, index) => (
-              <LinearGradient
-                key={index}
-                colors={["#F4F4F433", "#FFFFFF0B"]}
-                start={{ x: 0, y: 1.5 }}
-                end={{ x: 1, y: 0 }}
-                className="h-[70px] w-full p-[16px] border-[#E8E7E780] border rounded-[8px] flex justify-between"
-              >
-                <View
-                  className={`absolute top-[20px] left-3 ${
-                    index % 2 === 0 ? "bg-red-500" : "bg-green-500"
-                  }  rounded-full`}
-                >
-                  <item.icon />
-                </View>
-                <View className="ml-7">
-                  <Text className="text-white text-[20px] font-semibold ">
-                    {item.type}
-                  </Text>
-                  <Text className="text-white pt-2 text-[16px]">
-                    {item.time}
-                  </Text>
-                </View>
-                <View className="">
-                  <Text className="text-white text-right font-bold mt-[-30px] text-[18px]">
-                    ₦{item.amount}
-                  </Text>
-                </View>
-              </LinearGradient>
-            ))}
+        {managerBlDeets[activeIndex].data.length < 1 ? (
+          <View className="absolute top-[400px] flex items-center w-full pl-4">
+            <Text className="text-white text-[16px] w-[200px] leading-[21px] text-center">
+              You don&apos;t have any member in your cooperative society yet.{" "}
+            </Text>
+            <Text className="text-white text-[16px] w-[200px] leading-[21px] text-center pt-4 pb-6">
+              Click the button below to get started
+            </Text>
+            <CustomButton title="Add members" onPress={onSubmit} />
           </View>
-        </View>
+        ) : (
+          <View className="absolute top-[320px] w-full pl-4">
+            <View className="flex-1 flex-row items-center justify-between border-b border-[#939090] pb-1 ">
+              <Text className="text-white text-3xl font-semibold ">
+                {managerBlDeets[activeIndex].title}
+              </Text>
+              <Text className="text-primary font-bold text-xl pl-12">
+                View all
+              </Text>
+            </View>
+
+            <View className="flex flex-col gap-y-6 mt-1">
+              {managerBlDeets[activeIndex].data.map((item, index) => (
+                <LinearGradient
+                  key={index}
+                  colors={["#F4F4F433", "#FFFFFF0B"]}
+                  start={{ x: 0, y: 1.5 }}
+                  end={{ x: 1, y: 0 }}
+                  className="h-[70px] w-full p-[16px] border-[#E8E7E780] border rounded-[8px] flex justify-between"
+                >
+                  <View
+                    className={`absolute top-[20px] left-3 ${
+                      index % 2 === 0 ? "bg-red-500" : "bg-green-500"
+                    }  rounded-full`}
+                  >
+                    <item.icon />
+                  </View>
+                  <View className="ml-7">
+                    <Text className="text-white text-[20px] font-semibold ">
+                      {item.type}
+                    </Text>
+                    <Text className="text-white pt-2 text-[16px]">
+                      {item.time}
+                    </Text>
+                  </View>
+                  <View className="">
+                    <Text className="text-white text-right font-bold mt-[-30px] text-[18px]">
+                      ₦{item.amount}
+                    </Text>
+                  </View>
+                </LinearGradient>
+              ))}
+            </View>
+          </View>
+        )}
       </View>
+      <InviteModal
+        isVisible={isModalVisible}
+        onClose={() => setIsModalVisible(false)}
+      />
     </SafeAreaView>
   );
 };

@@ -105,6 +105,38 @@ export const publicBlDeets: publicBlDeet[] = [
   // },
 ];
 
+export const managerBlDeets = [
+  {
+    id: 1,
+    title: "Recent transactions",
+    data: [],
+  },
+  {
+    id: 2,
+    title: "Loan history",
+    data: [
+      {
+        type: "Sent to Freedom Cooper..",
+        time: "14:40 PM",
+        amount: "3, 000",
+        icon: ArrowRightTop,
+      },
+      {
+        type: "Received from Freedom Co..",
+        time: "12 - 05 - 2024",
+        amount: "3, 000",
+        icon: ArrowLeftBottom,
+      },
+      {
+        type: "Sent to Freedom Cooper...",
+        time: "14:40 PM",
+        amount: "3, 000",
+        icon: ArrowRightTop,
+      },
+    ],
+  },
+];
+
 export const onboarding = [
   {
     id: 1,

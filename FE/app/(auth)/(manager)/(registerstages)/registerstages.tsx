@@ -82,7 +82,7 @@ const RegisterStages = () => {
         title="Registration Successful"
         message="You have successfully registered your cooperative. Kindly proceed to add  members to your cooperative by giving them the ID below to register with"
         id="COOP-789098"
-        buttonText="Share Invite"
+        buttonText="Copy ID"
         buttonTextCancel="Cancel"
         onButtonPress={closeModal}
       />
