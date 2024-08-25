@@ -6,17 +6,19 @@ import CustomButton from "./CustomButton";
 interface CustomModalProps {
   isVisible: boolean;
   onClose: () => void;
+  OnNext?: () => void;
   title: string;
   message: string;
-  id: string;
+  id?: string;
   buttonText: string;
-  buttonTextCancel: string;
+  buttonTextCancel?: string;
   onButtonPress: () => void;
 }
 
 const CustomModal: React.FC<CustomModalProps> = ({
   isVisible,
   onClose,
+  OnNext,
   title,
   message,
   id,
@@ -33,25 +35,29 @@ const CustomModal: React.FC<CustomModalProps> = ({
       animationOut="slideOutDown"
       className="relative"
     >
-      <View className="bg-white h-[332px] p-5 rounded-t-[30px] w-full absolute bottom-[-20px]">
+      <View className="bg-white p-5 rounded-t-[30px] w-full absolute bottom-[-20px]">
         <Text className="text-primary font-bold text-[20px] text-center mb-[20px]">
           {title}
         </Text>
         <Text className="leading-[17.85px] text-center w-[300px] text-[#656565] ">
           {message}
         </Text>
-        <Text className="text-center font-bold text-[25px] mt-10 text-[#656565] ">
-          {id}
-        </Text>
+        {id && (
+          <Text className="text-center font-bold text-[25px] mt-10 text-[#656565] ">
+            {id}
+          </Text>
+        )}
         <View className="mt-8">
-          <CustomButton title={buttonText} />
+          <CustomButton title={buttonText} onPress={OnNext && OnNext} />
         </View>
-        <TouchableOpacity
-          onPress={onButtonPress}
-          className={`w-full p-3 rounded-full flex flex-row justify-center items-center h-[44px] border border-primary`}
-        >
-          <Text className="text-[#0D1015]">{buttonTextCancel}</Text>
-        </TouchableOpacity>
+        {buttonTextCancel && (
+          <TouchableOpacity
+            onPress={onButtonPress}
+            className={`w-full p-3 rounded-full flex flex-row justify-center items-center h-[44px] border border-primary`}
+          >
+            <Text className="text-[#0D1015]">{buttonTextCancel}</Text>
+          </TouchableOpacity>
+        )}
       </View>
     </Modal>
   );

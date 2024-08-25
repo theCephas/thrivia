@@ -11,13 +11,14 @@ import { publicBalance, publicBlDeets } from "@/constants";
 import BgStyling from "@/assets/svg/BgStyling";
 import CustomSideModal from "@/components/CustomSideModal";
 import CustomButton from "@/components/CustomButton";
-import { Link } from "expo-router";
+import { Link, useRouter } from "expo-router";
 
 const Home = () => {
   const swiperRef = useRef<Swiper>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const isLastSlide = activeIndex === publicBalance.length - 1;
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const router = useRouter();
 
   const closeModal = () => {
     setIsModalVisible(false);
@@ -153,7 +154,11 @@ const Home = () => {
                   ? "Join a cooperative society"
                   : "Apply for a loan"
               }
-              // onPress={() => {}}
+              onPress={() =>
+                activeIndex === 0
+                  ? router.replace("/(auth)/(member)/(join)/become-memeber")
+                  : ""
+              }
               className="mt-6"
             />
           </View>
