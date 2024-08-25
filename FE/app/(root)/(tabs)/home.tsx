@@ -11,6 +11,7 @@ import { publicBalance, publicBlDeets } from "@/constants";
 import BgStyling from "@/assets/svg/BgStyling";
 import CustomSideModal from "@/components/CustomSideModal";
 import CustomButton from "@/components/CustomButton";
+import { Link } from "expo-router";
 
 const Home = () => {
   const swiperRef = useRef<Swiper>(null);
@@ -81,12 +82,16 @@ const Home = () => {
                   </Text>
                   <Unsee />
                 </View>
-                <LinearGradient
-                  colors={["#F4F4F433", "#FFFFFF0B"]}
-                  className="flex items-center justify-center border-[#E8E7E780] border rounded-full w-[148px] h-[44px]"
-                >
-                  <Text className="text-white text-[18px]">{item.action}</Text>
-                </LinearGradient>
+                <Link href={"/(root)/(others)/add-money"}>
+                  <LinearGradient
+                    colors={["#F4F4F433", "#FFFFFF0B"]}
+                    className="flex items-center justify-center border-[#E8E7E780] border rounded-full w-[148px] h-[44px]"
+                  >
+                    <Text className="text-white text-[18px]">
+                      {item.action}
+                    </Text>
+                  </LinearGradient>
+                </Link>
               </LinearGradient>
             ))}
           </Swiper>
