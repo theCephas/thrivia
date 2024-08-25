@@ -3,24 +3,32 @@ import Notification from "@/assets/svg/Notification";
 import Settings from "@/assets/svg/Settings";
 import Unsee from "@/assets/svg/Unsee";
 import Swiper from "react-native-swiper";
-import { Image, Text, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRef, useState } from "react";
 import { publicBalance, publicBlDeets } from "@/constants";
 import BgStyling from "@/assets/svg/BgStyling";
+import CustomSideModal from "@/components/CustomSideModal";
 
 const Home = () => {
   const swiperRef = useRef<Swiper>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const isLastSlide = activeIndex === publicBalance.length - 1;
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const closeModal = () => {
+    setIsModalVisible(false);
+  };
 
   return (
     <SafeAreaView className="flex-1 bg-[#1d2128]">
       <View className="p-4 pt-5 pb-12 flex-1">
         <View className="flex flex-row justify-between items-center">
           <View className="flex flex-row items-center gap-3">
-            <Homeprofile />
+            <TouchableOpacity onPress={() => setIsModalVisible(true)}>
+              <Homeprofile />
+            </TouchableOpacity>
             <View>
               <Text className="text-white/80 text-xl">Welcome,</Text>
               <Text className="text-white text-2xl font-semibold">
@@ -126,6 +134,11 @@ const Home = () => {
           </View>
         </View>
       </View>
+      <CustomSideModal
+        isVisible={isModalVisible}
+        onClose={closeModal}
+        title="Cooperative Societies"
+      />
     </SafeAreaView>
   );
 };
