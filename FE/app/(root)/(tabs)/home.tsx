@@ -10,6 +10,7 @@ import { useRef, useState } from "react";
 import { publicBalance, publicBlDeets } from "@/constants";
 import BgStyling from "@/assets/svg/BgStyling";
 import CustomSideModal from "@/components/CustomSideModal";
+import CustomButton from "@/components/CustomButton";
 
 const Home = () => {
   const swiperRef = useRef<Swiper>(null);
@@ -90,49 +91,68 @@ const Home = () => {
             ))}
           </Swiper>
         </View>
-        <View className="absolute top-[320px] w-full pl-4">
-          <View className="flex-1 flex-row items-center justify-between border-b border-[#939090] pb-1 ">
-            <Text className="text-white text-3xl font-semibold ">
-              {publicBlDeets[activeIndex].title}
-            </Text>
-            <Text className="text-primary font-bold text-xl pl-12">
-              View all
-            </Text>
-          </View>
+        {publicBlDeets.length > 0 ? (
+          <View className="absolute top-[320px] w-full pl-4">
+            <View className="flex-1 flex-row items-center justify-between border-b border-[#939090] pb-1 ">
+              <Text className="text-white text-3xl font-semibold ">
+                {publicBlDeets[activeIndex].title}
+              </Text>
+              <Text className="text-primary font-bold text-xl pl-12">
+                View all
+              </Text>
+            </View>
 
-          <View className="flex flex-col gap-y-6 mt-1">
-            {publicBlDeets[activeIndex].data.map((item, index) => (
-              <LinearGradient
-                key={index}
-                colors={["#F4F4F433", "#FFFFFF0B"]}
-                start={{ x: 0, y: 1.5 }}
-                end={{ x: 1, y: 0 }}
-                className="h-[70px] w-full p-[16px] border-[#E8E7E780] border rounded-[8px] flex justify-between"
-              >
-                <View
-                  className={`absolute top-[20px] left-3 ${
-                    index % 2 === 0 ? "bg-red-500" : "bg-green-500"
-                  }  rounded-full`}
+            <View className="flex flex-col gap-y-6 mt-1">
+              {publicBlDeets[activeIndex].data.map((item, index) => (
+                <LinearGradient
+                  key={index}
+                  colors={["#F4F4F433", "#FFFFFF0B"]}
+                  start={{ x: 0, y: 1.5 }}
+                  end={{ x: 1, y: 0 }}
+                  className="h-[70px] w-full p-[16px] border-[#E8E7E780] border rounded-[8px] flex justify-between"
                 >
-                  <item.icon />
-                </View>
-                <View className="ml-7">
-                  <Text className="text-white text-[20px] font-semibold ">
-                    {item.type}
-                  </Text>
-                  <Text className="text-white pt-2 text-[16px]">
-                    {item.time}
-                  </Text>
-                </View>
-                <View className="">
-                  <Text className="text-white text-right font-bold mt-[-30px] text-[18px]">
-                    ₦{item.amount}
-                  </Text>
-                </View>
-              </LinearGradient>
-            ))}
+                  <View
+                    className={`absolute top-[20px] left-3 ${
+                      index % 2 === 0 ? "bg-red-500" : "bg-green-500"
+                    }  rounded-full`}
+                  >
+                    <item.icon />
+                  </View>
+                  <View className="ml-7">
+                    <Text className="text-white text-[20px] font-semibold ">
+                      {item.type}
+                    </Text>
+                    <Text className="text-white pt-2 text-[16px]">
+                      {item.time}
+                    </Text>
+                  </View>
+                  <View className="">
+                    <Text className="text-white text-right font-bold mt-[-30px] text-[18px]">
+                      ₦{item.amount}
+                    </Text>
+                  </View>
+                </LinearGradient>
+              ))}
+            </View>
           </View>
-        </View>
+        ) : (
+          <View className="absolute top-[470px] w-full pr-4 pl-10">
+            <Text className="text-white text-xl text-center">
+              {activeIndex === 0
+                ? " You are yet to join a cooperative society. Click the button below to get started"
+                : "Recent transitions on loan history will appear here"}
+            </Text>
+            <CustomButton
+              title={
+                activeIndex === 0
+                  ? "Join a cooperative society"
+                  : "Apply for a loan"
+              }
+              // onPress={() => {}}
+              className="mt-6"
+            />
+          </View>
+        )}
       </View>
       <CustomSideModal
         isVisible={isModalVisible}

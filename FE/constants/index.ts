@@ -10,6 +10,7 @@ import Notification from "@/assets/svg/Notification";
 import People from "@/assets/svg/People";
 import Profile from "@/assets/svg/Profile";
 import user from "@/assets/svg/User";
+import { SvgProps } from "react-native-svg";
 
 export const Icons = {
   Arrowright,
@@ -39,58 +40,69 @@ export const publicBalance = [
   },
 ];
 
-export const publicBlDeets = [
-  {
-    id: 1,
-    title: "Recent transactions",
-    data: [
-      {
-        id: 1,
-        type: "Sent to Freedom Cooper..",
-        time: "14:40 PM",
-        amount: "3, 000",
-        icon: ArrowRightTop,
-      },
-      {
-        id: 2,
-        type: "Received from Freedom Co..",
-        time: "12 - 05 - 2024",
-        amount: "3, 000",
-        icon: ArrowLeftBottom,
-      },
-      {
-        id: 3,
-        type: "Sent to Freedom Cooper...",
-        time: "14:40 PM",
-        amount: "3, 000",
-        icon: ArrowRightTop,
-      },
-    ],
-  },
-  {
-    id: 2,
-    title: "Loan history",
-    data: [
-      {
-        type: "Sent to Freedom Cooper..",
-        time: "14:40 PM",
-        amount: "3, 000",
-        icon: ArrowRightTop,
-      },
-      {
-        type: "Received from Freedom Co..",
-        time: "12 - 05 - 2024",
-        amount: "3, 000",
-        icon: ArrowLeftBottom,
-      },
-      {
-        type: "Sent to Freedom Cooper...",
-        time: "14:40 PM",
-        amount: "3, 000",
-        icon: ArrowRightTop,
-      },
-    ],
-  },
+type basic = { id: number; title: string };
+type publicBlData = basic & {
+  type: string;
+  time: string;
+  amount: string;
+  icon: React.FC<SvgProps>;
+};
+type publicBlDeet = basic & {
+  data: publicBlData[];
+};
+
+export const publicBlDeets: publicBlDeet[] = [
+  // {
+  //   id: 1,
+  //   title: "Recent transactions",
+  //   data: [
+  //     {
+  //       id: 1,
+  //       type: "Sent to Freedom Cooper..",
+  //       time: "14:40 PM",
+  //       amount: "3, 000",
+  //       icon: ArrowRightTop,
+  //     },
+  //     {
+  //       id: 2,
+  //       type: "Received from Freedom Co..",
+  //       time: "12 - 05 - 2024",
+  //       amount: "3, 000",
+  //       icon: ArrowLeftBottom,
+  //     },
+  //     {
+  //       id: 3,
+  //       type: "Sent to Freedom Cooper...",
+  //       time: "14:40 PM",
+  //       amount: "3, 000",
+  //       icon: ArrowRightTop,
+  //     },
+  //   ],
+  // },
+  // {
+  //   id: 2,
+  //   title: "Loan history",
+  //   data: [
+  //     {
+  //       type: "Sent to Freedom Cooper..",
+  //       time: "14:40 PM",
+  //       amount: "3, 000",
+  //       icon: ArrowRightTop,
+  //     },
+  //     {
+  //       type: "Received from Freedom Co..",
+  //       time: "12 - 05 - 2024",
+  //       amount: "3, 000",
+  //       icon: ArrowLeftBottom,
+  //     },
+  //     {
+  //       type: "Sent to Freedom Cooper...",
+  //       time: "14:40 PM",
+  //       amount: "3, 000",
+  //       icon: ArrowRightTop,
+  //     },
+  //   ],
+  // },
 ];
 
 export const onboarding = [
