@@ -112,6 +112,11 @@ export class UsersService {
       throw new NotFoundException(
         `Cooperative with unique id: ${application.uniqueId} does not exist`,
       );
+    const userExistsInCooperative = await this.cooperativeUsersRepository.findOne({
+      user: { uuid },
+      cooperative: { uuid: cooperativeExists.uuid }
+    });
+    if (userExistsInCooperative) throw new ConflictException(`User already exists in cooperative`);
     const phoneNumber = this.sharedService.validatePhoneNumber(
       application.phoneNumber,
     );

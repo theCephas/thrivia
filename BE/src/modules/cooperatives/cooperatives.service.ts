@@ -118,6 +118,21 @@ export class CooperativesService {
         status: ApplicationStatus.APPROVED,
       });
     await this.em.persistAndFlush(cooperativeApplicationModel);
+    const cooperativeUserModel = this.cooperativeUsersRepository.create({
+      user: applicationExists.user,
+      cooperative: applicationExists.cooperative,
+      uuid: v4(),
+      role: Role.MEMBER
+    });
+    await this.em.persistAndFlush(cooperativeUserModel);
+    const walletModel = this.walletsRepository.create({
+      uuid: v4(),
+      title: 'Savings',
+      cooperative: applicationExists.cooperative,
+      user: applicationExists.user,
+      createdBy: { uuid }
+    });
+    await this.em.persistAndFlush(walletModel);
   }
 
   async rejectApplication(
