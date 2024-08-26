@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { UsersModule } from '../users/users.module';
 import { PassportModule } from '@nestjs/passport';
 import { ConfigModule, ConfigService, ConfigType } from '@nestjs/config';
@@ -13,10 +13,11 @@ import { AuthController } from './auth.controller';
 import { LocalStrategy } from 'src/strategies/local.strategy';
 import { JwtStrategy } from 'src/strategies/jwt.strategy';
 import { ExpiredJwtStrategy } from 'src/strategies/expired-jwt.strategy';
+import { CooperativeUsers } from '../cooperatives/cooperatives.entity';
 
 @Module({
   imports: [
-    UsersModule,
+    forwardRef(() => UsersModule),
     PassportModule,
     ConfigModule.forFeature(JwtAuthConfiguration),
     JwtModule.registerAsync({
@@ -27,10 +28,11 @@ import { ExpiredJwtStrategy } from 'src/strategies/expired-jwt.strategy';
       }),
       inject: [JwtAuthConfiguration.KEY],
     }),
-    MikroOrmModule.forFeature({ entities: [Users, OTP] }),
+    MikroOrmModule.forFeature({ entities: [Users, OTP, CooperativeUsers] }),
     SharedModule,
   ],
   providers: [AuthService, LocalStrategy, JwtStrategy, ExpiredJwtStrategy],
   controllers: [AuthController],
+  exports: [AuthService],
 })
 export class AuthModule {}

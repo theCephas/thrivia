@@ -1,4 +1,6 @@
-import { IsEmail, IsOptional, IsString, Length } from 'class-validator';
+import { IsEmail, IsEnum, IsOptional, IsString, Length } from 'class-validator';
+import { IsValidDate } from 'src/tools/date-validator';
+import { Role } from 'src/types';
 
 export class CreateUserDto {
   @IsString()
@@ -21,4 +23,32 @@ export class CreateUserDto {
   @IsString()
   @Length(1, 50)
   password: string;
+
+  @IsEnum(Role)
+  role: Role;
+}
+
+export class CreateCooperativeApplicationDto {
+  @IsString()
+  uniqueId: string;
+
+  @IsString()
+  @IsOptional()
+  membershipNo: string;
+
+  @IsString()
+  fullName: string;
+
+  @IsValidDate()
+  dateOfBirth: string;
+
+  @IsString()
+  phoneNumber: string;
+
+  @IsString()
+  @IsOptional()
+  email: string;
+
+  @IsString()
+  address: string;
 }

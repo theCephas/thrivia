@@ -30,3 +30,23 @@ export enum OTPActionType {
   VERIFY_ACCOUNT = 'VERIFY_ACCOUNT',
   RESET_PASSWORD = 'RESET_PASSWORD',
 }
+
+export enum Role {
+  MANAGER = 'MANAGER',
+  MEMBER = 'MEMBER',
+}
+
+export enum TransactionType {
+  CREDIT = 'credit',
+  DEBIT = 'debit',
+}
+
+export enum CacheKeys {
+  BANKS_DATA = 'banksData',
+}
+
+export enum ApplicationStatus {
+  PENDING = 'PENDING',
+  APPROVED = 'APPROVED',
+  REJECTED = 'REJECTED',
+}

@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEnum, IsString, Length } from 'class-validator';
-import { OTPActionType } from 'src/types';
+import { OTPActionType, Role } from 'src/types';
 
 export class LoginDTO {
   @IsString()
@@ -8,6 +8,9 @@ export class LoginDTO {
 
   @IsString()
   password: string;
+
+  @IsEnum(Role)
+  role: Role;
 }
 
 export class RefreshTokenDto {
