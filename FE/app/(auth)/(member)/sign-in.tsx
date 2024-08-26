@@ -1,9 +1,10 @@
 import Call from "@/assets/svg/Call";
 import Lock from "@/assets/svg/Lock";
+import Thrivia from "@/assets/svg/Thrivia";
 import CustomButton from "@/components/CustomButton";
 import InputField from "@/components/InputField";
 
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
 // import { Ionicons } from "@expo/vector-icons";
 import { useState } from "react";
 import { Image, ScrollView, Text, View } from "react-native";
@@ -19,7 +20,7 @@ const SignIn = () => {
     <ScrollView className="relative h-full flex-1 bg-[#1d2128]">
       <View className="flex-1 items-center justify-center flex-col gap-8 bg-[#1d2128] mt-[60px]">
         <View>
-          <Image source={require("@/assets/images/thrivia.png")} className="" />
+          <Thrivia />
         </View>
         <View>
           <Text className="text-3xl font-bold text-center text-white">
@@ -48,7 +49,7 @@ const SignIn = () => {
         <View className="mt-[270px]">
           <CustomButton
             title="Log In"
-            // onPress={onSignUpPress}
+            onPress={() => router.push("/(root)/(tabs)/home")}
             className="mt-6"
           />
           <View className="flex items-center justify-center mb-8">

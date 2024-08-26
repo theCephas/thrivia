@@ -4,7 +4,7 @@ import CustomButton from "@/components/CustomButton";
 import InputField from "@/components/InputField";
 import { Icons } from "@/constants";
 
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
 // import { Ionicons } from "@expo/vector-icons";
 import { useState } from "react";
 import { Image, ScrollView, Text, View } from "react-native";
@@ -36,6 +36,7 @@ const SignIn = () => {
           placeholder={`Phone Number`}
           icon={Call}
           value={form.phoneNumber}
+          keyboardType="phone-pad"
           onChangeText={(value) => setForm({ ...form, phoneNumber: value })}
         />
         <InputField
@@ -51,10 +52,11 @@ const SignIn = () => {
             title="Log In"
             // onPress={onSignUpPress}
             className="mt-6"
+            onPress={() => router.push("/(manager-tabs)/home")}
           />
           <View className="flex items-center justify-center mb-8">
             <Link
-              href={"/(auth)/(member)/sign-up"}
+              href={"/(auth)/(manager)/sign-up"}
               className="text-white text-[16px] font-bold"
             >
               Don't have an account?{" "}

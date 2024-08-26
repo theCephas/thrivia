@@ -19,9 +19,10 @@ const InputField = ({
   inputStyle,
   labelStyle,
   className,
-  icon: Icon, // Receive the icon as a React component
+  icon: Icon,
   iconStyle,
   value,
+  keyboardType = "default",
   ...props
 }: InputFieldProps) => {
   const [isFocused, setIsFocused] = useState(false);
@@ -86,6 +87,7 @@ const InputField = ({
               onFocus={handleFocus}
               onBlur={handleBlur}
               value={value}
+              keyboardType={keyboardType}
               {...props}
             />
           </View>

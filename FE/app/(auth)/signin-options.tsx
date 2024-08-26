@@ -1,7 +1,8 @@
 // import { icons } from "@/constants";
 import Arrowright from "@/assets/svg/Arrowright";
+import Thrivia from "@/assets/svg/Thrivia";
 import { Link } from "expo-router";
-import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 // import Arrowright from "@/assets/icons/arrow-right.svg";
 
 const SignInOptions = () => {
@@ -9,7 +10,7 @@ const SignInOptions = () => {
     <ScrollView className="flex-1  bg-[#1d2128]">
       <View className="flex-1 items-center justify-center flex-col gap-8 mt-[60px]">
         <View>
-          <Image source={require("@/assets/images/thrivia.png")} className="" />
+          <Thrivia />
         </View>
         <View>
           <Text className="text-xl pt-2 font-OnestMedium text-center text-white ">

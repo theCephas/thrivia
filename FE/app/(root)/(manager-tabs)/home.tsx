@@ -3,39 +3,40 @@ import Notification from "@/assets/svg/Notification";
 import Settings from "@/assets/svg/Settings";
 import Unsee from "@/assets/svg/Unsee";
 import Swiper from "react-native-swiper";
-import { Text, TouchableOpacity, View } from "react-native";
+import { Image, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRef, useState } from "react";
-import { publicBalance, publicBlDeets } from "@/constants";
+import { managerBlDeets, publicBalance, publicBlDeets } from "@/constants";
 import BgStyling from "@/assets/svg/BgStyling";
-import CustomSideModal from "@/components/CustomSideModal";
 import CustomButton from "@/components/CustomButton";
-import { Link, useRouter } from "expo-router";
+import InviteModal from "@/components/InviteModal";
 
 const Home = () => {
   const swiperRef = useRef<Swiper>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const isLastSlide = activeIndex === publicBalance.length - 1;
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const router = useRouter();
 
-  const closeModal = () => {
-    setIsModalVisible(false);
+  const onSubmit = () => {
+    setIsModalVisible(true);
   };
+
+  // const handleFileSelected = (file: any) => {
+  //   console.log("Selected file:", file);
+  //   // Handle file processing here
+  // };
 
   return (
     <SafeAreaView className="flex-1 bg-[#1d2128]">
       <View className="p-4 pt-5 pb-12 flex-1">
         <View className="flex flex-row justify-between items-center">
           <View className="flex flex-row items-center gap-3">
-            <TouchableOpacity onPress={() => setIsModalVisible(true)}>
-              <Homeprofile />
-            </TouchableOpacity>
+            <Homeprofile />
             <View>
               <Text className="text-white/80 text-xl">Welcome,</Text>
               <Text className="text-white text-2xl font-semibold">
-                Hi, Chinonye
+                Freedom Cooperative
               </Text>
             </View>
           </View>
@@ -83,25 +84,32 @@ const Home = () => {
                   </Text>
                   <Unsee />
                 </View>
-                <Link href={"/(root)/(others)/add-money"}>
-                  <LinearGradient
-                    colors={["#F4F4F433", "#FFFFFF0B"]}
-                    className="flex items-center justify-center border-[#E8E7E780] border rounded-full w-[148px] h-[44px]"
-                  >
-                    <Text className="text-white text-[18px]">
-                      {item.action}
-                    </Text>
-                  </LinearGradient>
-                </Link>
+                <LinearGradient
+                  colors={["#F4F4F433", "#FFFFFF0B"]}
+                  className="flex items-center justify-center border-[#E8E7E780] border rounded-full w-[148px] h-[44px]"
+                >
+                  <Text className="text-white text-[18px]">{item.action}</Text>
+                </LinearGradient>
               </LinearGradient>
             ))}
           </Swiper>
         </View>
-        {publicBlDeets.length > 0 ? (
+
+        {managerBlDeets[activeIndex].data.length < 1 ? (
+          <View className="absolute top-[400px] flex items-center w-full pl-4">
+            <Text className="text-white text-[16px] w-[200px] leading-[21px] text-center">
+              You don&apos;t have any member in your cooperative society yet.{" "}
+            </Text>
+            <Text className="text-white text-[16px] w-[200px] leading-[21px] text-center pt-4 pb-6">
+              Click the button below to get started
+            </Text>
+            <CustomButton title="Add members" onPress={onSubmit} />
+          </View>
+        ) : (
           <View className="absolute top-[320px] w-full pl-4">
             <View className="flex-1 flex-row items-center justify-between border-b border-[#939090] pb-1 ">
               <Text className="text-white text-3xl font-semibold ">
-                {publicBlDeets[activeIndex].title}
+                {managerBlDeets[activeIndex].title}
               </Text>
               <Text className="text-primary font-bold text-xl pl-12">
                 View all
@@ -109,7 +117,7 @@ const Home = () => {
             </View>
 
             <View className="flex flex-col gap-y-6 mt-1">
-              {publicBlDeets[activeIndex].data.map((item, index) => (
+              {managerBlDeets[activeIndex].data.map((item, index) => (
                 <LinearGradient
                   key={index}
                   colors={["#F4F4F433", "#FFFFFF0B"]}
@@ -141,33 +149,11 @@ const Home = () => {
               ))}
             </View>
           </View>
-        ) : (
-          <View className="absolute top-[470px] w-full pr-4 pl-10">
-            <Text className="text-white text-xl text-center">
-              {activeIndex === 0
-                ? " You are yet to join a cooperative society. Click the button below to get started"
-                : "Recent transitions on loan history will appear here"}
-            </Text>
-            <CustomButton
-              title={
-                activeIndex === 0
-                  ? "Join a cooperative society"
-                  : "Apply for a loan"
-              }
-              onPress={() =>
-                activeIndex === 0
-                  ? router.replace("/(auth)/(member)/(join)/become-memeber")
-                  : ""
-              }
-              className="mt-6"
-            />
-          </View>
         )}
       </View>
-      <CustomSideModal
+      <InviteModal
         isVisible={isModalVisible}
-        onClose={closeModal}
-        title="Cooperative Societies"
+        onClose={() => setIsModalVisible(false)}
       />
     </SafeAreaView>
   );
