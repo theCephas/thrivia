@@ -4,7 +4,7 @@ import BgStyling from "@/assets/svg/BgStyling";
 import Unsee from "@/assets/svg/Unsee";
 import CustomButton from "@/components/CustomButton";
 import { LinearGradient } from "expo-linear-gradient";
-import { Link, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import { useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
