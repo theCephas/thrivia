@@ -34,8 +34,8 @@ const Home = () => {
           <View className="flex flex-row items-center gap-3">
             <Homeprofile />
             <View>
-              <Text className="text-white/80 text-xl">Welcome,</Text>
-              <Text className="text-white text-2xl font-semibold">
+              <Text className="text-white/80 text-[16px]">Welcome,</Text>
+              <Text className="text-white text-[18px] pt-1 font-semibold">
                 Freedom Cooperative
               </Text>
             </View>
@@ -75,11 +75,11 @@ const Home = () => {
                 <View className="absolute top-0 z-50 right-[-180px] w-full ">
                   <BgStyling />
                 </View>
-                <Text className="text-white text-[20px] font-[400]">
+                <Text className="text-white text-[14px] font-[400]">
                   {item.title}
                 </Text>
                 <View className="py-4 flex flex-row items-center gap-3">
-                  <Text className="text-white text-4xl font-bold tracking-widest">
+                  <Text className="text-white text-[30px] font-bold tracking-widest">
                     {item.balance}
                   </Text>
                   <Unsee />
@@ -88,7 +88,7 @@ const Home = () => {
                   colors={["#F4F4F433", "#FFFFFF0B"]}
                   className="flex items-center justify-center border-[#E8E7E780] border rounded-full w-[148px] h-[44px]"
                 >
-                  <Text className="text-white text-[18px]">{item.action}</Text>
+                  <Text className="text-white text-[14px]">{item.action}</Text>
                 </LinearGradient>
               </LinearGradient>
             ))}
@@ -108,10 +108,10 @@ const Home = () => {
         ) : (
           <View className="absolute top-[320px] w-full pl-4">
             <View className="flex-1 flex-row items-center justify-between border-b border-[#939090] pb-1 ">
-              <Text className="text-white text-3xl font-semibold ">
+              <Text className="text-white text-[18px] font-semibold ">
                 {managerBlDeets[activeIndex].title}
               </Text>
-              <Text className="text-primary font-bold text-xl pl-12">
+              <Text className="text-primary font-bold text-[16px] pl-12">
                 View all
               </Text>
             </View>
@@ -133,15 +133,15 @@ const Home = () => {
                     <item.icon />
                   </View>
                   <View className="ml-7">
-                    <Text className="text-white text-[20px] font-semibold ">
+                    <Text className="text-white text-[14px] font-semibold ">
                       {item.type}
                     </Text>
-                    <Text className="text-white pt-2 text-[16px]">
+                    <Text className="text-white pt-2 text-[14px]">
                       {item.time}
                     </Text>
                   </View>
                   <View className="">
-                    <Text className="text-white text-right font-bold mt-[-30px] text-[18px]">
+                    <Text className="text-white text-right font-bold mt-[-30px] text-[16px]">
                       ₦{item.amount}
                     </Text>
                   </View>

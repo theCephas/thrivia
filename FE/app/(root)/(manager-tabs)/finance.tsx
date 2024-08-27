@@ -16,7 +16,7 @@ const Finance = () => {
       <View className="p-10 pt-16 flex flex-row items-center justify-center gap-[100px]">
         <TouchableOpacity onPress={() => setActiveTab("Loans")}>
           <Text
-            className={`text-white font-semibold text-[18px] ${
+            className={`text-white font-semibold text-[16px] ${
               activeTab === "Loans"
                 ? "text-white/80 border-b-2 border-primary w-[50px] text-center pb-[2px]"
                 : "text-white border-none pb-[2px]"
@@ -27,7 +27,7 @@ const Finance = () => {
         </TouchableOpacity>
         <TouchableOpacity onPress={() => setActiveTab("Savings")}>
           <Text
-            className={`text-white font-semibold text-[18px] ${
+            className={`text-white font-semibold text-[16px] ${
               activeTab === "Savings"
                 ? "text-white/80 border-b-2 border-primary w-[50px] text-center pb-[2px]"
                 : "text-white border-none pb-[2px]"
@@ -44,11 +44,6 @@ const Finance = () => {
             <View className="flex items-center px-4">
               <LinearGradient
                 colors={["#3C2A07", "#92822E", "#4C4611"]}
-                // colors={
-                //   isLastSlide
-                //     ? ["#3C2A07", "#92822E", "#4C4611"]
-                //     : ["#073C36", "#2E9278", "#114C46"]
-
                 start={{ x: 0, y: 1.5 }}
                 end={{ x: 1, y: 0 }}
                 className="flex relative justify-center w-full h-[108px] rounded-[16px] p-4"
@@ -60,7 +55,7 @@ const Finance = () => {
                   Loan Balance
                 </Text>
                 <View className="py-4 flex flex-row items-center gap-3">
-                  <Text className="text-white text-4xl font-bold tracking-widest">
+                  <Text className="text-white text-[30px] font-bold tracking-widest">
                     ₦300,000
                   </Text>
                   <Unsee />
@@ -79,7 +74,7 @@ const Finance = () => {
               <Text className="text-white text-[18px] font-semibold ">
                 Loan History
               </Text>
-              <Text className="text-primary font-bold text-xl pl-12">
+              <Text className="text-primary font-bold text-[16px] pl-12">
                 View all
               </Text>
             </View>
@@ -98,15 +93,15 @@ const Finance = () => {
                     className="h-[70px] w-full p-[16px] border-[#E8E7E780] border rounded-[8px] flex flex-row justify-between"
                   >
                     <View>
-                      <Text className="text-white text-[20px] font-semibold ">
+                      <Text className="text-white text-[16px] font-semibold ">
                         {item.type}
                       </Text>
-                      <Text className="text-white pt-2 text-[16px]">
+                      <Text className="text-white pt-2 text-[14px]">
                         {item.time}
                       </Text>
                     </View>
                     <View className="flex flex-row justify-between items-center">
-                      <Text className="text-white flex items-center justify-center font-bold text-[18px]">
+                      <Text className="text-white flex items-center justify-center font-bold text-[16px]">
                         {item.action}
                       </Text>
                       <View className="">
