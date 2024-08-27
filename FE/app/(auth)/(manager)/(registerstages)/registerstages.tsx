@@ -3,8 +3,8 @@ import CircleProgress from "@/components/CircleProgress";
 
 import CustomButton from "@/components/CustomButton";
 import CustomModal from "@/components/CustomModal";
-import FormStageOne from "@/components/FormStageOne";
-import FormStageTwo from "@/components/FormStageTwo";
+import FormStageOne from "@/components/managerformStages/FormStageOne";
+import FormStageTwo from "@/components/managerformStages/FormStageTwo";
 
 import { Link, router } from "expo-router";
 
@@ -23,6 +23,7 @@ const RegisterStages = () => {
     businessType: "",
     password: "",
     confirmPassword: "",
+    selectBank: "",
   });
 
   const nextStage = () => {
@@ -68,11 +69,10 @@ const RegisterStages = () => {
             <CustomButton title="Register" onPress={onSubmit} />
           )}
           <TouchableOpacity
+            onPress={() => router.back()}
             className={`w-full p-3 mb-5 rounded-full flex flex-row justify-center items-center h-[44px] border border-white`}
           >
-            <Link href={"/(auth)/(manager)/sign-in"}>
-              <Text className="text-white">Cancel</Text>
-            </Link>
+            <Text className="text-white">Cancel</Text>
           </TouchableOpacity>
         </View>
       </View>

@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   ForbiddenException,
+  forwardRef,
   Inject,
   Injectable,
   NotFoundException,
@@ -14,7 +15,7 @@ import { EntityManager, EntityRepository } from '@mikro-orm/core';
 import { SharedService } from '../shared/shared.service';
 import { JwtAuthConfiguration } from 'src/config/configuration';
 import { ConfigType } from '@nestjs/config';
-import { IAuthContext, OTPActionType } from 'src/types';
+import { IAuthContext, OTPActionType, Role } from 'src/types';
 import { nanoid } from 'nanoid';
 import { generateOtp } from 'src/utils';
 import bcrypt from 'bcrypt';
@@ -25,16 +26,20 @@ import {
   SendOtpDto,
   VerifyOtpDto,
 } from './auth.dto';
+import { CooperativeUsers } from '../cooperatives/cooperatives.entity';
 
 @Injectable()
 export class AuthService {
   constructor(
+    @Inject(forwardRef(() => UsersService))
     private readonly usersService: UsersService,
     private readonly jwtService: JwtService,
     @InjectRepository(Users)
     private readonly usersRepository: EntityRepository<Users>,
     @InjectRepository(OTP)
     private readonly otpRepository: EntityRepository<OTP>,
+    @InjectRepository(CooperativeUsers)
+    private readonly cooperativeUsersRepository: EntityRepository<CooperativeUsers>,
     private readonly sharedService: SharedService,
     @Inject(JwtAuthConfiguration.KEY)
     private readonly jwtConfig: ConfigType<typeof JwtAuthConfiguration>,
@@ -66,7 +71,11 @@ export class AuthService {
     };
   }
 
-  async validateUser(emailOrPhone: string, password: string): Promise<any> {
+  async validateUser(
+    emailOrPhone: string,
+    password: string,
+    role: Role,
+  ): Promise<any> {
     const user = await this.usersService.findByEmailOrPhone(emailOrPhone);
     if (!user) throw new NotFoundException('User not found');
     const passwordMatch = await bcrypt.compare(password, user.password);
@@ -81,6 +90,16 @@ export class AuthService {
       //   this.em.persistAndFlush(otpModel);
       //   return { pinId, uuid: user.uuid };
       // }
+      if (role === Role.MANAGER) {
+        const cooperativeExists = await this.cooperativeUsersRepository.findOne(
+          {
+            user: { uuid: user.uuid },
+            role: Role.MANAGER,
+          },
+        );
+        if (!cooperativeExists)
+          throw new NotFoundException('No cooperative found for this account');
+      }
       return user;
     }
     throw new UnauthorizedException('Invalid details');

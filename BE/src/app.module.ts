@@ -10,6 +10,9 @@ import { DatabaseModule } from './database.module';
 import { SharedModule } from './modules/shared/shared.module';
 import { UsersModule } from './modules/users/users.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { CooperativesModule } from './modules/cooperatives/cooperatives.module';
+import { CacheModule } from '@nestjs/cache-manager';
+import { WalletsModule } from './modules/wallets/wallets.module';
 
 @Module({
   imports: [
@@ -19,9 +22,12 @@ import { AuthModule } from './modules/auth/auth.module';
       envFilePath: '.env',
     }),
     DatabaseModule.forRoot(),
+    CacheModule.register({ isGlobal: true }),
     SharedModule,
     UsersModule,
     AuthModule,
+    CooperativesModule,
+    WalletsModule
   ],
   controllers: [AppController],
   providers: [

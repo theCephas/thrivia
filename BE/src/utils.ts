@@ -43,3 +43,14 @@ export const extractTokenFromReq = (req: Request, error: string) => {
   if (!token) throw new UnauthorizedException(error);
   return token;
 };
+
+export const generateRandomDigits = () => {
+  function getRandomDigit() {
+    return Math.floor(Math.random() * 10);
+  }
+  let digits = '';
+  for (let i = 0; i < 8; i++) {
+    digits += getRandomDigit();
+  }
+  return digits;
+};

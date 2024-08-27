@@ -7,7 +7,7 @@ import { Text, View } from "react-native";
 import { SvgProps } from "react-native-svg";
 
 const TabIcon = ({
-  Icon, // Expect a React component for the icon
+  Icon,
   focused,
   label,
 }: {
@@ -49,7 +49,7 @@ export default function Layout() {
           backgroundColor: "#0D1015",
           paddingBottom: 0, // ios only
           overflow: "hidden",
-          height: 78,
+          height: 70,
           borderTopLeftRadius: 30,
           borderTopRightRadius: 30,
           width: "100%",
@@ -62,6 +62,7 @@ export default function Layout() {
           alignItems: "center",
           flexDirection: "row",
           position: "absolute",
+          bottom: 0,
         },
       }}
     >
