@@ -2,6 +2,7 @@ import ArrowLeftBottom from "@/assets/svg/ArrowLeftBottom";
 import Arrowright from "@/assets/svg/Arrowright";
 import ArrowRightTop from "@/assets/svg/ArrowRightTop";
 import Call from "@/assets/svg/Call";
+import Dot from "@/assets/svg/Dot";
 import Email from "@/assets/svg/Email";
 import Finance from "@/assets/svg/Finance";
 import Home from "@/assets/svg/Home";
@@ -103,6 +104,108 @@ export const publicBlDeets: publicBlDeet[] = [
   //     },
   //   ],
   // },
+];
+
+export const financeLoanHistory = [
+  {
+    type: "Cephas applied for loan",
+    time: "12 - 05 - 2024",
+    action: "View details",
+    icon: Arrowright,
+  },
+  {
+    type: "Israel repaid loan",
+    time: "12 - 05 - 2024",
+    action: "View details",
+    icon: Arrowright,
+  },
+  {
+    type: "Cephas applied for loan",
+    time: "12 - 05 - 2024",
+
+    action: "View details",
+    icon: Arrowright,
+  },
+  {
+    type: "Cephas applied for loan",
+    time: "12 - 05 - 2024",
+    action: "View details",
+    icon: Arrowright,
+  },
+  {
+    type: "Israel repaid loan",
+    time: "12 - 05 - 2024",
+    action: "View details",
+    icon: Arrowright,
+  },
+];
+
+export const loanHistory = [
+  {
+    type: "Cephas Iseoluwa loan request",
+    time: "14:30PM",
+    icon: Dot,
+  },
+  {
+    type: "Cephas Iseoluwa loan request",
+    time: "14:30PM",
+    icon: Dot,
+  },
+  {
+    type: "Cephas Iseoluwa loan request",
+    time: "14:30PM",
+    icon: Dot,
+  },
+  {
+    type: "Cephas Iseoluwa loan request",
+    time: "14:30PM",
+    icon: Dot,
+  },
+  {
+    type: "Cephas Iseoluwa loan request",
+    time: "14:30PM",
+    icon: Dot,
+  },
+  {
+    type: "Cephas Iseoluwa loan request",
+    time: "14:30PM",
+    icon: Dot,
+  },
+  {
+    type: "Cephas Iseoluwa loan request",
+    time: "14:30PM",
+    icon: Dot,
+  },
+  {
+    type: "Cephas Iseoluwa loan request",
+    time: "14:30PM",
+    icon: Dot,
+  },
+  {
+    type: "Cephas Iseoluwa loan request",
+    time: "14:30PM",
+    icon: Dot,
+  },
+  {
+    type: "Cephas Iseoluwa loan request",
+    time: "14:30PM",
+    icon: Dot,
+  },
+  {
+    type: "Cephas Iseoluwa loan request",
+    time: "14:30PM",
+    icon: Dot,
+  },
+  {
+    type: "Cephas Iseoluwa loan request",
+    time: "14:30PM",
+    icon: Dot,
+  },
+  {
+    type: "Cephas Iseoluwa loan request",
+    time: "14:30PM",
+    icon: Dot,
+  },
 ];
 
 export const managerBlDeets = [
