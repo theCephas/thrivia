@@ -2,6 +2,8 @@ import SelectBank from "@/assets/svg/SelectBank";
 import Dropdown from "../Dropdown";
 import InputField from "../InputField";
 import Money from "@/assets/svg/Money";
+import LoanIcon from "@/assets/svg/LoanIcon";
+import Time from "@/assets/svg/Time";
 
 interface Props {
   form: any;
@@ -23,14 +25,14 @@ const ApplyStageTwo: React.FC<Props> = ({ form, setForm }) => {
         value={form.purpose}
         options={["Bank A", "Bank B", "Bank C"]}
         onSelect={(value) => setForm({ ...form, purpose: value })}
-        icon={SelectBank}
+        icon={LoanIcon}
       />
       <Dropdown
         placeholder="Loan term"
         value={form.term}
         options={["3 months", "6 months", "1 year"]}
         onSelect={(value) => setForm({ ...form, term: value })}
-        icon={SelectBank}
+        icon={Time}
       />
     </>
   );

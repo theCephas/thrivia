@@ -1,12 +1,11 @@
 import Thrivia from "@/assets/svg/Thrivia";
 import ApplyStageOne from "@/components/applyLoanStages/ApplyStageOne";
+import ApplyStageThree from "@/components/applyLoanStages/ApplyStageThree";
 import ApplyStageTwo from "@/components/applyLoanStages/ApplyStageTwo";
 import CircleProgress from "@/components/CircleProgress";
 
 import CustomButton from "@/components/CustomButton";
 import CustomModal from "@/components/CustomModal";
-import StageOne from "@/components/joinStages/StageOne";
-import StageTwo from "@/components/joinStages/StageTwo";
 
 import { router } from "expo-router";
 
@@ -71,8 +70,10 @@ const JoinStages = () => {
         {currentStage === 1 && <ApplyStageOne form={form} setForm={setForm} />}
 
         {currentStage === 2 && <ApplyStageTwo form={form} setForm={setForm} />}
-
-        <View className={` ${currentStage === 3 ? "mt-[200px]" : "mt-20"}`}>
+        {currentStage === 3 && (
+          <ApplyStageThree form={form} setForm={setForm} />
+        )}
+        <View className={` ${currentStage === 1 ? "mt-20" : "mt-[150px]"}`}>
           <CustomButton
             title="Proceed"
             onPress={() => {
@@ -88,11 +89,12 @@ const JoinStages = () => {
           </TouchableOpacity>
         </View>
       </View>
+
       <CustomModal
         isVisible={isModalVisible === 1}
         onClose={closeModal}
         OnNext={() => onSubmit(2)}
-        title="Submit application"
+        title="Submit application?"
         message="Kindly ensure that all data was provided correctly before submitting your application.
  You can't edit an application once it's submitted"
         buttonText="Submit application"
