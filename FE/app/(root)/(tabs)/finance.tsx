@@ -91,14 +91,14 @@ const Finance = () => {
         <View className="px-4 flex flex-row justify-between mt-4">
           <CustomButton
             title="Repay loan"
-            onPress={() =>
-              router.replace("/(auth)/(member)/(join)/join-stages")
-            }
+            onPress={() => {}}
             className="w-[48%]"
           />
           <TouchableOpacity
             className={`w-[48%] mb-5 rounded-full  border border-white overflow-hidden`}
-            onPress={() => router.replace("/(root)/(tabs)/home")}
+            onPress={() =>
+              router.replace("/(root)/(others)/(member-loan)/loan-stages")
+            }
           >
             <LinearGradient
               colors={[

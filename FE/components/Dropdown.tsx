@@ -110,7 +110,7 @@ const Dropdown = ({
           {isOpen && (
             <LinearGradient
               colors={["#F4F4F433", "#FFFFFF0B"]}
-              className="w-[152px] p-2 mt-1 border border-[#E8E7E780] left-[200px]"
+              className="absolute -bottom-[130px] w-[152px] p-2 mt-1 border border-[#E8E7E780] left-[200px]"
             >
               {options.map((item, index) => (
                 <TouchableOpacity

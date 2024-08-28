@@ -5,6 +5,7 @@ export default function Layout() {
     <Stack>
       <Stack.Screen name="add-money" options={{ headerShown: false }} />
       <Stack.Screen name="(manager-pages)" options={{ headerShown: false }} />
+      <Stack.Screen name="(member-loan)" options={{ headerShown: false }} />
     </Stack>
   );
 }
