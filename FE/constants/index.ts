@@ -140,6 +140,37 @@ export const financeLoanHistory = [
   },
 ];
 
+export const memberLoanHistory = [
+  {
+    type: "Loan repaid",
+    time: "12 - 05 - 2024",
+    action: "View details",
+    icon: ArrowRightTop,
+    amount: "₦3,000",
+  },
+  {
+    type: "Loan recieved",
+    time: "12 - 05 - 2024",
+    action: "View details",
+    icon: ArrowLeftBottom,
+    amount: "₦3,000",
+  },
+  {
+    type: "Loan repaid",
+    time: "12 - 05 - 2024",
+    action: "View details",
+    icon: ArrowRightTop,
+    amount: "₦3,000",
+  },
+  {
+    type: "Loan recieved",
+    time: "12 - 05 - 2024",
+    action: "View details",
+    icon: ArrowLeftBottom,
+    amount: "₦3,000",
+  },
+];
+
 export const loanHistory = [
   {
     type: "Cephas Iseoluwa loan request",
