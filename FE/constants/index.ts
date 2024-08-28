@@ -208,6 +208,74 @@ export const loanHistory = [
   },
 ];
 
+export const members = [
+  {
+    type: "Cephas Iseoluwa",
+    userId: "FC203-52",
+    icon: Dot,
+  },
+  {
+    type: "Cephas Iseoluwa",
+    userId: "FC203-52",
+    icon: Dot,
+  },
+  {
+    type: "Cephas Iseoluwa",
+    userId: "FC203-52",
+    icon: Dot,
+  },
+  {
+    type: "Cephas Iseoluwa",
+    userId: "FC203-52",
+    icon: Dot,
+  },
+  {
+    type: "Cephas Iseoluwa",
+    userId: "FC203-52",
+    icon: Dot,
+  },
+  {
+    type: "Cephas Iseoluwa",
+    userId: "FC203-52",
+    icon: Dot,
+  },
+  {
+    type: "Cephas Iseoluwa",
+    userId: "FC203-52",
+    icon: Dot,
+  },
+  {
+    type: "Cephas Iseoluwa",
+    userId: "FC203-52",
+    icon: Dot,
+  },
+  {
+    type: "Cephas Iseoluwa",
+    userId: "FC203-52",
+    icon: Dot,
+  },
+  {
+    type: "Cephas Iseoluwa",
+    userId: "FC203-52",
+    icon: Dot,
+  },
+  {
+    type: "Cephas Iseoluwa",
+    userId: "FC203-52",
+    icon: Dot,
+  },
+  {
+    type: "Cephas Iseoluwa",
+    userId: "FC203-52",
+    icon: Dot,
+  },
+  {
+    type: "Cephas Iseoluwa",
+    userId: "FC203-52",
+    icon: Dot,
+  },
+];
+
 export const managerBlDeets = [
   {
     id: 1,
