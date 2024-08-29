@@ -56,13 +56,15 @@ const SignIn = () => {
           placeholder={`Phone Number`}
           icon={Call}
           value={form.phoneNumber}
+          keyboardType="number-pad"
           onChangeText={(value) => setForm({ ...form, phoneNumber: value })}
         />
         <InputField
-          placeholder={`Create Password`}
+          placeholder={`Password`}
           secureTextEntry={true}
           value={form.password}
           icon={Lock}
+          keyboardType="default"
           onChangeText={(value) => setForm({ ...form, password: value })}
         />
 

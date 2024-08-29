@@ -85,6 +85,7 @@ const SignUp = () => {
           placeholder={`Phone Number`}
           icon={Call}
           value={form.phoneNumber}
+          keyboardType="number-pad"
           onChangeText={(value) => setForm({ ...form, phoneNumber: value })}
         />
         <InputField
