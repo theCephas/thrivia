@@ -53,7 +53,7 @@ const Welcome = () => {
           {onboarding.map((item) => (
             <View key={item.id} className="flex flex-col relative">
               <View className="absolute bottom-[-460px]">
-                <Text className="text-white font-bold text-3xl text-left">
+                <Text className="text-white font-onest font-bold text-3xl text-left">
                   {" "}
                   {item.title}
                 </Text>
