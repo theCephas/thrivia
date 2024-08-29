@@ -2,9 +2,10 @@ import OnboardingBg from "@/assets/svg/OnboardingBg";
 import Thrivia from "@/assets/svg/Thrivia";
 import CustomButton from "@/components/CustomButton";
 import { onboarding } from "@/constants";
+import useAuthStore from "@/store";
 import { LinearGradient } from "expo-linear-gradient";
 import { Link, router } from "expo-router";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Image, ScrollView, Text, View } from "react-native";
 
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -13,6 +14,11 @@ import Swiper from "react-native-swiper";
 const Welcome = () => {
   const swiperRef = useRef<Swiper>(null);
   const [activeIndex, setActiveIndex] = useState(0);
+  const { isLoggedIn } = useAuthStore();
+
+  useEffect(() => {
+    if (isLoggedIn) router.replace("/(root)/(tabs)/home");
+  }, [isLoggedIn]);
   const isLastSlide = activeIndex === onboarding.length - 1;
 
   return (

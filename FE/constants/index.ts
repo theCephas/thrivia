@@ -13,6 +13,9 @@ import Profile from "@/assets/svg/Profile";
 import user from "@/assets/svg/User";
 import { SvgProps } from "react-native-svg";
 
+export const ACCESS_TOKEN = "access";
+export const REFRESH_TOKEN = "refresh";
+
 export const Icons = {
   Arrowright,
   Call,

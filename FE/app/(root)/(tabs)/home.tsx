@@ -6,12 +6,13 @@ import Swiper from "react-native-swiper";
 import { Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { publicBalance, publicBlDeets } from "@/constants";
 import BgStyling from "@/assets/svg/BgStyling";
 import CustomSideModal from "@/components/CustomSideModal";
 import CustomButton from "@/components/CustomButton";
 import { Link, useRouter } from "expo-router";
+import useAuthStore from "@/store";
 
 const Home = () => {
   const swiperRef = useRef<Swiper>(null);
@@ -19,6 +20,12 @@ const Home = () => {
   const isLastSlide = activeIndex === publicBalance.length - 1;
   const [isModalVisible, setIsModalVisible] = useState(false);
   const router = useRouter();
+
+  const { isLoggedIn, logout } = useAuthStore();
+
+  useEffect(() => {
+    if (!isLoggedIn) router.replace("/(auth)/(member)/sign-in");
+  }, [isLoggedIn]);
 
   const closeModal = () => {
     setIsModalVisible(false);
@@ -39,10 +46,13 @@ const Home = () => {
               </Text>
             </View>
           </View>
-          <View className="flex flex-row items-center gap-x-6">
+          <TouchableOpacity
+            onPress={() => logout()}
+            className="flex flex-row items-center gap-x-6"
+          >
             <Notification />
             <Settings />
-          </View>
+          </TouchableOpacity>
         </View>
 
         <View className="flex-1 relative mt-8">
