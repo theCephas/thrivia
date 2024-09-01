@@ -17,7 +17,13 @@ const SignIn = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (token && token.member) router.replace("/(root)/(tabs)/home");
+    if (token) {
+      token.manager
+        ? router.replace("/(root)/(manager-tabs)/home")
+        : token.member
+        ? router.replace("/(root)/(tabs)/home")
+        : "";
+    }
   }, [token]);
 
   const [form, setForm] = useState({

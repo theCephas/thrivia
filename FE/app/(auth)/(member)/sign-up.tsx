@@ -27,7 +27,13 @@ const SignUp = () => {
   const { token } = useAuthStore();
 
   useEffect(() => {
-    if (token && token.member) router.replace("/(root)/(tabs)/home");
+    if (token) {
+      token.manager
+        ? router.replace("/(root)/(manager-tabs)/home")
+        : token.member
+        ? router.replace("/(root)/(tabs)/home")
+        : "";
+    }
   }, [token]);
 
   const onSignUpPress = async () => {
