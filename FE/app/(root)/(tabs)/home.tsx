@@ -21,11 +21,15 @@ const Home = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const router = useRouter();
 
-  const { isLoggedIn, logout } = useAuthStore();
+  const { logout, user, token } = useAuthStore();
 
   useEffect(() => {
-    if (!isLoggedIn) router.replace("/(auth)/(member)/sign-in");
-  }, [isLoggedIn]);
+    !token || !user
+      ? router.replace("/(auth)/sign-in")
+      : token.manager
+      ? router.replace("/(root)/(manager-tabs)/home")
+      : "";
+  }, [token]);
 
   const closeModal = () => {
     setIsModalVisible(false);
@@ -42,7 +46,7 @@ const Home = () => {
             <View>
               <Text className="text-white/80 text-xl">Welcome,</Text>
               <Text className="text-white text-2xl font-semibold">
-                Hi, Chinonye
+                Hi, {user ? user.firstName : ""}
               </Text>
             </View>
           </View>

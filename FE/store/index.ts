@@ -2,33 +2,32 @@ import { create } from "zustand";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { persist, PersistOptions } from "zustand/middleware";
 import axiosInstance from "@/constants/axiosInstance";
-import { StateCreator } from "zustand";
 
 interface AuthState {
-  isLoggedIn: boolean;
   token: any | null;
   expireAt: any | null;
-  login: (token: string, expireIn: string) => void;
+  login: (token: any, expireIn: string, user: any) => void;
   logout: () => void;
   refreshToken: () => Promise<void>;
   isTokenExpired: () => any;
   checkTokenExpiration: () => Promise<void>;
+  user: any | null;
 }
 
 const useAuthStore = create(
   persist(
     (set, _get) => ({
-      isLoggedIn: false,
       token: null,
       expireAt: null,
+      user: null,
 
-      login: (token: string, expiresIn: string) => {
+      login: (token: any, expiresIn: string, user: any) => {
         // console.log(token, expiresIn);
         const expireAt = expiresIn;
-        set({ isLoggedIn: true, token, expireAt });
+        set({ token, expireAt, user });
       },
 
-      logout: () => set({ isLoggedIn: false, token: null, expireAt: null }),
+      logout: () => set({ token: null, expireAt: null, user: null }),
 
       refreshToken: async () => {
         try {
@@ -38,7 +37,7 @@ const useAuthStore = create(
           set({ token: newToken, expireAt });
         } catch (error) {
           console.error("Failed to refresh token:", error);
-          set({ isLoggedIn: false, token: null, expireAt: null });
+          set({ token: null, expireAt: null });
         }
       },
 

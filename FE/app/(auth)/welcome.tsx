@@ -14,12 +14,18 @@ import Swiper from "react-native-swiper";
 const Welcome = () => {
   const swiperRef = useRef<Swiper>(null);
   const [activeIndex, setActiveIndex] = useState(0);
-  const { isLoggedIn } = useAuthStore();
+  const { token } = useAuthStore();
+  const isLastSlide = activeIndex === onboarding.length - 1;
 
   useEffect(() => {
-    if (isLoggedIn) router.replace("/(root)/(tabs)/home");
-  }, [isLoggedIn]);
-  const isLastSlide = activeIndex === onboarding.length - 1;
+    if (token) {
+      token.member
+        ? router.replace("/(root)/(manager-tabs)/home")
+        : token.manager
+        ? router.replace("/(root)/(manager-tabs)/home")
+        : "";
+    }
+  }, [token]);
 
   return (
     <View className="">

@@ -6,17 +6,29 @@ import Swiper from "react-native-swiper";
 import { Image, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { managerBlDeets, publicBalance, publicBlDeets } from "@/constants";
 import BgStyling from "@/assets/svg/BgStyling";
 import CustomButton from "@/components/CustomButton";
 import InviteModal from "@/components/InviteModal";
+import useAuthStore from "@/store";
+import { useRouter } from "expo-router";
 
 const Home = () => {
   const swiperRef = useRef<Swiper>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const isLastSlide = activeIndex === publicBalance.length - 1;
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const router = useRouter();
+  const { logout, user, token } = useAuthStore();
+
+  useEffect(() => {
+    !token || !user
+      ? router.replace("/(auth)/sign-in")
+      : token.member
+      ? router.replace("/(root)/(tabs)/home")
+      : "";
+  }, [token]);
 
   const onSubmit = () => {
     setIsModalVisible(true);

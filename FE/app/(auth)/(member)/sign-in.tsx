@@ -2,21 +2,23 @@ import Call from "@/assets/svg/Call";
 import Lock from "@/assets/svg/Lock";
 import Thrivia from "@/assets/svg/Thrivia";
 import CustomButton from "@/components/CustomButton";
+import FormLoader from "@/components/FormLoader";
 import InputField from "@/components/InputField";
 import axiosInstance from "@/constants/axiosInstance";
 import useAuthStore from "@/store";
 
 import { Link, router } from "expo-router";
-// import { Ionicons } from "@expo/vector-icons";
 import { useEffect, useState } from "react";
-import { Image, ScrollView, Text, View } from "react-native";
+import { ScrollView, Text, View } from "react-native";
+import Toast from "react-native-toast-message";
 
 const SignIn = () => {
-  const { login, isLoggedIn } = useAuthStore();
+  const { login, token } = useAuthStore();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (isLoggedIn) router.replace("/(root)/(tabs)/home");
-  }, [isLoggedIn]);
+    if (token && token.member) router.replace("/(root)/(tabs)/home");
+  }, [token]);
 
   const [form, setForm] = useState({
     phoneNumber: "",
@@ -24,16 +26,33 @@ const SignIn = () => {
   });
 
   const onSignUpPress = async () => {
+    setLoading(true);
     try {
       const res = await axiosInstance.post("/auth/login", {
         emailOrPhone: form.phoneNumber,
         password: form.password,
+        role: "MEMBER",
       });
 
-      const { accessToken, expiresIn } = res.data;
-      login(accessToken, expiresIn);
+      const data = res.data;
+
+      if (data.accessToken) {
+        Toast.show({
+          type: "success",
+          text1: `Login Successful!`,
+        });
+
+        const { accessToken, expiresIn, user } = data;
+        login({ member: accessToken }, expiresIn, user);
+      }
     } catch (err) {
+      Toast.show({
+        type: "error",
+        text1: `${err}`,
+      });
       console.log(err);
+    } finally {
+      setLoading(false);
     }
   };
   return (
@@ -86,6 +105,8 @@ const SignIn = () => {
           </View>
         </View>
       </View>
+      <Toast position="top" topOffset={100} />
+      {loading && <FormLoader />}
     </ScrollView>
   );
 };
