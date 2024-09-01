@@ -1,4 +1,3 @@
-import BgStyling from "@/assets/svg/BgStyling";
 import LoanBg from "@/assets/svg/LoanBg";
 import Unsee from "@/assets/svg/Unsee";
 import CustomButton from "@/components/CustomButton";
@@ -7,10 +6,10 @@ import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import { useState } from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 const Finance = () => {
   const [activeTab, setActiveTab] = useState("Loans");
+
   return (
     <View className="flex-1 bg-[#1d2128]">
       <View className="p-10 pt-16 flex flex-row items-center justify-center gap-[100px]">

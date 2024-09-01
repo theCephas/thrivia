@@ -21,15 +21,7 @@ const Home = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const router = useRouter();
 
-  const { logout, user, token } = useAuthStore();
-
-  useEffect(() => {
-    !token || !user
-      ? router.replace("/(auth)/sign-in")
-      : token.manager
-      ? router.replace("/(root)/(manager-tabs)/home")
-      : "";
-  }, [token]);
+  const { logout, user } = useAuthStore();
 
   const closeModal = () => {
     setIsModalVisible(false);

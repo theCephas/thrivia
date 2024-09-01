@@ -20,7 +20,7 @@ const Welcome = () => {
   useEffect(() => {
     if (token) {
       token.member
-        ? router.replace("/(root)/(manager-tabs)/home")
+        ? router.replace("/(root)/(tabs)/home")
         : token.manager
         ? router.replace("/(root)/(manager-tabs)/home")
         : "";

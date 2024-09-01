@@ -1,6 +1,5 @@
 import Call from "@/assets/svg/Call";
 import Email from "@/assets/svg/Email";
-import LoaderIcon from "@/assets/svg/LoaderIcon";
 import Lock from "@/assets/svg/Lock";
 import Thrivia from "@/assets/svg/Thrivia";
 import User from "@/assets/svg/User";
@@ -11,7 +10,7 @@ import axiosInstance from "@/constants/axiosInstance";
 import useAuthStore from "@/store";
 import { Link, router } from "expo-router";
 import { useEffect, useState } from "react";
-import { ActivityIndicator, ScrollView, Text, View } from "react-native";
+import { ScrollView, Text, View } from "react-native";
 import Toast from "react-native-toast-message";
 const SignUp = () => {
   const [form, setForm] = useState({
@@ -65,7 +64,7 @@ const SignUp = () => {
         type: "error",
         text1: `${err}`,
       });
-      console.log(err);
+      // console.log(err);
     } finally {
       setLoading(false);
     }

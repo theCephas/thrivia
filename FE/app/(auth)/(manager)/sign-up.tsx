@@ -69,7 +69,7 @@ const SignUp = () => {
         type: "error",
         text1: `${err}`,
       });
-      console.log(err);
+      // console.log(err);
     } finally {
       setLoading(false);
     }

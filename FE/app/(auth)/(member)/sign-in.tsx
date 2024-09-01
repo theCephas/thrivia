@@ -56,7 +56,7 @@ const SignIn = () => {
         type: "error",
         text1: `${err}`,
       });
-      console.log(err);
+      // console.log(err);
     } finally {
       setLoading(false);
     }
@@ -97,7 +97,6 @@ const SignIn = () => {
           <CustomButton
             title="Log In"
             onPress={() => onSignUpPress()}
-            // onPress={() => router.push("/(root)/(tabs)/home")}
             className="mt-6"
           />
           <View className="flex items-center justify-center mb-8">
