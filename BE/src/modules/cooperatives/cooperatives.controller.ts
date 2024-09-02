@@ -8,10 +8,16 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { CreateCooperativeDto, RejectApplicationDto } from './cooperatives.dto';
+import {
+  CreateCooperativeDto,
+  DepositMoneyDto,
+  PaymentInfo,
+  RejectApplicationDto,
+} from './cooperatives.dto';
 import { JwtAuthGuard } from 'src/guards/jwt-auth-guard';
 import { Request } from 'express';
 import { CooperativesService } from './cooperatives.service';
+import { ExpiredJwtAuthGuard } from 'src/guards/expired-jwt-auth-guard';
 
 @Controller('cooperatives')
 @ApiTags('cooperatives')
@@ -43,6 +49,18 @@ export class CooperativesController {
     );
   }
 
+  @Get(':uuid/withdrawal-requests')
+  @UseGuards(JwtAuthGuard)
+  fetchWithdrawalRequests(
+    @Param('uuid') uuid: string,
+    @Req() request: Request,
+  ) {
+    return this.cooperativesService.fetchWithdrawalRequests(
+      uuid,
+      request.user as any,
+    );
+  }
+
   @Post(':uuid/application/:applicationUuid/approve')
   @UseGuards(JwtAuthGuard)
   approveApplication(
@@ -53,6 +71,20 @@ export class CooperativesController {
     return this.cooperativesService.approveApplication(
       uuid,
       applicationUuid,
+      request.user as any,
+    );
+  }
+
+  @Post(':uuid/withdrawal-request/:requestUuid/approve')
+  @UseGuards(JwtAuthGuard)
+  approveWithdrawalRequest(
+    @Param('uuid') uuid: string,
+    @Param('requestUuid') requestUuid: string,
+    @Req() request: Request,
+  ) {
+    return this.cooperativesService.approveWithdrawalRequest(
+      uuid,
+      requestUuid,
       request.user as any,
     );
   }
@@ -73,6 +105,22 @@ export class CooperativesController {
     );
   }
 
+  @Post(':uuid/withdrawal-request/:requestUuid/reject')
+  @UseGuards(JwtAuthGuard)
+  rejectWithdrawalRequest(
+    @Param('uuid') uuid: string,
+    @Param('requestUuid') requestUuid: string,
+    @Body() body: RejectApplicationDto,
+    @Req() request: Request,
+  ) {
+    return this.cooperativesService.rejectWithdrawalRequest(
+      uuid,
+      requestUuid,
+      body,
+      request.user as any,
+    );
+  }
+
   @Get(':uuid/application/:applicationUuid')
   @UseGuards(JwtAuthGuard)
   getApplicationDetails(
@@ -83,6 +131,48 @@ export class CooperativesController {
     return this.cooperativesService.getApplicationDetails(
       uuid,
       applicationUuid,
+      request.user as any,
+    );
+  }
+
+  @Get(':uuid/withdrawal-request/:requestUuid')
+  @UseGuards(JwtAuthGuard)
+  getWithdrawalRequestDetails(
+    @Param('uuid') uuid: string,
+    @Param('requestUuid') requestUuid: string,
+    @Req() request: Request,
+  ) {
+    return this.cooperativesService.getWithdrawalRequestDetails(
+      uuid,
+      requestUuid,
+      request.user as any,
+    );
+  }
+
+  @Post('verify-transaction/:transactionId')
+  @UseGuards(ExpiredJwtAuthGuard)
+  verifyPayment(
+    @Param('transactionId') transactionId: string,
+    @Body() paymentInfo: PaymentInfo,
+  ) {
+    return this.cooperativesService.verifyTransaction(
+      transactionId,
+      paymentInfo,
+    );
+  }
+
+  @Post(':uuid/wallets/:walletUuid/deposit')
+  @UseGuards(JwtAuthGuard)
+  depositMoney(
+    @Param('uuid') uuid: string,
+    @Param('walletUuid') walletUuid: string,
+    @Body() body: DepositMoneyDto,
+    @Req() request: Request,
+  ) {
+    return this.cooperativesService.depositMoney(
+      uuid,
+      walletUuid,
+      body,
       request.user as any,
     );
   }

@@ -50,3 +50,12 @@ export enum ApplicationStatus {
   APPROVED = 'APPROVED',
   REJECTED = 'REJECTED',
 }
+
+export enum PaymentType {
+  INCOMING = 'incoming',
+  OUTGOING = 'outgoing',
+}
+
+export enum Currencies {
+  NGN = 'NGN',
+}

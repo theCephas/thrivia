@@ -9,11 +9,16 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { CreateCooperativeApplicationDto, CreateUserDto } from './users.dto';
+import {
+  CreateCooperativeApplicationDto,
+  CreateUserDto,
+  WithdrawalRequestDto,
+} from './users.dto';
 import { UsersService } from './users.service';
 import { JwtAuthGuard } from 'src/guards/jwt-auth-guard';
 import { Role } from 'src/types';
 import { Request } from 'express';
+import { DepositMoneyDto } from '../cooperatives/cooperatives.dto';
 
 @Controller('users')
 @ApiTags('users')
@@ -35,7 +40,7 @@ export class UsersController {
     return this.usersService.fetchCooperatives(role, request.user as any);
   }
 
-  @Post('cooperative-application/:uuid')
+  @Post('cooperative-application')
   @UseGuards(JwtAuthGuard)
   submitCooperativeApplication(
     @Body() body: CreateCooperativeApplicationDto,
@@ -45,5 +50,62 @@ export class UsersController {
       body,
       request.user as any,
     );
+  }
+
+  @Get('cooperative/:uuid/application')
+  @UseGuards(JwtAuthGuard)
+  fetchCooperativeApplication(
+    @Param('uuid') uuid: string,
+    @Req() request: Request,
+  ) {
+    return this.usersService.fetchCooperativeApplication(
+      uuid,
+      request.user as any,
+    );
+  }
+
+  @Get('cooperative-applications')
+  @UseGuards(JwtAuthGuard)
+  fetchCooperativeApplications(@Req() request: Request) {
+    return this.usersService.fetchCooperativeApplications(request.user as any);
+  }
+
+  @Get('cooperative/:uuid/wallets')
+  @UseGuards(JwtAuthGuard)
+  fetchWallets(@Param('uuid') uuid: string, @Req() request: Request) {
+    return this.usersService.fetchWallets(uuid, request.user as any);
+  }
+
+  @Post('wallets/:uuid/deposit')
+  @UseGuards(JwtAuthGuard)
+  depositMoney(
+    @Param('uuid') uuid: string,
+    @Body() body: DepositMoneyDto,
+    @Req() request: Request,
+  ) {
+    return this.usersService.depositMoney(uuid, body, request.user as any);
+  }
+
+  @Post('wallets/:uuid/withdrawal-request')
+  @UseGuards(JwtAuthGuard)
+  submitWithdrawalRequest(
+    @Param('uuid') uuid: string,
+    @Body() body: WithdrawalRequestDto,
+    @Req() request: Request,
+  ) {
+    return this.usersService.submitWithdrawalRequest(
+      uuid,
+      body,
+      request.user as any,
+    );
+  }
+
+  @Get('wallets/:uuid/withdrawal-requests')
+  @UseGuards(JwtAuthGuard)
+  fetchWithdrawalRequests(
+    @Param('uuid') uuid: string,
+    @Req() request: Request,
+  ) {
+    return this.usersService.fetchWithdrawalRequests(uuid, request.user as any);
   }
 }

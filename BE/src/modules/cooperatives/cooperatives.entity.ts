@@ -9,7 +9,8 @@ import {
 } from '@mikro-orm/core';
 import { Timestamp } from '../../base/timestamp.entity';
 import { Users } from '../users/users.entity';
-import { ApplicationStatus, Role } from 'src/types';
+import { ApplicationStatus, Currencies, PaymentType, Role } from '../../types';
+import { Wallets } from '../wallets/wallets.entity';
 
 @Filter({
   name: 'notDeleted',
@@ -95,12 +96,87 @@ export class CooperativeUsers extends Timestamp {
     referenceColumnName: 'uuid',
     joinColumn: 'uuid',
     columnType: 'varchar(255)',
-    eager: true,
   })
   cooperative: Cooperatives;
 
   @Enum({ items: () => Role, default: Role.MEMBER })
   role!: Role;
+}
+
+@Filter({
+  name: 'notDeleted',
+  cond: { deletedAt: null },
+  default: true,
+})
+@Entity({ tableName: 'withdrawal_requests' })
+export class WithdrawalRequests extends Timestamp {
+  @PrimaryKey()
+  id!: number;
+
+  @Property()
+  @Unique()
+  uuid!: string;
+
+  @ManyToOne(() => Users, {
+    fieldName: 'user_uuid',
+    referenceColumnName: 'uuid',
+    joinColumn: 'uuid',
+    columnType: 'varchar(255)',
+  })
+  user: Users;
+
+  @ManyToOne(() => Cooperatives, {
+    fieldName: 'cooperative_uuid',
+    referenceColumnName: 'uuid',
+    joinColumn: 'uuid',
+    columnType: 'varchar(255)',
+    eager: true,
+  })
+  cooperative: Cooperatives;
+
+  @ManyToOne(() => Wallets, {
+    fieldName: 'wallet_uuid',
+    referenceColumnName: 'uuid',
+    joinColumn: 'uuid',
+    columnType: 'varchar(255)',
+    eager: true,
+  })
+  wallet: Wallets;
+
+  @Enum({ items: () => ApplicationStatus })
+  status: ApplicationStatus;
+
+  @ManyToOne(() => Users, {
+    fieldName: 'reviewed_by',
+    referenceColumnName: 'uuid',
+    joinColumn: 'uuid',
+    columnType: 'varchar(255)',
+  })
+  reviewedBy: Users;
+
+  @Property({ nullable: true })
+  rejectionReason: string;
+
+  @Property({ type: 'datetime', nullable: true })
+  reviewedAt: Date;
+
+  @Property()
+  bankName: string;
+
+  @Property()
+  bankCode: string;
+
+  @Property()
+  accountNumber: string;
+
+  @Property()
+  accountName: string;
+
+  @Property({ nullable: true })
+  purpose: string;
+
+  @Property({ type: 'decimal', precision: 10, scale: 2, default: 0 })
+  amount: number;
 }
 
 @Filter({
@@ -164,7 +240,6 @@ export class CooperativeApplications extends Timestamp {
     referenceColumnName: 'uuid',
     joinColumn: 'uuid',
     columnType: 'varchar(255)',
-    eager: true,
   })
   cooperative: Cooperatives;
 
@@ -176,4 +251,40 @@ export class CooperativeApplications extends Timestamp {
 
   @Enum({ items: () => ApplicationStatus })
   status: ApplicationStatus;
+}
+
+@Filter({
+  name: 'notDeleted',
+  cond: { deletedAt: null },
+  default: true,
+})
+@Entity({ tableName: 'payments' })
+export class Payments extends Timestamp {
+  @PrimaryKey()
+  id!: number;
+
+  @Property()
+  @Unique()
+  uuid!: string;
+
+  @Property()
+  transactionId!: string;
+
+  @Property()
+  status: string;
+
+  @Property()
+  amount: number;
+
+  @Property()
+  channel: string;
+
+  @Property()
+  metadata: string;
+
+  @Enum({ items: () => PaymentType })
+  type: PaymentType;
+
+  @Enum({ items: () => Currencies })
+  currencies: Currencies;
 }
