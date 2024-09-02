@@ -5,7 +5,7 @@ import CustomButton from "./CustomButton";
 
 interface CustomModalProps {
   isVisible: boolean;
-  onClose: () => void;
+  onClose?: () => void;
   OnNext?: () => void;
   title: string;
   message: string;

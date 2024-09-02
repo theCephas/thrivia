@@ -4,10 +4,10 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        Onest: ["Onest", "sans-serif"],
-        OnestBold: ["Onest-Bold", "sans-serif"],
-        OnestMedium: ["Onest-Medium", "sans-serif"],
-        OnestSemiBold: ["Onest-SemiBold", "sans-serif"],
+        onest: ["Onest", "sans-serif"],
+        onestBold: ["Onest-Bold", "sans-serif"],
+        onestMedium: ["Onest-Medium", "sans-serif"],
+        onestSemiBold: ["Onest-SemiBold", "sans-serif"],
       },
       colors: {
         primary: "#27816C",

@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import InputField from "./InputField";
+import InputField from "../InputField";
 import SelectBank from "@/assets/svg/SelectBank";
 import OneTwoThree from "@/assets/svg/OneTwoThree";
 import AccountName from "@/assets/svg/AccountName";
-import Dropdown from "./Dropdown";
+import Dropdown from "../Dropdown";
 
 interface FormStageTwoProps {
   form: any;

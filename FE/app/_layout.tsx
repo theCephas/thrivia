@@ -1,27 +1,30 @@
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
-import { useEffect } from "react";
+import { useEffect, useCallback } from "react";
 import "react-native-reanimated";
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  const [loaded] = useFonts({
+  const [fontsLoaded] = useFonts({
     Onest: require("../assets/fonts/Onest-Regular.ttf"),
-    "Onest-bold": require("../assets/fonts/Onest-Bold.ttf"),
+    "Onest-Bold": require("../assets/fonts/Onest-Bold.ttf"),
     "Onest-Medium": require("../assets/fonts/Onest-Medium.ttf"),
-    "Onest-Semibold": require("../assets/fonts/Onest-SemiBold.ttf"),
+    "Onest-SemiBold": require("../assets/fonts/Onest-SemiBold.ttf"),
   });
 
-  useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
+  const onLayoutRootView = useCallback(async () => {
+    if (fontsLoaded) {
+      await SplashScreen.hideAsync();
     }
-  }, [loaded]);
+  }, [fontsLoaded]);
 
-  if (!loaded) {
+  useEffect(() => {
+    onLayoutRootView();
+  }, [fontsLoaded]);
+
+  if (!fontsLoaded) {
     return null;
   }
 

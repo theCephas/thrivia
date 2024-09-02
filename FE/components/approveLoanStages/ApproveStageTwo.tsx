@@ -1,16 +1,16 @@
 import React from "react";
-import InputField from "./InputField";
+import InputField from "../InputField";
 import Address from "@/assets/svg/Address";
 import Call from "@/assets/svg/Call";
 import Email from "@/assets/svg/Email";
 import User from "@/assets/svg/User";
 
-interface FormStageOneProps {
+interface ApproveStageTwoProps {
   form: any;
   setForm: (value: any) => void;
 }
 
-const FormStageOne: React.FC<FormStageOneProps> = ({ form, setForm }) => {
+const ApproveStageTwo: React.FC<ApproveStageTwoProps> = ({ form, setForm }) => {
   return (
     <>
       <InputField
@@ -52,4 +52,4 @@ const FormStageOne: React.FC<FormStageOneProps> = ({ form, setForm }) => {
   );
 };
 
-export default FormStageOne;
+export default ApproveStageTwo;

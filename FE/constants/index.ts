@@ -2,6 +2,7 @@ import ArrowLeftBottom from "@/assets/svg/ArrowLeftBottom";
 import Arrowright from "@/assets/svg/Arrowright";
 import ArrowRightTop from "@/assets/svg/ArrowRightTop";
 import Call from "@/assets/svg/Call";
+import Dot from "@/assets/svg/Dot";
 import Email from "@/assets/svg/Email";
 import Finance from "@/assets/svg/Finance";
 import Home from "@/assets/svg/Home";
@@ -11,6 +12,9 @@ import People from "@/assets/svg/People";
 import Profile from "@/assets/svg/Profile";
 import user from "@/assets/svg/User";
 import { SvgProps } from "react-native-svg";
+
+export const ACCESS_TOKEN = "access";
+export const REFRESH_TOKEN = "refresh";
 
 export const Icons = {
   Arrowright,
@@ -103,6 +107,207 @@ export const publicBlDeets: publicBlDeet[] = [
   //     },
   //   ],
   // },
+];
+
+export const financeLoanHistory = [
+  {
+    type: "Cephas applied for loan",
+    time: "12 - 05 - 2024",
+    action: "View details",
+    icon: Arrowright,
+  },
+  {
+    type: "Israel repaid loan",
+    time: "12 - 05 - 2024",
+    action: "View details",
+    icon: Arrowright,
+  },
+  {
+    type: "Cephas applied for loan",
+    time: "12 - 05 - 2024",
+
+    action: "View details",
+    icon: Arrowright,
+  },
+  {
+    type: "Cephas applied for loan",
+    time: "12 - 05 - 2024",
+    action: "View details",
+    icon: Arrowright,
+  },
+  {
+    type: "Israel repaid loan",
+    time: "12 - 05 - 2024",
+    action: "View details",
+    icon: Arrowright,
+  },
+];
+
+export const memberLoanHistory = [
+  {
+    type: "Loan repaid",
+    time: "12 - 05 - 2024",
+    action: "View details",
+    icon: ArrowRightTop,
+    amount: "₦3,000",
+  },
+  {
+    type: "Loan recieved",
+    time: "12 - 05 - 2024",
+    action: "View details",
+    icon: ArrowLeftBottom,
+    amount: "₦3,000",
+  },
+  {
+    type: "Loan repaid",
+    time: "12 - 05 - 2024",
+    action: "View details",
+    icon: ArrowRightTop,
+    amount: "₦3,000",
+  },
+  {
+    type: "Loan recieved",
+    time: "12 - 05 - 2024",
+    action: "View details",
+    icon: ArrowLeftBottom,
+    amount: "₦3,000",
+  },
+];
+
+export const loanHistory = [
+  {
+    type: "Cephas Iseoluwa loan request",
+    time: "14:30PM",
+    icon: Dot,
+  },
+  {
+    type: "Cephas Iseoluwa loan request",
+    time: "14:30PM",
+    icon: Dot,
+  },
+  {
+    type: "Cephas Iseoluwa loan request",
+    time: "14:30PM",
+    icon: Dot,
+  },
+  {
+    type: "Cephas Iseoluwa loan request",
+    time: "14:30PM",
+    icon: Dot,
+  },
+  {
+    type: "Cephas Iseoluwa loan request",
+    time: "14:30PM",
+    icon: Dot,
+  },
+  {
+    type: "Cephas Iseoluwa loan request",
+    time: "14:30PM",
+    icon: Dot,
+  },
+  {
+    type: "Cephas Iseoluwa loan request",
+    time: "14:30PM",
+    icon: Dot,
+  },
+  {
+    type: "Cephas Iseoluwa loan request",
+    time: "14:30PM",
+    icon: Dot,
+  },
+  {
+    type: "Cephas Iseoluwa loan request",
+    time: "14:30PM",
+    icon: Dot,
+  },
+  {
+    type: "Cephas Iseoluwa loan request",
+    time: "14:30PM",
+    icon: Dot,
+  },
+  {
+    type: "Cephas Iseoluwa loan request",
+    time: "14:30PM",
+    icon: Dot,
+  },
+  {
+    type: "Cephas Iseoluwa loan request",
+    time: "14:30PM",
+    icon: Dot,
+  },
+  {
+    type: "Cephas Iseoluwa loan request",
+    time: "14:30PM",
+    icon: Dot,
+  },
+];
+
+export const members = [
+  {
+    type: "Cephas Iseoluwa",
+    userId: "FC203-52",
+    icon: Dot,
+  },
+  {
+    type: "Cephas Iseoluwa",
+    userId: "FC203-52",
+    icon: Dot,
+  },
+  {
+    type: "Cephas Iseoluwa",
+    userId: "FC203-52",
+    icon: Dot,
+  },
+  {
+    type: "Cephas Iseoluwa",
+    userId: "FC203-52",
+    icon: Dot,
+  },
+  {
+    type: "Cephas Iseoluwa",
+    userId: "FC203-52",
+    icon: Dot,
+  },
+  {
+    type: "Cephas Iseoluwa",
+    userId: "FC203-52",
+    icon: Dot,
+  },
+  {
+    type: "Cephas Iseoluwa",
+    userId: "FC203-52",
+    icon: Dot,
+  },
+  {
+    type: "Cephas Iseoluwa",
+    userId: "FC203-52",
+    icon: Dot,
+  },
+  {
+    type: "Cephas Iseoluwa",
+    userId: "FC203-52",
+    icon: Dot,
+  },
+  {
+    type: "Cephas Iseoluwa",
+    userId: "FC203-52",
+    icon: Dot,
+  },
+  {
+    type: "Cephas Iseoluwa",
+    userId: "FC203-52",
+    icon: Dot,
+  },
+  {
+    type: "Cephas Iseoluwa",
+    userId: "FC203-52",
+    icon: Dot,
+  },
+  {
+    type: "Cephas Iseoluwa",
+    userId: "FC203-52",
+    icon: Dot,
+  },
 ];
 
 export const managerBlDeets = [
