@@ -7,16 +7,17 @@ import User from "@/assets/svg/User";
 import CustomButton from "@/components/CustomButton";
 import FormLoader from "@/components/FormLoader";
 import InputField from "@/components/InputField";
-import axiosInstance from "@/constants/axiosInstance";
+import { useAxiosInstance } from "@/constants/axiosInstance";
 import useAuthStore from "@/store";
 
 import { Link, router } from "expo-router";
 
 import { useEffect, useState } from "react";
-import { Image, ScrollView, Text, View } from "react-native";
+import { ScrollView, Text, View } from "react-native";
 import Toast from "react-native-toast-message";
 
 const SignUp = () => {
+  const axiosInstance = useAxiosInstance();
   const [form, setForm] = useState({
     firstName: "",
     lastName: "",
@@ -28,12 +29,12 @@ const SignUp = () => {
 
   const [loading, setLoading] = useState(false);
 
-  const { token } = useAuthStore();
+  const { token, login } = useAuthStore();
 
   useEffect(() => {
     if (token) {
       token.manager
-        ? router.replace("/(root)/(manager-tabs)/home")
+        ? router.replace("/(auth)/(manager)/(registerstages)/registerstages")
         : token.member
         ? router.replace("/(root)/(tabs)/home")
         : "";
@@ -45,6 +46,7 @@ const SignUp = () => {
     try {
       if (form.createPassword !== form.confirmPassword)
         throw new Error("Passwords don't match");
+
       const res = await axiosInstance.post("/users", {
         firstName: form.firstName,
         lastName: form.lastName,
@@ -53,8 +55,9 @@ const SignUp = () => {
         password: form.createPassword,
         role: "MANAGER",
       });
+      console.log("res = ", res);
 
-      const data = res.data;
+      const data = await res.data;
 
       if (data.accessToken) {
         Toast.show({
@@ -62,8 +65,10 @@ const SignUp = () => {
           text1: `Account was created successfully`,
         });
 
-        router.replace("/(auth)/(manager)/sign-in");
+        const { accessToken, expiresIn, user } = data;
+        login({ manager: accessToken }, expiresIn, user);
       }
+      // router.replace("/(auth)/(manager)/(registerstages)/registerstages");
     } catch (err) {
       Toast.show({
         type: "error",

@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { persist, PersistOptions } from "zustand/middleware";
-import axiosInstance from "@/constants/axiosInstance";
+import { useAxiosInstance } from "@/constants/axiosInstance";
 
 interface AuthState {
   token: any | null;
@@ -13,6 +13,11 @@ interface AuthState {
   checkTokenExpiration: () => Promise<void>;
   user: any | null;
 }
+
+const Api = () => {
+  const axiosInstance = useAxiosInstance();
+  return axiosInstance;
+};
 
 const useAuthStore = create(
   persist(
@@ -31,7 +36,7 @@ const useAuthStore = create(
 
       refreshToken: async () => {
         try {
-          const newToken = await axiosInstance.post("");
+          const newToken = await Api().post("");
           const decodedToken = newToken;
           const expireAt = decodedToken;
           set({ token: newToken, expireAt });

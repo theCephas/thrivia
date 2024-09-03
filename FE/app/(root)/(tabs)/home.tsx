@@ -6,7 +6,7 @@ import Swiper from "react-native-swiper";
 import { Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
-import { useEffect, useRef, useState } from "react";
+import {  useRef, useState } from "react";
 import { publicBalance, publicBlDeets } from "@/constants";
 import BgStyling from "@/assets/svg/BgStyling";
 import CustomSideModal from "@/components/CustomSideModal";

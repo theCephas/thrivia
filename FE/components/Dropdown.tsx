@@ -110,15 +110,18 @@ const Dropdown = ({
           {isOpen && (
             <LinearGradient
               colors={["#F4F4F433", "#FFFFFF0B"]}
-              className="absolute -bottom-[130px] w-[152px] p-2 mt-1 border border-[#E8E7E780] left-[200px]"
+              className="absolute -bottom-[130px] w-[152px] p-2 mt-1 border border-[#E8E7E780] left-[200px] z-50"
             >
               {options.map((item, index) => (
                 <TouchableOpacity
                   key={index}
-                  onPress={() => handleSelect(item)}
-                  className="py-2 z-40 border-b border-[#E8E7E780]"
+                  onPress={() => {
+                    console.log("first");
+                    onSelect(item);
+                  }}
+                  className="py-2 border-b border-[#E8E7E780]"
                 >
-                  <Text className="z-40" style={styles.optionText}>
+                  <Text className="" style={styles.optionText}>
                     {item}
                   </Text>
                 </TouchableOpacity>

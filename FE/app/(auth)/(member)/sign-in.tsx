@@ -4,7 +4,7 @@ import Thrivia from "@/assets/svg/Thrivia";
 import CustomButton from "@/components/CustomButton";
 import FormLoader from "@/components/FormLoader";
 import InputField from "@/components/InputField";
-import axiosInstance from "@/constants/axiosInstance";
+import { useAxiosInstance } from "@/constants/axiosInstance";
 import useAuthStore from "@/store";
 
 import { Link, router } from "expo-router";
@@ -13,6 +13,7 @@ import { ScrollView, Text, View } from "react-native";
 import Toast from "react-native-toast-message";
 
 const SignIn = () => {
+  const axiosInstance = useAxiosInstance();
   const { login, token } = useAuthStore();
   const [loading, setLoading] = useState(false);
 
@@ -40,7 +41,7 @@ const SignIn = () => {
         role: "MEMBER",
       });
 
-      const data = res.data;
+      const data = await res.data;
 
       if (data.accessToken) {
         Toast.show({

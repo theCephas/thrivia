@@ -3,15 +3,19 @@ import CircleProgress from "@/components/CircleProgress";
 
 import CustomButton from "@/components/CustomButton";
 import CustomModal from "@/components/CustomModal";
+import FormLoader from "@/components/FormLoader";
 import FormStageOne from "@/components/managerformStages/FormStageOne";
 import FormStageTwo from "@/components/managerformStages/FormStageTwo";
+import { useAxiosInstance } from "@/constants/axiosInstance";
 
-import { Link, router } from "expo-router";
+import { router } from "expo-router";
 
 import { useState } from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import Toast from "react-native-toast-message";
 
 const RegisterStages = () => {
+  const axiosInstance = useAxiosInstance();
   const [currentStage, setCurrentStage] = useState(1);
   const [form, setForm] = useState({
     coopName: "",
@@ -21,10 +25,12 @@ const RegisterStages = () => {
     phoneNumber: "",
     businessName: "",
     businessType: "",
-    password: "",
-    confirmPassword: "",
-    selectBank: "",
+    accountNumber: "",
+    accName: "",
+    selectBank: "Access bank",
   });
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const nextStage = () => {
     if (currentStage < 2) {
@@ -32,15 +38,42 @@ const RegisterStages = () => {
     }
   };
 
-  const [isModalVisible, setIsModalVisible] = useState(false);
-
-  const onSubmit = () => {
-    setIsModalVisible(true);
-  };
-
   const closeModal = () => {
     setIsModalVisible(false);
   };
+
+  const onSubmit = async () => {
+    setLoading(true);
+    try {
+      const res = await axiosInstance.post("/cooperatives", {
+        name: form.coopName,
+        regNo: `${form.businessRegNumber}`,
+        address: form.businessAddress,
+        contactEmail: form.email,
+        contactPhone: `${form.phoneNumber}`,
+        bankName: form.selectBank,
+        accountNo: `${form.accountNumber}`,
+        accountName: form.accName,
+      });
+
+      // console.log(res);
+
+      const data = await res.data;
+
+      // console.log(data);
+
+      setIsModalVisible(true);
+    } catch (err) {
+      Toast.show({
+        type: "error",
+        text1: `${err}`,
+      });
+      console.log(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <ScrollView className="flex-1 h-full relative bg-[#1d2128]">
       <View className="flex-1 items-centejustify-center flex-col gap-8 bg-[#1d2128] mt-[8px]">
@@ -76,6 +109,8 @@ const RegisterStages = () => {
           </TouchableOpacity>
         </View>
       </View>
+      <Toast position="top" topOffset={100} />
+      {loading && <FormLoader />}
       <CustomModal
         isVisible={isModalVisible}
         onClose={closeModal}
