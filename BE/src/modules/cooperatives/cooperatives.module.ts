@@ -4,10 +4,16 @@ import {
   CooperativeApplications,
   Cooperatives,
   CooperativeUsers,
+  Payments,
+  WithdrawalRequests,
 } from './cooperatives.entity';
 import { CooperativesController } from './cooperatives.controller';
 import { CooperativesService } from './cooperatives.service';
-import { Wallets } from '../wallets/wallets.entity';
+import { Transactions, Wallets } from '../wallets/wallets.entity';
+import { ConfigModule } from '@nestjs/config';
+import { MonnifyConfiguration } from 'src/config/configuration';
+import { WalletsModule } from '../wallets/wallets.module';
+import { SharedModule } from '../shared/shared.module';
 
 @Module({
   imports: [
@@ -17,8 +23,14 @@ import { Wallets } from '../wallets/wallets.entity';
         CooperativeUsers,
         Wallets,
         CooperativeApplications,
+        Transactions,
+        Payments,
+        WithdrawalRequests,
       ],
     }),
+    ConfigModule.forFeature(MonnifyConfiguration),
+    WalletsModule,
+    SharedModule,
   ],
   controllers: [CooperativesController],
   providers: [CooperativesService],

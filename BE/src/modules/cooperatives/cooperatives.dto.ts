@@ -1,4 +1,4 @@
-import { IsString } from 'class-validator';
+import { IsNumber, IsString } from 'class-validator';
 
 export class CreateCooperativeDto {
   @IsString()
@@ -29,4 +29,14 @@ export class CreateCooperativeDto {
 export class RejectApplicationDto {
   @IsString()
   reason: string;
+}
+
+export class PaymentInfo {
+  @IsNumber()
+  amount: number;
+}
+
+export class DepositMoneyDto {
+  @IsString()
+  paymentUuid: string;
 }

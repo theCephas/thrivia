@@ -3,14 +3,15 @@ import {
   Enum,
   Filter,
   ManyToOne,
+  OneToOne,
   PrimaryKey,
   Property,
   Unique,
 } from '@mikro-orm/core';
 import { Timestamp } from '../../base/timestamp.entity';
-import { Cooperatives } from '../cooperatives/cooperatives.entity';
+import { Cooperatives, Payments } from '../cooperatives/cooperatives.entity';
 import { Users } from '../users/users.entity';
-import { TransactionType } from 'src/types';
+import { TransactionType } from '../../types';
 
 @Filter({
   name: 'notDeleted',
@@ -30,7 +31,7 @@ export class Wallets extends Timestamp {
   title!: string;
 
   @Property({ type: 'decimal', precision: 10, scale: 2, default: 0 })
-  balance: string;
+  balance: number;
 
   @ManyToOne(() => Cooperatives, {
     fieldName: 'cooperative_uuid',
@@ -90,6 +91,22 @@ export class Transactions extends Timestamp {
     columnType: 'varchar(255)',
   })
   wallet!: Wallets;
+
+  @ManyToOne(() => Users, {
+    fieldName: 'user_uuid',
+    referenceColumnName: 'uuid',
+    joinColumn: 'uuid',
+    columnType: 'varchar(255)',
+  })
+  user!: Users;
+
+  @OneToOne(() => Payments, {
+    fieldName: 'payment_uuid',
+    referenceColumnName: 'uuid',
+    joinColumn: 'uuid',
+    columnType: 'varchar(255)',
+  })
+  payment!: Payments;
 
   @Property({ type: 'longtext' })
   walletSnapshot: string;

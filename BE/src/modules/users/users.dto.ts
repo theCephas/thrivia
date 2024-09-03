@@ -1,4 +1,11 @@
-import { IsEmail, IsEnum, IsOptional, IsString, Length } from 'class-validator';
+import {
+  IsEmail,
+  IsEnum,
+  IsNumber,
+  IsOptional,
+  IsString,
+  Length,
+} from 'class-validator';
 import { IsValidDate } from 'src/tools/date-validator';
 import { Role } from 'src/types';
 
@@ -51,4 +58,25 @@ export class CreateCooperativeApplicationDto {
 
   @IsString()
   address: string;
+}
+
+export class WithdrawalRequestDto {
+  @IsString()
+  bankCode: string;
+
+  @IsString()
+  bankName: string;
+
+  @IsString()
+  accountNumber: string;
+
+  @IsString()
+  accountName: string;
+
+  @IsString()
+  @IsOptional()
+  purpose: string;
+
+  @IsNumber()
+  amount: number;
 }

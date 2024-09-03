@@ -9,7 +9,11 @@ import {
   CooperativeApplications,
   Cooperatives,
   CooperativeUsers,
+  Payments,
+  WithdrawalRequests,
 } from '../cooperatives/cooperatives.entity';
+import { Transactions, Wallets } from '../wallets/wallets.entity';
+import { WalletsModule } from '../wallets/wallets.module';
 
 @Module({
   imports: [
@@ -19,9 +23,14 @@ import {
         CooperativeUsers,
         Cooperatives,
         CooperativeApplications,
+        Payments,
+        Transactions,
+        Wallets,
+        WithdrawalRequests,
       ],
     }),
     SharedModule,
+    WalletsModule,
     forwardRef(() => AuthModule),
   ],
   controllers: [UsersController],
