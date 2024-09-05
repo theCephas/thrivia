@@ -14,6 +14,7 @@ import { ConfigModule } from '@nestjs/config';
 import { MonnifyConfiguration } from 'src/config/configuration';
 import { WalletsModule } from '../wallets/wallets.module';
 import { SharedModule } from '../shared/shared.module';
+import { Users } from '../users/users.entity';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { SharedModule } from '../shared/shared.module';
         Transactions,
         Payments,
         WithdrawalRequests,
+        Users
       ],
     }),
     ConfigModule.forFeature(MonnifyConfiguration),

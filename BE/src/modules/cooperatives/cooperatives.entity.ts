@@ -5,7 +5,6 @@ import {
   ManyToOne,
   PrimaryKey,
   Property,
-  Unique,
 } from '@mikro-orm/core';
 import { Timestamp } from '../../base/timestamp.entity';
 import { Users } from '../users/users.entity';
@@ -20,10 +19,6 @@ import { Wallets } from '../wallets/wallets.entity';
 @Entity({ tableName: 'cooperatives' })
 export class Cooperatives extends Timestamp {
   @PrimaryKey()
-  id!: number;
-
-  @Property()
-  @Unique()
   uuid!: string;
 
   @Property()
@@ -64,6 +59,7 @@ export class Cooperatives extends Timestamp {
     referenceColumnName: 'uuid',
     joinColumn: 'uuid',
     columnType: 'varchar(255)',
+    nullable: true
   })
   createdBy: Users;
 }
@@ -76,10 +72,6 @@ export class Cooperatives extends Timestamp {
 @Entity({ tableName: 'cooperative_users' })
 export class CooperativeUsers extends Timestamp {
   @PrimaryKey()
-  id!: number;
-
-  @Property()
-  @Unique()
   uuid!: string;
 
   @ManyToOne(() => Users, {
@@ -88,6 +80,7 @@ export class CooperativeUsers extends Timestamp {
     joinColumn: 'uuid',
     columnType: 'varchar(255)',
     eager: true,
+    nullable: true
   })
   user: Users;
 
@@ -96,6 +89,7 @@ export class CooperativeUsers extends Timestamp {
     referenceColumnName: 'uuid',
     joinColumn: 'uuid',
     columnType: 'varchar(255)',
+    nullable: true
   })
   cooperative: Cooperatives;
 
@@ -111,10 +105,6 @@ export class CooperativeUsers extends Timestamp {
 @Entity({ tableName: 'withdrawal_requests' })
 export class WithdrawalRequests extends Timestamp {
   @PrimaryKey()
-  id!: number;
-
-  @Property()
-  @Unique()
   uuid!: string;
 
   @ManyToOne(() => Users, {
@@ -122,6 +112,7 @@ export class WithdrawalRequests extends Timestamp {
     referenceColumnName: 'uuid',
     joinColumn: 'uuid',
     columnType: 'varchar(255)',
+    nullable: true,
   })
   user: Users;
 
@@ -131,6 +122,7 @@ export class WithdrawalRequests extends Timestamp {
     joinColumn: 'uuid',
     columnType: 'varchar(255)',
     eager: true,
+    nullable: true,
   })
   cooperative: Cooperatives;
 
@@ -140,6 +132,7 @@ export class WithdrawalRequests extends Timestamp {
     joinColumn: 'uuid',
     columnType: 'varchar(255)',
     eager: true,
+    nullable: true
   })
   wallet: Wallets;
 
@@ -151,6 +144,7 @@ export class WithdrawalRequests extends Timestamp {
     referenceColumnName: 'uuid',
     joinColumn: 'uuid',
     columnType: 'varchar(255)',
+    nullable: true
   })
   reviewedBy: Users;
 
@@ -187,10 +181,6 @@ export class WithdrawalRequests extends Timestamp {
 @Entity({ tableName: 'cooperative_applications' })
 export class CooperativeApplications extends Timestamp {
   @PrimaryKey()
-  id!: number;
-
-  @Property()
-  @Unique()
   uuid!: string;
 
   @Property()
@@ -223,6 +213,7 @@ export class CooperativeApplications extends Timestamp {
     joinColumn: 'uuid',
     columnType: 'varchar(255)',
     eager: true,
+    nullable: true,
   })
   reviewedBy: Users;
 
@@ -232,6 +223,7 @@ export class CooperativeApplications extends Timestamp {
     joinColumn: 'uuid',
     columnType: 'varchar(255)',
     eager: true,
+    nullable: true,
   })
   user: Users;
 
@@ -240,6 +232,7 @@ export class CooperativeApplications extends Timestamp {
     referenceColumnName: 'uuid',
     joinColumn: 'uuid',
     columnType: 'varchar(255)',
+    nullable: true
   })
   cooperative: Cooperatives;
 
@@ -261,10 +254,6 @@ export class CooperativeApplications extends Timestamp {
 @Entity({ tableName: 'payments' })
 export class Payments extends Timestamp {
   @PrimaryKey()
-  id!: number;
-
-  @Property()
-  @Unique()
   uuid!: string;
 
   @Property()

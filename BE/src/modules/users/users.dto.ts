@@ -1,13 +1,11 @@
 import {
   IsEmail,
-  IsEnum,
   IsNumber,
   IsOptional,
   IsString,
   Length,
 } from 'class-validator';
 import { IsValidDate } from 'src/tools/date-validator';
-import { Role } from 'src/types';
 
 export class CreateUserDto {
   @IsString()
@@ -30,9 +28,6 @@ export class CreateUserDto {
   @IsString()
   @Length(1, 50)
   password: string;
-
-  @IsEnum(Role)
-  role: Role;
 }
 
 export class CreateCooperativeApplicationDto {

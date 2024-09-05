@@ -4,7 +4,7 @@ import { Timestamp } from '../base/timestamp.entity';
 @Entity({ tableName: 'notification_templates' })
 export class NotificationTemplates extends Timestamp {
   @PrimaryKey()
-  id!: number;
+  uuid!: string;
 
   @Property()
   @Unique()

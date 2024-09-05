@@ -3,15 +3,15 @@
   "tables": [
     {
       "columns": {
-        "id": {
-          "name": "id",
-          "type": "int",
-          "unsigned": true,
-          "autoincrement": true,
-          "primary": true,
+        "uuid": {
+          "name": "uuid",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
           "nullable": false,
-          "length": null,
-          "mappedType": "integer"
+          "length": 255,
+          "mappedType": "string"
         },
         "created_at": {
           "name": "created_at",
@@ -81,7 +81,7 @@
         {
           "keyName": "PRIMARY",
           "columnNames": [
-            "id"
+            "uuid"
           ],
           "composite": false,
           "constraint": true,
@@ -95,15 +95,15 @@
     },
     {
       "columns": {
-        "id": {
-          "name": "id",
-          "type": "int",
-          "unsigned": true,
-          "autoincrement": true,
-          "primary": true,
+        "uuid": {
+          "name": "uuid",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
           "nullable": false,
-          "length": null,
-          "mappedType": "integer"
+          "length": 255,
+          "mappedType": "string"
         },
         "created_at": {
           "name": "created_at",
@@ -173,7 +173,7 @@
         {
           "keyName": "PRIMARY",
           "columnNames": [
-            "id"
+            "uuid"
           ],
           "composite": false,
           "constraint": true,
@@ -187,15 +187,15 @@
     },
     {
       "columns": {
-        "id": {
-          "name": "id",
-          "type": "int",
-          "unsigned": true,
-          "autoincrement": true,
-          "primary": true,
+        "uuid": {
+          "name": "uuid",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
           "nullable": false,
-          "length": null,
-          "mappedType": "integer"
+          "length": 255,
+          "mappedType": "string"
         },
         "created_at": {
           "name": "created_at",
@@ -228,16 +228,6 @@
           "nullable": true,
           "length": null,
           "mappedType": "datetime"
-        },
-        "uuid": {
-          "name": "uuid",
-          "type": "varchar(255)",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "length": 255,
-          "mappedType": "string"
         },
         "transaction_id": {
           "name": "transaction_id",
@@ -318,19 +308,9 @@
       "name": "payments",
       "indexes": [
         {
-          "columnNames": [
-            "uuid"
-          ],
-          "composite": false,
-          "keyName": "payments_uuid_unique",
-          "constraint": true,
-          "primary": false,
-          "unique": true
-        },
-        {
           "keyName": "PRIMARY",
           "columnNames": [
-            "id"
+            "uuid"
           ],
           "composite": false,
           "constraint": true,
@@ -344,15 +324,15 @@
     },
     {
       "columns": {
-        "id": {
-          "name": "id",
-          "type": "int",
-          "unsigned": true,
-          "autoincrement": true,
-          "primary": true,
+        "uuid": {
+          "name": "uuid",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
           "nullable": false,
-          "length": null,
-          "mappedType": "integer"
+          "length": 255,
+          "mappedType": "string"
         },
         "created_at": {
           "name": "created_at",
@@ -385,16 +365,6 @@
           "nullable": true,
           "length": null,
           "mappedType": "datetime"
-        },
-        "uuid": {
-          "name": "uuid",
-          "type": "varchar(255)",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "length": 255,
-          "mappedType": "string"
         },
         "first_name": {
           "name": "first_name",
@@ -532,16 +502,6 @@
       "indexes": [
         {
           "columnNames": [
-            "uuid"
-          ],
-          "composite": false,
-          "keyName": "users_uuid_unique",
-          "constraint": true,
-          "primary": false,
-          "unique": true
-        },
-        {
-          "columnNames": [
             "phone_number"
           ],
           "composite": false,
@@ -563,7 +523,7 @@
         {
           "keyName": "PRIMARY",
           "columnNames": [
-            "id"
+            "uuid"
           ],
           "composite": false,
           "constraint": true,
@@ -577,15 +537,15 @@
     },
     {
       "columns": {
-        "id": {
-          "name": "id",
-          "type": "int",
-          "unsigned": true,
-          "autoincrement": true,
-          "primary": true,
+        "uuid": {
+          "name": "uuid",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
           "nullable": false,
-          "length": null,
-          "mappedType": "integer"
+          "length": 255,
+          "mappedType": "string"
         },
         "created_at": {
           "name": "created_at",
@@ -618,16 +578,6 @@
           "nullable": true,
           "length": null,
           "mappedType": "datetime"
-        },
-        "uuid": {
-          "name": "uuid",
-          "type": "varchar(255)",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "length": 255,
-          "mappedType": "string"
         },
         "name": {
           "name": "name",
@@ -745,23 +695,13 @@
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
-          "nullable": false,
+          "nullable": true,
           "length": 255,
           "mappedType": "string"
         }
       },
       "name": "cooperatives",
       "indexes": [
-        {
-          "columnNames": [
-            "uuid"
-          ],
-          "composite": false,
-          "keyName": "cooperatives_uuid_unique",
-          "constraint": true,
-          "primary": false,
-          "unique": true
-        },
         {
           "columnNames": [
             "user_uuid"
@@ -775,7 +715,7 @@
         {
           "keyName": "PRIMARY",
           "columnNames": [
-            "id"
+            "uuid"
           ],
           "composite": false,
           "constraint": true,
@@ -795,6 +735,7 @@
             "uuid"
           ],
           "referencedTableName": "users",
+          "deleteRule": "set null",
           "updateRule": "cascade"
         }
       },
@@ -802,15 +743,15 @@
     },
     {
       "columns": {
-        "id": {
-          "name": "id",
-          "type": "int",
-          "unsigned": true,
-          "autoincrement": true,
-          "primary": true,
+        "uuid": {
+          "name": "uuid",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
           "nullable": false,
-          "length": null,
-          "mappedType": "integer"
+          "length": 255,
+          "mappedType": "string"
         },
         "created_at": {
           "name": "created_at",
@@ -844,23 +785,13 @@
           "length": null,
           "mappedType": "datetime"
         },
-        "uuid": {
-          "name": "uuid",
-          "type": "varchar(255)",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "length": 255,
-          "mappedType": "string"
-        },
         "user_uuid": {
           "name": "user_uuid",
           "type": "varchar(255)",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
-          "nullable": false,
+          "nullable": true,
           "length": 255,
           "mappedType": "string"
         },
@@ -870,7 +801,7 @@
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
-          "nullable": false,
+          "nullable": true,
           "length": 255,
           "mappedType": "string"
         },
@@ -891,16 +822,6 @@
       },
       "name": "cooperative_users",
       "indexes": [
-        {
-          "columnNames": [
-            "uuid"
-          ],
-          "composite": false,
-          "keyName": "cooperative_users_uuid_unique",
-          "constraint": true,
-          "primary": false,
-          "unique": true
-        },
         {
           "columnNames": [
             "user_uuid"
@@ -924,7 +845,7 @@
         {
           "keyName": "PRIMARY",
           "columnNames": [
-            "id"
+            "uuid"
           ],
           "composite": false,
           "constraint": true,
@@ -944,6 +865,7 @@
             "uuid"
           ],
           "referencedTableName": "users",
+          "deleteRule": "set null",
           "updateRule": "cascade"
         },
         "cooperative_users_cooperative_uuid_foreign": {
@@ -956,6 +878,7 @@
             "uuid"
           ],
           "referencedTableName": "cooperatives",
+          "deleteRule": "set null",
           "updateRule": "cascade"
         }
       },
@@ -963,15 +886,15 @@
     },
     {
       "columns": {
-        "id": {
-          "name": "id",
-          "type": "int",
-          "unsigned": true,
-          "autoincrement": true,
-          "primary": true,
+        "uuid": {
+          "name": "uuid",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
           "nullable": false,
-          "length": null,
-          "mappedType": "integer"
+          "length": 255,
+          "mappedType": "string"
         },
         "created_at": {
           "name": "created_at",
@@ -1004,16 +927,6 @@
           "nullable": true,
           "length": null,
           "mappedType": "datetime"
-        },
-        "uuid": {
-          "name": "uuid",
-          "type": "varchar(255)",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "length": 255,
-          "mappedType": "string"
         },
         "unique_id": {
           "name": "unique_id",
@@ -1101,7 +1014,7 @@
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
-          "nullable": false,
+          "nullable": true,
           "length": 255,
           "mappedType": "string"
         },
@@ -1111,7 +1024,7 @@
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
-          "nullable": false,
+          "nullable": true,
           "length": 255,
           "mappedType": "string"
         },
@@ -1121,7 +1034,7 @@
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
-          "nullable": false,
+          "nullable": true,
           "length": 255,
           "mappedType": "string"
         },
@@ -1164,16 +1077,6 @@
       "indexes": [
         {
           "columnNames": [
-            "uuid"
-          ],
-          "composite": false,
-          "keyName": "cooperative_applications_uuid_unique",
-          "constraint": true,
-          "primary": false,
-          "unique": true
-        },
-        {
-          "columnNames": [
             "reviewed_by"
           ],
           "composite": false,
@@ -1205,7 +1108,7 @@
         {
           "keyName": "PRIMARY",
           "columnNames": [
-            "id"
+            "uuid"
           ],
           "composite": false,
           "constraint": true,
@@ -1225,6 +1128,7 @@
             "uuid"
           ],
           "referencedTableName": "users",
+          "deleteRule": "set null",
           "updateRule": "cascade"
         },
         "cooperative_applications_user_uuid_foreign": {
@@ -1237,6 +1141,7 @@
             "uuid"
           ],
           "referencedTableName": "users",
+          "deleteRule": "set null",
           "updateRule": "cascade"
         },
         "cooperative_applications_cooperative_uuid_foreign": {
@@ -1249,6 +1154,7 @@
             "uuid"
           ],
           "referencedTableName": "cooperatives",
+          "deleteRule": "set null",
           "updateRule": "cascade"
         }
       },
@@ -1256,15 +1162,15 @@
     },
     {
       "columns": {
-        "id": {
-          "name": "id",
-          "type": "int",
-          "unsigned": true,
-          "autoincrement": true,
-          "primary": true,
+        "uuid": {
+          "name": "uuid",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
           "nullable": false,
-          "length": null,
-          "mappedType": "integer"
+          "length": 255,
+          "mappedType": "string"
         },
         "created_at": {
           "name": "created_at",
@@ -1298,16 +1204,6 @@
           "length": null,
           "mappedType": "datetime"
         },
-        "uuid": {
-          "name": "uuid",
-          "type": "varchar(255)",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "length": 255,
-          "mappedType": "string"
-        },
         "title": {
           "name": "title",
           "type": "varchar(255)",
@@ -1336,7 +1232,7 @@
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
-          "nullable": false,
+          "nullable": true,
           "length": 255,
           "mappedType": "string"
         },
@@ -1346,7 +1242,7 @@
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
-          "nullable": false,
+          "nullable": true,
           "length": 255,
           "mappedType": "string"
         },
@@ -1356,23 +1252,13 @@
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
-          "nullable": false,
+          "nullable": true,
           "length": 255,
           "mappedType": "string"
         }
       },
       "name": "wallets",
       "indexes": [
-        {
-          "columnNames": [
-            "uuid"
-          ],
-          "composite": false,
-          "keyName": "wallets_uuid_unique",
-          "constraint": true,
-          "primary": false,
-          "unique": true
-        },
         {
           "columnNames": [
             "cooperative_uuid"
@@ -1406,7 +1292,7 @@
         {
           "keyName": "PRIMARY",
           "columnNames": [
-            "id"
+            "uuid"
           ],
           "composite": false,
           "constraint": true,
@@ -1426,6 +1312,7 @@
             "uuid"
           ],
           "referencedTableName": "cooperatives",
+          "deleteRule": "set null",
           "updateRule": "cascade"
         },
         "wallets_user_uuid_foreign": {
@@ -1438,6 +1325,7 @@
             "uuid"
           ],
           "referencedTableName": "users",
+          "deleteRule": "set null",
           "updateRule": "cascade"
         },
         "wallets_created_by_foreign": {
@@ -1450,6 +1338,7 @@
             "uuid"
           ],
           "referencedTableName": "users",
+          "deleteRule": "set null",
           "updateRule": "cascade"
         }
       },
@@ -1457,15 +1346,15 @@
     },
     {
       "columns": {
-        "id": {
-          "name": "id",
-          "type": "int",
-          "unsigned": true,
-          "autoincrement": true,
-          "primary": true,
+        "uuid": {
+          "name": "uuid",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
           "nullable": false,
-          "length": null,
-          "mappedType": "integer"
+          "length": 255,
+          "mappedType": "string"
         },
         "created_at": {
           "name": "created_at",
@@ -1498,16 +1387,6 @@
           "nullable": true,
           "length": null,
           "mappedType": "datetime"
-        },
-        "uuid": {
-          "name": "uuid",
-          "type": "varchar(255)",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "length": 255,
-          "mappedType": "string"
         },
         "type": {
           "name": "type",
@@ -1564,7 +1443,7 @@
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
-          "nullable": false,
+          "nullable": true,
           "length": 255,
           "mappedType": "string"
         },
@@ -1574,7 +1453,7 @@
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
-          "nullable": false,
+          "nullable": true,
           "length": 255,
           "mappedType": "string"
         },
@@ -1613,16 +1492,6 @@
       "indexes": [
         {
           "columnNames": [
-            "uuid"
-          ],
-          "composite": false,
-          "keyName": "transactions_uuid_unique",
-          "constraint": true,
-          "primary": false,
-          "unique": true
-        },
-        {
-          "columnNames": [
             "wallet_uuid"
           ],
           "composite": false,
@@ -1654,7 +1523,7 @@
         {
           "keyName": "PRIMARY",
           "columnNames": [
-            "id"
+            "uuid"
           ],
           "composite": false,
           "constraint": true,
@@ -1674,6 +1543,7 @@
             "uuid"
           ],
           "referencedTableName": "wallets",
+          "deleteRule": "set null",
           "updateRule": "cascade"
         },
         "transactions_user_uuid_foreign": {
@@ -1686,6 +1556,7 @@
             "uuid"
           ],
           "referencedTableName": "users",
+          "deleteRule": "set null",
           "updateRule": "cascade"
         },
         "transactions_payment_uuid_foreign": {
@@ -1705,15 +1576,15 @@
     },
     {
       "columns": {
-        "id": {
-          "name": "id",
-          "type": "int",
-          "unsigned": true,
-          "autoincrement": true,
-          "primary": true,
+        "uuid": {
+          "name": "uuid",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
           "nullable": false,
-          "length": null,
-          "mappedType": "integer"
+          "length": 255,
+          "mappedType": "string"
         },
         "created_at": {
           "name": "created_at",
@@ -1747,23 +1618,13 @@
           "length": null,
           "mappedType": "datetime"
         },
-        "uuid": {
-          "name": "uuid",
-          "type": "varchar(255)",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "length": 255,
-          "mappedType": "string"
-        },
         "user_uuid": {
           "name": "user_uuid",
           "type": "varchar(255)",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
-          "nullable": false,
+          "nullable": true,
           "length": 255,
           "mappedType": "string"
         },
@@ -1773,7 +1634,7 @@
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
-          "nullable": false,
+          "nullable": true,
           "length": 255,
           "mappedType": "string"
         },
@@ -1783,7 +1644,7 @@
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
-          "nullable": false,
+          "nullable": true,
           "length": 255,
           "mappedType": "string"
         },
@@ -1807,7 +1668,7 @@
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
-          "nullable": false,
+          "nullable": true,
           "length": 255,
           "mappedType": "string"
         },
@@ -1898,16 +1759,6 @@
       "indexes": [
         {
           "columnNames": [
-            "uuid"
-          ],
-          "composite": false,
-          "keyName": "withdrawal_requests_uuid_unique",
-          "constraint": true,
-          "primary": false,
-          "unique": true
-        },
-        {
-          "columnNames": [
             "user_uuid"
           ],
           "composite": false,
@@ -1949,7 +1800,7 @@
         {
           "keyName": "PRIMARY",
           "columnNames": [
-            "id"
+            "uuid"
           ],
           "composite": false,
           "constraint": true,
@@ -1969,6 +1820,7 @@
             "uuid"
           ],
           "referencedTableName": "users",
+          "deleteRule": "set null",
           "updateRule": "cascade"
         },
         "withdrawal_requests_cooperative_uuid_foreign": {
@@ -1981,6 +1833,7 @@
             "uuid"
           ],
           "referencedTableName": "cooperatives",
+          "deleteRule": "set null",
           "updateRule": "cascade"
         },
         "withdrawal_requests_wallet_uuid_foreign": {
@@ -1993,6 +1846,7 @@
             "uuid"
           ],
           "referencedTableName": "wallets",
+          "deleteRule": "set null",
           "updateRule": "cascade"
         },
         "withdrawal_requests_reviewed_by_foreign": {
@@ -2005,6 +1859,7 @@
             "uuid"
           ],
           "referencedTableName": "users",
+          "deleteRule": "set null",
           "updateRule": "cascade"
         }
       },

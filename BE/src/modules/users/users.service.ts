@@ -131,46 +131,48 @@ export class UsersService {
     application: CreateCooperativeApplicationDto,
     { uuid }: IAuthContext,
   ) {
-    const cooperativeExists = await this.cooperativeRepository.findOne({
-      uniqueId: application.uniqueId,
-    });
-    if (!cooperativeExists)
-      throw new NotFoundException(
-        `Cooperative with unique id: ${application.uniqueId} does not exist`,
-      );
-    const userExistsInCooperative =
-      await this.cooperativeUsersRepository.findOne({
-        user: { uuid },
-        cooperative: { uuid: cooperativeExists.uuid },
-      });
-    if (userExistsInCooperative)
-      throw new ConflictException(`User already exists in cooperative`);
-    const applicationExists =
-      await this.cooperativeApplicationsRepository.findOne({
-        user: { uuid },
-        cooperative: { uuid: cooperativeExists.uuid },
-      });
-    if (applicationExists)
-      throw new ConflictException(`Application already exists`);
-    const phoneNumber = this.sharedService.validatePhoneNumber(
-      application.phoneNumber,
-    );
-    application.phoneNumber = phoneNumber.substring(1);
-    const cooperativeApplicationModel =
-      this.cooperativeApplicationsRepository.create({
-        uuid: v4(),
+    await this.em.transactional(async (em) => {
+      const cooperativeExists = await this.cooperativeRepository.findOne({
         uniqueId: application.uniqueId,
-        membershipNo: application.membershipNo,
-        fullName: application.fullName,
-        dateOfBirth: application.dateOfBirth,
-        phoneNumber: application.phoneNumber,
-        email: application.email,
-        address: application.address,
-        user: { uuid },
-        cooperative: { uuid: cooperativeExists.uuid },
-        status: ApplicationStatus.PENDING,
       });
-    await this.em.persistAndFlush(cooperativeApplicationModel);
+      if (!cooperativeExists)
+        throw new NotFoundException(
+          `Cooperative with unique id: ${application.uniqueId} does not exist`,
+        );
+      const userExistsInCooperative =
+        await this.cooperativeUsersRepository.findOne({
+          user: { uuid },
+          cooperative: { uuid: cooperativeExists.uuid },
+        });
+      if (userExistsInCooperative)
+        throw new ConflictException(`User already exists in cooperative`);
+      const applicationExists =
+        await this.cooperativeApplicationsRepository.findOne({
+          user: { uuid },
+          cooperative: { uuid: cooperativeExists.uuid },
+        });
+      if (applicationExists)
+        throw new ConflictException(`Application already exists`);
+      const phoneNumber = this.sharedService.validatePhoneNumber(
+        application.phoneNumber,
+      );
+      application.phoneNumber = phoneNumber.substring(1);
+      const cooperativeApplicationModel =
+        this.cooperativeApplicationsRepository.create({
+          uuid: v4(),
+          uniqueId: application.uniqueId,
+          membershipNo: application.membershipNo,
+          fullName: application.fullName,
+          dateOfBirth: application.dateOfBirth,
+          phoneNumber: application.phoneNumber,
+          email: application.email,
+          address: application.address,
+          user: this.usersRepository.getReference(uuid),
+          cooperative: this.cooperativeRepository.getReference(uuid),
+          status: ApplicationStatus.PENDING,
+        });
+      await em.persistAndFlush(cooperativeApplicationModel);
+    });
   }
 
   async fetchCooperativeApplication(
@@ -255,9 +257,9 @@ export class UsersService {
     const withdrawalRequestModel = this.withdrawalRequestRepository.create({
       uuid: v4(),
       status: ApplicationStatus.PENDING,
-      user: { uuid },
+      user: this.usersRepository.getReference(uuid),
       cooperative: walletExists.cooperative,
-      wallet: { uuid: walletUuid },
+      wallet: this.walletsRepository.getReference(walletUuid),
       bankName: request.bankName,
       bankCode: request.bankCode,
       accountNumber: request.accountNumber,

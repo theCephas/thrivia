@@ -9,7 +9,7 @@ import { Timestamp } from '../../base/timestamp.entity';
 @Entity({ tableName: 'otp' })
 export class OTP extends Timestamp {
   @PrimaryKey()
-  id!: number;
+  uuid!: string;
 
   @Property({ length: 6 })
   otp!: string;
@@ -29,10 +29,6 @@ export class OTP extends Timestamp {
 @Entity({ tableName: 'users' })
 export class Users extends Timestamp {
   @PrimaryKey()
-  id!: number;
-
-  @Property()
-  @Unique()
   uuid!: string;
 
   @Property()

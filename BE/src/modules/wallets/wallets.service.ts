@@ -8,6 +8,8 @@ import { BankDetailsDto, CreditWalletDto } from './wallets.dto';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { Transactions, Wallets } from './wallets.entity';
 import { EntityManager, EntityRepository } from '@mikro-orm/core';
+import { Payments } from '../cooperatives/cooperatives.entity';
+import { Users } from '../users/users.entity';
 
 @Injectable()
 export class WalletsService {
@@ -19,6 +21,10 @@ export class WalletsService {
     private readonly walletsRepository: EntityRepository<Wallets>,
     @InjectRepository(Transactions)
     private readonly transactionRepository: EntityRepository<Transactions>,
+    @InjectRepository(Payments)
+    private readonly paymentsRepository: EntityRepository<Payments>,
+    @InjectRepository(Users)
+    private readonly usersRepository: EntityRepository<Users>,
     private readonly paymentFactory: PaymentFactory,
     private readonly em: EntityManager,
   ) {
@@ -39,29 +45,31 @@ export class WalletsService {
   }
 
   async creditWallet(details: CreditWalletDto) {
-    const wallet = await this.walletsRepository.findOne({
-      uuid: details.walletUuid,
+    await this.em.transactional(async (em) => {
+      const wallet = await this.walletsRepository.findOne({
+        uuid: details.walletUuid,
+      });
+      if (!wallet)
+        throw new NotFoundException(
+          `Wallet with id: ${details.walletUuid} does not exist`,
+        );
+      const transactionModel = this.transactionRepository.create({
+        type: TransactionType.CREDIT,
+        balanceBefore: wallet.balance,
+        balanceAfter: wallet.balance + details.amount,
+        amount: details.amount,
+        wallet: this.walletsRepository.getReference(wallet.uuid),
+        walletSnapshot: JSON.stringify(wallet),
+        payment: this.paymentsRepository.getReference(details.paymentUuid),
+        user: this.usersRepository.getReference(details.userUuid),
+        remark: details.remark,
+      });
+      await em.persistAndFlush(transactionModel);
+      const walletModel = this.walletsRepository.create({
+        uuid: wallet.uuid,
+        balance: wallet.balance + details.amount,
+      });
+      await em.persistAndFlush(walletModel);
     });
-    if (!wallet)
-      throw new NotFoundException(
-        `Wallet with id: ${details.walletUuid} does not exist`,
-      );
-    const transactionModel = this.transactionRepository.create({
-      type: TransactionType.CREDIT,
-      balanceBefore: wallet.balance,
-      balanceAfter: wallet.balance + details.amount,
-      amount: details.amount,
-      wallet: { uuid: wallet.uuid },
-      walletSnapshot: JSON.stringify(wallet),
-      payment: { uuid: details.paymentUuid },
-      user: { uuid: details.userUuid },
-      remark: details.remark,
-    });
-    await this.em.persistAndFlush(transactionModel);
-    const walletModel = this.walletsRepository.create({
-      id: wallet.id,
-      balance: wallet.balance + details.amount,
-    });
-    await this.em.persistAndFlush(walletModel);
   }
 }

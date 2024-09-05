@@ -17,7 +17,7 @@ import {
   Payments,
   WithdrawalRequests,
 } from './cooperatives.entity';
-import { EntityManager, EntityRepository } from '@mikro-orm/core';
+import { EntityManager, EntityRepository, Reference } from '@mikro-orm/core';
 import {
   CreateCooperativeDto,
   DepositMoneyDto,
@@ -42,6 +42,7 @@ import { WalletsService } from '../wallets/wallets.service';
 import { nanoid } from 'nanoid';
 import PaymentFactory from '../shared/payment-providers/payment-provider.factory';
 import { PaymentProvider } from '../shared/payment-providers/payment-provider.contract';
+import { Users } from '../users/users.entity';
 
 @Injectable()
 export class CooperativesService {
@@ -62,6 +63,8 @@ export class CooperativesService {
     private readonly transactionRepository: EntityRepository<Transactions>,
     @InjectRepository(WithdrawalRequests)
     private readonly withdrawalRequestRepository: EntityRepository<WithdrawalRequests>,
+    @InjectRepository(Users)
+    private readonly usersRepository: EntityRepository<Users>,
     @Inject(MonnifyConfiguration.KEY)
     private readonly monnifyConfig: ConfigType<typeof MonnifyConfiguration>,
     private readonly em: EntityManager,
@@ -75,58 +78,60 @@ export class CooperativesService {
     cooperative: CreateCooperativeDto,
     { uuid }: IAuthContext,
   ) {
-    const existingCooperative = await this.cooperativesRepository.findOne([
-      { name: cooperative.name },
-      { regNo: cooperative.regNo },
-    ]);
-    if (existingCooperative) {
-      if (existingCooperative.name === cooperative.name) {
-        throw new ConflictException(
-          `Cooperative with name: ${existingCooperative.name} already exist`,
-        );
+    await this.em.transactional(async (em) => {
+      const existingCooperative = await this.cooperativesRepository.findOne([
+        { name: cooperative.name },
+        { regNo: cooperative.regNo },
+      ]);
+      if (existingCooperative) {
+        if (existingCooperative.name === cooperative.name) {
+          throw new ConflictException(
+            `Cooperative with name: ${existingCooperative.name} already exist`,
+          );
+        }
+        if (existingCooperative.regNo === cooperative.regNo) {
+          throw new ConflictException(
+            `Cooperative with registration no: ${existingCooperative.regNo} already exist`,
+          );
+        }
       }
-      if (existingCooperative.regNo === cooperative.regNo) {
-        throw new ConflictException(
-          `Cooperative with registration no: ${existingCooperative.regNo} already exist`,
-        );
-      }
-    }
-    const cooperativeModel = this.cooperativesRepository.create({
-      uuid: v4(),
-      name: cooperative.name,
-      regNo: cooperative.regNo,
-      address: cooperative.address,
-      contactEmail: cooperative.contactEmail,
-      contactPhone: cooperative.contactPhone,
-      bankName: cooperative.bankName,
-      accountNo: cooperative.accountNo,
-      accountName: cooperative.accountName,
-      uniqueId: `COOP-${generateRandomDigits()}`,
-      slug: `${cooperative.name.replace(/ /g, '-')}.thrivia.com`,
-      createdBy: { uuid },
+      const cooperativeModel = this.cooperativesRepository.create({
+        uuid: v4(),
+        name: cooperative.name,
+        regNo: cooperative.regNo,
+        address: cooperative.address,
+        contactEmail: cooperative.contactEmail,
+        contactPhone: cooperative.contactPhone,
+        bankName: cooperative.bankName,
+        accountNo: cooperative.accountNo,
+        accountName: cooperative.accountName,
+        uniqueId: `COOP-${generateRandomDigits()}`,
+        slug: `${cooperative.name.toLowerCase().replace(/ /g, '-')}.thrivia.com`,
+        createdBy: this.usersRepository.getReference(uuid),
+      });
+      await em.persistAndFlush(cooperativeModel);
+      const cooperativeUserModel = this.cooperativeUsersRepository.create({
+        uuid: v4(),
+        cooperative: this.cooperativesRepository.getReference(cooperativeModel.uuid),
+        user: this.usersRepository.getReference(uuid),
+      });
+      await em.persistAndFlush(cooperativeUserModel);
+      const cooperativeWalletModel = this.walletsRepository.create({
+        uuid: v4(),
+        title: 'Savings',
+        cooperative: this.cooperativesRepository.getReference(cooperativeModel.uuid),
+        createdBy: this.usersRepository.getReference(uuid),
+      });
+      await em.persistAndFlush(cooperativeWalletModel);
+      const cooperativeOwnerWalletModel = this.walletsRepository.create({
+        uuid: v4(),
+        title: 'Savings',
+        cooperative: this.cooperativesRepository.getReference(cooperativeModel.uuid),
+        user: this.usersRepository.getReference(uuid),
+        createdBy: this.usersRepository.getReference(uuid),
+      });
+      await em.persistAndFlush(cooperativeOwnerWalletModel);
     });
-    await this.em.persistAndFlush(cooperativeModel);
-    const cooperativeUserModel = this.cooperativeUsersRepository.create({
-      uuid: v4(),
-      cooperative: { uuid: cooperativeModel.uuid },
-      user: { uuid },
-    });
-    await this.em.persistAndFlush(cooperativeUserModel);
-    const walletModel = this.walletsRepository.create({
-      uuid: v4(),
-      title: 'Savings',
-      cooperative: { uuid: cooperativeModel.uuid },
-      createdBy: { uuid },
-    });
-    await this.em.persistAndFlush(walletModel);
-    const wallet2Model = this.walletsRepository.create({
-      uuid: v4(),
-      title: 'Savings',
-      cooperative: { uuid: cooperativeModel.uuid },
-      user: { uuid },
-      createdBy: { uuid },
-    });
-    await this.em.persistAndFlush(wallet2Model);
   }
 
   async fetchWallets(cooperativeUuid: string, { uuid }: IAuthContext) {
@@ -160,37 +165,39 @@ export class CooperativesService {
     { uuid }: IAuthContext,
   ) {
     await this.cooperativeGuard(cooperativeUuid, uuid);
-    const applicationExists =
-      await this.cooperativeApplicationsRepository.findOne({
-        uuid: applicationUuid,
+    await this.em.transactional(async (em) => {
+      const applicationExists =
+        await this.cooperativeApplicationsRepository.findOne({
+          uuid: applicationUuid,
+        });
+      if (!applicationExists)
+        throw new NotFoundException(
+          `Cooperative application with id: ${applicationUuid} does not exist`,
+        );
+      const cooperativeApplicationModel =
+        this.cooperativeApplicationsRepository.create({
+          uuid: applicationExists.uuid,
+          reviewedAt: new Date(),
+          reviewedBy: this.usersRepository.getReference(uuid),
+          status: ApplicationStatus.APPROVED,
+        });
+      await em.persistAndFlush(cooperativeApplicationModel);
+      const cooperativeUserModel = this.cooperativeUsersRepository.create({
+        user: applicationExists.user,
+        cooperative: applicationExists.cooperative,
+        uuid: v4(),
+        role: Role.MEMBER,
       });
-    if (!applicationExists)
-      throw new NotFoundException(
-        `Cooperative application with id: ${applicationUuid} does not exist`,
-      );
-    const cooperativeApplicationModel =
-      this.cooperativeApplicationsRepository.create({
-        id: applicationExists.id,
-        reviewedAt: new Date(),
-        reviewedBy: { uuid },
-        status: ApplicationStatus.APPROVED,
+      await em.persistAndFlush(cooperativeUserModel);
+      const walletModel = this.walletsRepository.create({
+        uuid: v4(),
+        title: 'Savings',
+        cooperative: applicationExists.cooperative,
+        user: applicationExists.user,
+        createdBy: this.usersRepository.getReference(uuid),
       });
-    await this.em.persistAndFlush(cooperativeApplicationModel);
-    const cooperativeUserModel = this.cooperativeUsersRepository.create({
-      user: applicationExists.user,
-      cooperative: applicationExists.cooperative,
-      uuid: v4(),
-      role: Role.MEMBER,
+      await em.persistAndFlush(walletModel);
     });
-    await this.em.persistAndFlush(cooperativeUserModel);
-    const walletModel = this.walletsRepository.create({
-      uuid: v4(),
-      title: 'Savings',
-      cooperative: applicationExists.cooperative,
-      user: applicationExists.user,
-      createdBy: { uuid },
-    });
-    await this.em.persistAndFlush(walletModel);
   }
 
   async approveWithdrawalRequest(
@@ -199,78 +206,80 @@ export class CooperativesService {
     { uuid }: IAuthContext,
   ) {
     await this.cooperativeGuard(cooperativeUuid, uuid);
-    const requestExists = await this.withdrawalRequestRepository.findOne(
-      {
-        uuid: requestUuid,
-      },
-      {},
-    );
-    if (!requestExists)
-      throw new NotFoundException(
-        `Withdrawal request with id: ${requestUuid} does not exist`,
+    await this.em.transactional(async (em) => {
+      const requestExists = await this.withdrawalRequestRepository.findOne(
+        {
+          uuid: requestUuid,
+        },
+        {},
       );
-    const withdrawalRequestModel = this.withdrawalRequestRepository.create({
-      id: requestExists.id,
-      reviewedAt: new Date(),
-      reviewedBy: { uuid },
-      status: ApplicationStatus.APPROVED,
+      if (!requestExists)
+        throw new NotFoundException(
+          `Withdrawal request with id: ${requestUuid} does not exist`,
+        );
+      const withdrawalRequestModel = this.withdrawalRequestRepository.create({
+        uuid: requestExists.uuid,
+        reviewedAt: new Date(),
+        reviewedBy: this.usersRepository.getReference(uuid),
+        status: ApplicationStatus.APPROVED,
+      });
+      await em.persistAndFlush(withdrawalRequestModel);
+      const reference = nanoid();
+      const response = await this.paymentProvider.payout({
+        amount: requestExists.amount,
+        bankCode: requestExists.bankCode,
+        accountNumber: requestExists.accountNumber,
+        accountName: requestExists.accountName,
+        reference,
+        narration: `Withdrawal from ${requestExists.cooperative.name} to ${requestExists.accountName}`,
+      });
+      if (response.status === 'success') {
+        const walletModel = this.walletsRepository.create({
+          uuid: requestExists.wallet.uuid,
+          balance: requestExists.wallet.balance - requestExists.amount,
+        });
+        await em.persistAndFlush(walletModel);
+        const paymentUuid = v4();
+        const paymentModel = this.paymentRepository.create({
+          uuid: paymentUuid,
+          transactionId: reference,
+          status: 'successful',
+          amount: requestExists.amount,
+          channel: 'withdrawal',
+          metadata: JSON.stringify(response.data),
+          type: PaymentType.OUTGOING,
+          currencies: Currencies.NGN,
+        });
+        await em.persistAndFlush(paymentModel);
+        const transactionModel = this.transactionRepository.create({
+          type: TransactionType.DEBIT,
+          balanceBefore: requestExists.wallet.balance,
+          balanceAfter: requestExists.wallet.balance - requestExists.amount,
+          amount: requestExists.amount,
+          wallet: this.walletsRepository.getReference(requestExists.wallet.uuid),
+          walletSnapshot: JSON.stringify(requestExists.wallet),
+          payment: this.paymentRepository.getReference(paymentUuid),
+          user: requestExists.user,
+          remark: `Withdrawal from ${requestExists.cooperative.name} to ${requestExists.accountName}`,
+        });
+        await em.persistAndFlush(transactionModel);
+      } else {
+        const paymentModel = this.paymentRepository.create({
+          transactionId: reference,
+          status: 'failed',
+          amount: requestExists.amount,
+          channel: 'withdrawal',
+          metadata: JSON.stringify(response.data),
+          type: PaymentType.OUTGOING,
+          currencies: Currencies.NGN,
+        });
+        await em.persistAndFlush(paymentModel);
+        throw new HttpException(
+          'Transaction Failed',
+          HttpStatus.EXPECTATION_FAILED,
+        );
+      }
     });
-    await this.em.persistAndFlush(withdrawalRequestModel);
-    const reference = nanoid();
-    const response = await this.paymentProvider.payout({
-      amount: requestExists.amount,
-      bankCode: requestExists.bankCode,
-      accountNumber: requestExists.accountNumber,
-      accountName: requestExists.accountName,
-      reference,
-      narration: `Withdrawal from ${requestExists.cooperative.name} to ${requestExists.accountName}`,
-    });
-    if (response.status === 'success') {
-      const walletModel = this.walletsRepository.create({
-        id: requestExists.wallet.id,
-        balance: requestExists.wallet.balance - requestExists.amount,
-      });
-      await this.em.persistAndFlush(walletModel);
-      const paymentUuid = v4();
-      const paymentModel = this.paymentRepository.create({
-        uuid: paymentUuid,
-        transactionId: reference,
-        status: 'successful',
-        amount: requestExists.amount,
-        channel: 'withdrawal',
-        metadata: JSON.stringify(response.data),
-        type: PaymentType.OUTGOING,
-        currencies: Currencies.NGN,
-      });
-      await this.em.persistAndFlush(paymentModel);
-      const transactionModel = this.transactionRepository.create({
-        type: TransactionType.DEBIT,
-        balanceBefore: requestExists.wallet.balance,
-        balanceAfter: requestExists.wallet.balance - requestExists.amount,
-        amount: requestExists.amount,
-        wallet: { uuid: requestExists.wallet.uuid },
-        walletSnapshot: JSON.stringify(requestExists.wallet),
-        payment: { uuid: paymentUuid },
-        user: requestExists.user,
-        remark: `Withdrawal from ${requestExists.cooperative.name} to ${requestExists.accountName}`,
-      });
-      await this.em.persistAndFlush(transactionModel);
-    } else {
-      const paymentModel = this.paymentRepository.create({
-        transactionId: reference,
-        status: 'failed',
-        amount: requestExists.amount,
-        channel: 'withdrawal',
-        metadata: JSON.stringify(response.data),
-        type: PaymentType.OUTGOING,
-        currencies: Currencies.NGN,
-      });
-      await this.em.persistAndFlush(paymentModel);
-      throw new HttpException(
-        'Transaction Failed',
-        HttpStatus.EXPECTATION_FAILED,
-      );
-    }
   }
 
   async rejectApplication(
@@ -280,23 +289,25 @@ export class CooperativesService {
     { uuid }: IAuthContext,
   ) {
     await this.cooperativeGuard(cooperativeUuid, uuid);
-    const applicationExists =
-      await this.cooperativeApplicationsRepository.findOne({
-        uuid: applicationUuid,
-      });
-    if (!applicationExists)
-      throw new NotFoundException(
-        `Cooperative application with uuid: ${applicationUuid} does not exist`,
-      );
-    const cooperativeApplicationModel =
-      this.cooperativeApplicationsRepository.create({
-        id: applicationExists.id,
-        reviewedAt: new Date(),
-        reviewedBy: { uuid },
-        rejectionReason: reason,
-        status: ApplicationStatus.REJECTED,
-      });
-    await this.em.persistAndFlush(cooperativeApplicationModel);
+    await this.em.transactional(async (em) => {
+      const applicationExists =
+        await this.cooperativeApplicationsRepository.findOne({
+          uuid: applicationUuid,
+        });
+      if (!applicationExists)
+        throw new NotFoundException(
+          `Cooperative application with uuid: ${applicationUuid} does not exist`,
+        );
+      const cooperativeApplicationModel =
+        this.cooperativeApplicationsRepository.create({
+          uuid: applicationExists.uuid,
+          reviewedAt: new Date(),
+          reviewedBy: this.usersRepository.getReference(uuid),
+          rejectionReason: reason,
+          status: ApplicationStatus.REJECTED,
+        });
+      await em.persistAndFlush(cooperativeApplicationModel);
+    });
   }
 
   async rejectWithdrawalRequest(
@@ -306,21 +317,23 @@ export class CooperativesService {
     { uuid }: IAuthContext,
   ) {
     await this.cooperativeGuard(cooperativeUuid, uuid);
-    const requestExists = await this.withdrawalRequestRepository.findOne({
-      uuid: requestUuid,
+    await this.em.transactional(async (em) => {
+      const requestExists = await this.withdrawalRequestRepository.findOne({
+        uuid: requestUuid,
+      });
+      if (!requestExists)
+        throw new NotFoundException(
+          `Withdrawal request with uuid: ${requestUuid} does not exist`,
+        );
+      const withdrawalRequestModel = this.withdrawalRequestRepository.create({
+        uuid: requestExists.uuid,
+        reviewedAt: new Date(),
+        reviewedBy: this.usersRepository.getReference(uuid),
+        rejectionReason: reason,
+        status: ApplicationStatus.REJECTED,
+      });
+      await em.persistAndFlush(withdrawalRequestModel);
     });
-    if (!requestExists)
-      throw new NotFoundException(
-        `Withdrawal request with uuid: ${requestUuid} does not exist`,
-      );
-    const withdrawalRequestModel = this.withdrawalRequestRepository.create({
-      id: requestExists.id,
-      reviewedAt: new Date(),
-      reviewedBy: { uuid },
-      rejectionReason: reason,
-      status: ApplicationStatus.REJECTED,
-    });
-    await this.em.persistAndFlush(withdrawalRequestModel);
   }
 
   async getApplicationDetails(

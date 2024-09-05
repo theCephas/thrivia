@@ -6,7 +6,6 @@ import {
   OneToOne,
   PrimaryKey,
   Property,
-  Unique,
 } from '@mikro-orm/core';
 import { Timestamp } from '../../base/timestamp.entity';
 import { Cooperatives, Payments } from '../cooperatives/cooperatives.entity';
@@ -21,10 +20,6 @@ import { TransactionType } from '../../types';
 @Entity({ tableName: 'wallets' })
 export class Wallets extends Timestamp {
   @PrimaryKey()
-  id!: number;
-
-  @Property()
-  @Unique()
   uuid!: string;
 
   @Property()
@@ -38,6 +33,7 @@ export class Wallets extends Timestamp {
     referenceColumnName: 'uuid',
     joinColumn: 'uuid',
     columnType: 'varchar(255)',
+    nullable: true,
   })
   cooperative: Cooperatives;
 
@@ -46,6 +42,7 @@ export class Wallets extends Timestamp {
     referenceColumnName: 'uuid',
     joinColumn: 'uuid',
     columnType: 'varchar(255)',
+    nullable: true
   })
   user: Users;
 
@@ -54,6 +51,7 @@ export class Wallets extends Timestamp {
     referenceColumnName: 'uuid',
     joinColumn: 'uuid',
     columnType: 'varchar(255)',
+    nullable: true
   })
   createdBy: Users;
 }
@@ -66,10 +64,6 @@ export class Wallets extends Timestamp {
 @Entity({ tableName: 'transactions' })
 export class Transactions extends Timestamp {
   @PrimaryKey()
-  id!: number;
-
-  @Property()
-  @Unique()
   uuid!: string;
 
   @Enum({ items: () => TransactionType })
@@ -89,6 +83,7 @@ export class Transactions extends Timestamp {
     referenceColumnName: 'uuid',
     joinColumn: 'uuid',
     columnType: 'varchar(255)',
+    nullable: true
   })
   wallet!: Wallets;
 
@@ -97,6 +92,7 @@ export class Transactions extends Timestamp {
     referenceColumnName: 'uuid',
     joinColumn: 'uuid',
     columnType: 'varchar(255)',
+    nullable: true
   })
   user!: Users;
 
