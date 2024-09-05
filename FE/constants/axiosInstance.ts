@@ -1,4 +1,10 @@
+import useAuthStore from "@/store";
 import axios from "axios";
+
+const useAuthToken = () => {
+  const token = useAuthStore((state) => state.token);
+  return token;
+};
 
 // Create an Axios instance
 const axiosInstance = axios.create({
@@ -9,26 +15,37 @@ const axiosInstance = axios.create({
   },
 });
 
-axiosInstance.interceptors.request.use(
-  (config) => {
-    const token = "your-token-here";
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+export const useAxiosInstance = () => {
+  const token = useAuthToken();
+  axiosInstance.interceptors.request.use(
+    (config) => {
+      if (token) {
+        config.headers.Authorization = `Bearer ${
+          token.manager ? token.manager : token.member
+        }`;
+      }
+      return config;
+    },
+    (error) => {
+      return Promise.reject(error);
     }
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
+  );
 
-axiosInstance.interceptors.response.use(
-  (response) => {
-    return response;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
+  axiosInstance.interceptors.response.use(
+    (response) => {
+      return response;
+    },
+    (error) => {
+      if (error.response) {
+        const data = error.response.data;
+        const message =
+          typeof data.message !== "string"
+            ? data.message?.join("\n")
+            : data.message;
+        throw new Error(message);
+      }
+    }
+  );
 
-export default axiosInstance;
+  return axiosInstance;
+};

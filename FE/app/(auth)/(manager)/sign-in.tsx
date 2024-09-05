@@ -1,21 +1,65 @@
 import Call from "@/assets/svg/Call";
 import Lock from "@/assets/svg/Lock";
 import CustomButton from "@/components/CustomButton";
+import FormLoader from "@/components/FormLoader";
 import InputField from "@/components/InputField";
-import { Icons } from "@/constants";
+import { useAxiosInstance } from "@/constants/axiosInstance";
+import useAuthStore from "@/store";
 
 import { Link, router } from "expo-router";
-// import { Ionicons } from "@expo/vector-icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Image, ScrollView, Text, View } from "react-native";
+import Toast from "react-native-toast-message";
 
 const SignIn = () => {
+  const axiosInstance = useAxiosInstance();
   const [form, setForm] = useState({
     phoneNumber: "",
     password: "",
   });
+  const [loading, setLoading] = useState(false);
+  const { login, token } = useAuthStore();
 
-  // const onSignUpPress = async () => {};
+  useEffect(() => {
+    if (token) {
+      token.manager
+        ? router.replace("/(root)/(manager-tabs)/home")
+        : token.member
+        ? router.replace("/(root)/(tabs)/home")
+        : "";
+    }
+  }, [token]);
+
+  const onSignUpPress = async () => {
+    setLoading(true);
+    try {
+      const res = await axiosInstance.post("/auth/login", {
+        emailOrPhone: form.phoneNumber,
+        password: form.password,
+        role: "MANAGER",
+      });
+
+      const data = res.data;
+
+      if (data.accessToken) {
+        Toast.show({
+          type: "success",
+          text1: `Login Successful!`,
+        });
+
+        const { accessToken, expiresIn, user } = data;
+        login({ member: accessToken }, expiresIn, user);
+      }
+    } catch (err) {
+      Toast.show({
+        type: "error",
+        text1: `${err}`,
+      });
+      // console.log(err);
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <ScrollView className="relative h-full flex-1 bg-[#1d2128]">
       <View className="flex-1 items-center justify-center flex-col gap-8 bg-[#1d2128] mt-[60px]">
@@ -50,9 +94,8 @@ const SignIn = () => {
         <View className="mt-[270px]">
           <CustomButton
             title="Log In"
-            // onPress={onSignUpPress}
+            onPress={onSignUpPress}
             className="mt-6"
-            onPress={() => router.push("/(manager-tabs)/home")}
           />
           <View className="flex items-center justify-center mb-8">
             <Link
@@ -65,6 +108,8 @@ const SignIn = () => {
           </View>
         </View>
       </View>
+      <Toast position="top" topOffset={100} />
+      {loading && <FormLoader />}
     </ScrollView>
   );
 };

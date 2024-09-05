@@ -3,11 +3,11 @@ import Notification from "@/assets/svg/Notification";
 import Settings from "@/assets/svg/Settings";
 import Unsee from "@/assets/svg/Unsee";
 import Swiper from "react-native-swiper";
-import { Image, Text, View } from "react-native";
+import { Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRef, useState } from "react";
-import { managerBlDeets, publicBalance, publicBlDeets } from "@/constants";
+import { managerBlDeets, publicBalance } from "@/constants";
 import BgStyling from "@/assets/svg/BgStyling";
 import CustomButton from "@/components/CustomButton";
 import InviteModal from "@/components/InviteModal";
@@ -21,11 +21,6 @@ const Home = () => {
   const onSubmit = () => {
     setIsModalVisible(true);
   };
-
-  // const handleFileSelected = (file: any) => {
-  //   console.log("Selected file:", file);
-  //   // Handle file processing here
-  // };
 
   return (
     <SafeAreaView className="flex-1 bg-[#1d2128]">

@@ -2,7 +2,9 @@ import Finance from "@/assets/svg/Finance";
 import Home from "@/assets/svg/Home";
 import People from "@/assets/svg/People";
 import Profile from "@/assets/svg/Profile";
-import { Tabs } from "expo-router";
+import useAuthStore from "@/store";
+import { Tabs, useRouter } from "expo-router";
+import { useEffect } from "react";
 import { Text, View } from "react-native";
 import { SvgProps } from "react-native-svg";
 
@@ -38,6 +40,17 @@ const TabIcon = ({
 );
 
 export default function Layout() {
+  const router = useRouter();
+
+  const { user, token } = useAuthStore();
+
+  useEffect(() => {
+    !token || !user
+      ? router.replace("/(auth)/signin-options")
+      : token.manager
+      ? router.replace("/(root)/(manager-tabs)/home")
+      : "";
+  }, [token]);
   return (
     <Tabs
       initialRouteName="index"

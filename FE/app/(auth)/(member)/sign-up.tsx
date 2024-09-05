@@ -4,15 +4,16 @@ import Lock from "@/assets/svg/Lock";
 import Thrivia from "@/assets/svg/Thrivia";
 import User from "@/assets/svg/User";
 import CustomButton from "@/components/CustomButton";
+import FormLoader from "@/components/FormLoader";
 import InputField from "@/components/InputField";
-import axiosInstance from "@/constants/axiosInstance";
+import { useAxiosInstance } from "@/constants/axiosInstance";
 import useAuthStore from "@/store";
-
 import { Link, router } from "expo-router";
 import { useEffect, useState } from "react";
 import { ScrollView, Text, View } from "react-native";
-
+import Toast from "react-native-toast-message";
 const SignUp = () => {
+  const axiosInstance = useAxiosInstance();
   const [form, setForm] = useState({
     firstName: "",
     lastName: "",
@@ -21,15 +22,22 @@ const SignUp = () => {
     createPassword: "",
     confirmPassword: "",
   });
+  const [loading, setLoading] = useState(false);
 
-  const { isLoggedIn } = useAuthStore();
+  const { token } = useAuthStore();
 
   useEffect(() => {
-    if (isLoggedIn) router.replace("/(root)/(tabs)/home");
-  }, [isLoggedIn]);
+    if (token) {
+      token.manager
+        ? router.replace("/(root)/(manager-tabs)/home")
+        : token.member
+        ? router.replace("/(root)/(tabs)/home")
+        : "";
+    }
+  }, [token]);
 
   const onSignUpPress = async () => {
-    // console.log(form);
+    setLoading(true);
     try {
       if (form.createPassword !== form.confirmPassword)
         throw new Error("Passwords don't match");
@@ -37,18 +45,33 @@ const SignUp = () => {
         firstName: form.firstName,
         lastName: form.lastName,
         email: form.email,
-        phoneNumber: form.phoneNumber,
+        phoneNumber: `${form.phoneNumber}`,
         password: form.createPassword,
+        role: "MEMBER",
       });
 
-      // console.log(res.data);
-      router.replace("/(auth)/(member)/sign-in");
+      const data = res.data;
+
+      if (data.accessToken) {
+        Toast.show({
+          type: "success",
+          text1: `Account was created successfully`,
+        });
+
+        router.replace("/(auth)/(member)/sign-in");
+      }
     } catch (err) {
-      console.log(err);
+      Toast.show({
+        type: "error",
+        text1: `${err}`,
+      });
+      // console.log(err);
+    } finally {
+      setLoading(false);
     }
   };
   return (
-    <ScrollView className="flex-1 bg-[#1d2128]">
+    <ScrollView className="flex-1 bg-[#1d2128] relative">
       <View className="flex-1 items-center justify-center flex-col gap-8 bg-[#1d2128] mt-[60px]">
         <View>
           <Thrivia />
@@ -105,7 +128,6 @@ const SignUp = () => {
 
         <CustomButton
           title="Create account"
-          // onPress={() => {router.push("/(root)/(tabs)/home")}}
           onPress={() => onSignUpPress()}
           className="mt-6"
         />
@@ -120,6 +142,8 @@ const SignUp = () => {
           </Link>
         </View>
       </View>
+      <Toast position="top" topOffset={100} />
+      {loading && <FormLoader />}
     </ScrollView>
   );
 };
