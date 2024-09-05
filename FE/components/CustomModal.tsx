@@ -9,7 +9,7 @@ interface CustomModalProps {
   OnNext?: () => void;
   title: string;
   message: string;
-  id?: string;
+  id?: string | null;
   buttonText: string;
   buttonTextCancel?: string;
   onButtonPress: () => void;

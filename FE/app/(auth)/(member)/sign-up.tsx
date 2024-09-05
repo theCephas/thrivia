@@ -8,6 +8,7 @@ import FormLoader from "@/components/FormLoader";
 import InputField from "@/components/InputField";
 import { useAxiosInstance } from "@/constants/axiosInstance";
 import useAuthStore from "@/store";
+import axios from "axios";
 import { Link, router } from "expo-router";
 import { useEffect, useState } from "react";
 import { ScrollView, Text, View } from "react-native";
@@ -27,13 +28,13 @@ const SignUp = () => {
   const { token } = useAuthStore();
 
   useEffect(() => {
-    if (token) {
-      token.manager
-        ? router.replace("/(root)/(manager-tabs)/home")
-        : token.member
-        ? router.replace("/(root)/(tabs)/home")
-        : "";
+    let isMounted = true;
+    if (token && isMounted) {
+      router.replace("/(root)/(tabs)/home");
     }
+    return () => {
+      isMounted = false;
+    };
   }, [token]);
 
   const onSignUpPress = async () => {
@@ -47,7 +48,6 @@ const SignUp = () => {
         email: form.email,
         phoneNumber: `${form.phoneNumber}`,
         password: form.createPassword,
-        role: "MEMBER",
       });
 
       const data = res.data;
@@ -102,6 +102,7 @@ const SignUp = () => {
           placeholder={`Email`}
           icon={Email}
           value={form.email}
+          keyboardType="email-address"
           onChangeText={(value) => setForm({ ...form, email: value })}
         />
         <InputField

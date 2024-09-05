@@ -1,10 +1,5 @@
-import useAuthStore from "@/store";
 import axios from "axios";
-
-const useAuthToken = () => {
-  const token = useAuthStore((state) => state.token);
-  return token;
-};
+import useAuthStore from "@/store";
 
 // Create an Axios instance
 const axiosInstance = axios.create({
@@ -16,13 +11,12 @@ const axiosInstance = axios.create({
 });
 
 export const useAxiosInstance = () => {
-  const token = useAuthToken();
+  const token = useAuthStore.getState().token;
+
   axiosInstance.interceptors.request.use(
     (config) => {
       if (token) {
-        config.headers.Authorization = `Bearer ${
-          token.manager ? token.manager : token.member
-        }`;
+        config.headers.Authorization = `Bearer ${token}`;
       }
       return config;
     },

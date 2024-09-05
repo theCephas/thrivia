@@ -6,7 +6,7 @@ import Swiper from "react-native-swiper";
 import { Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
-import {  useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { publicBalance, publicBlDeets } from "@/constants";
 import BgStyling from "@/assets/svg/BgStyling";
 import CustomSideModal from "@/components/CustomSideModal";
@@ -21,7 +21,14 @@ const Home = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const router = useRouter();
 
-  const { logout, user } = useAuthStore();
+  const { logout, user, token, coopUUID } = useAuthStore();
+
+  console.log(token, coopUUID);
+
+  const handleLogout = async () => {
+    logout();
+    router.replace("/(auth)/(member)/sign-in");
+  };
 
   const closeModal = () => {
     setIsModalVisible(false);
@@ -43,7 +50,7 @@ const Home = () => {
             </View>
           </View>
           <TouchableOpacity
-            onPress={() => logout()}
+            onPress={handleLogout}
             className="flex flex-row items-center gap-x-6"
           >
             <Notification />

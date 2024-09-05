@@ -17,40 +17,34 @@ const SignIn = () => {
   const { login, token } = useAuthStore();
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    if (token) {
-      token.manager
-        ? router.replace("/(root)/(manager-tabs)/home")
-        : token.member
-        ? router.replace("/(root)/(tabs)/home")
-        : "";
-    }
-  }, [token]);
+  // console.log(token);
 
   const [form, setForm] = useState({
-    phoneNumber: "",
+    email: "",
     password: "",
   });
 
-  const onSignUpPress = async () => {
+  const onSignInPress = async () => {
     setLoading(true);
     try {
       const res = await axiosInstance.post("/auth/login", {
-        emailOrPhone: form.phoneNumber,
+        emailOrPhone: form.email,
         password: form.password,
-        role: "MEMBER",
       });
 
       const data = await res.data;
+
+      console.log(data);
 
       if (data.accessToken) {
         Toast.show({
           type: "success",
           text1: `Login Successful!`,
         });
-
-        const { accessToken, expiresIn, user } = data;
-        login({ member: accessToken }, expiresIn, user);
+        const { accessToken, expiresIn, user, refreshToken } = data;
+        console.log(accessToken);
+        login(accessToken, expiresIn, user);
+        router.replace("/(root)/(tabs)/home");
       }
     } catch (err) {
       Toast.show({
@@ -79,11 +73,11 @@ const SignIn = () => {
       </View>
       <View className="p-5 mt-8">
         <InputField
-          placeholder={`Phone Number`}
+          placeholder={`Phone Number or Email`}
           icon={Call}
-          value={form.phoneNumber}
-          keyboardType="number-pad"
-          onChangeText={(value) => setForm({ ...form, phoneNumber: value })}
+          value={form.email}
+          keyboardType="email-address"
+          onChangeText={(value) => setForm({ ...form, email: value })}
         />
         <InputField
           placeholder={`Password`}
@@ -97,7 +91,7 @@ const SignIn = () => {
         <View className="mt-[270px]">
           <CustomButton
             title="Log In"
-            onPress={() => onSignUpPress()}
+            onPress={() => onSignInPress()}
             className="mt-6"
           />
           <View className="flex items-center justify-center mb-8">

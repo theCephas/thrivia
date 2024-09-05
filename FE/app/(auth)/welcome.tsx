@@ -19,11 +19,9 @@ const Welcome = () => {
 
   useEffect(() => {
     if (token) {
-      token.member
-        ? router.replace("/(root)/(tabs)/home")
-        : token.manager
-        ? router.replace("/(root)/(manager-tabs)/home")
-        : "";
+      router.replace("/(root)/(tabs)/home");
+    } else {
+      router.replace("/(auth)/(member)/sign-in");
     }
   }, [token]);
 
@@ -76,7 +74,7 @@ const Welcome = () => {
           title={isLastSlide ? "Get Started" : "Next"}
           onPress={() =>
             isLastSlide
-              ? router.replace("/(auth)/signin-options")
+              ? router.replace("/(auth)/(member)/sign-up")
               : swiperRef.current?.scrollBy(1)
           }
           className={"w-11/12 mt-16 m-auto mb-6"}
