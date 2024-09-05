@@ -120,10 +120,9 @@ export class UsersService {
     }
   }
 
-  async fetchCooperatives(role: Role, { uuid }: IAuthContext) {
+  async fetchCooperatives({ uuid }: IAuthContext) {
     return this.cooperativeUsersRepository.find({
-      user: { uuid },
-      role,
+      user: { uuid }
     });
   }
 

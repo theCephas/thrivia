@@ -3,7 +3,6 @@ import {
   Controller,
   Get,
   Param,
-  ParseEnumPipe,
   Post,
   Req,
   UseGuards,
@@ -31,13 +30,12 @@ export class UsersController {
     return this.usersService.createUser(body);
   }
 
-  @Get('cooperatives/:role')
+  @Get('cooperatives')
   @UseGuards(JwtAuthGuard)
   fetchCooperatives(
-    @Param('role', new ParseEnumPipe(Role)) role: Role,
     @Req() request: Request,
   ) {
-    return this.usersService.fetchCooperatives(role, request.user as any);
+    return this.usersService.fetchCooperatives(request.user as any);
   }
 
   @Post('cooperative-application')

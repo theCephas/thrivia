@@ -78,6 +78,7 @@ export class CooperativesService {
     cooperative: CreateCooperativeDto,
     { uuid }: IAuthContext,
   ) {
+    let cooperativeModel: Cooperatives;
     await this.em.transactional(async (em) => {
       const existingCooperative = await this.cooperativesRepository.findOne([
         { name: cooperative.name },
@@ -95,7 +96,7 @@ export class CooperativesService {
           );
         }
       }
-      const cooperativeModel = this.cooperativesRepository.create({
+      cooperativeModel = this.cooperativesRepository.create({
         uuid: v4(),
         name: cooperative.name,
         regNo: cooperative.regNo,
@@ -132,6 +133,7 @@ export class CooperativesService {
       });
       await em.persistAndFlush(cooperativeOwnerWalletModel);
     });
+    return cooperativeModel;
   }
 
   async fetchWallets(cooperativeUuid: string, { uuid }: IAuthContext) {
