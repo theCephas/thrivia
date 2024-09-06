@@ -77,15 +77,12 @@ const RegisterStages = () => {
       const data = res.data;
       console.log("Response data", data);
 
-      // Show a success toast
       Toast.show({
         type: "success",
         text1: `Account was created successfully`,
-        position: "top", // ensure proper positioning
-        topOffset: 100, // adjust as necessary
+        position: "top",
+        topOffset: 100,
       });
-
-      // Set necessary data in the store
 
       setCoopUUID(data.uuid);
       setUniqueId(data.uniqueId);
@@ -110,6 +107,8 @@ const RegisterStages = () => {
         type: "success",
         text1: "ID copied to clipboard",
       });
+      setIsModalVisible(false);
+      router.replace(`/(root)/(tabs)/home`);
     }
   };
 

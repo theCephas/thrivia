@@ -53,7 +53,7 @@ const Home = () => {
               <Text className="text-white/80 text-[16px]">Welcome,</Text>
               <Text className="hidden">Cooperative UUID: {uuid}</Text>
               <Text className="text-white text-[18px] pt-1 font-semibold">
-                Hi, {cooperativeName || "your cooperative"}
+                {cooperativeName || "your cooperative"}
               </Text>
             </View>
           </View>

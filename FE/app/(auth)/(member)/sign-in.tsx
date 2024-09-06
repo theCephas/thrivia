@@ -16,9 +16,6 @@ const SignIn = () => {
   const axiosInstance = useAxiosInstance();
   const { login, token } = useAuthStore();
   const [loading, setLoading] = useState(false);
-
-  // console.log(token);
-
   const [form, setForm] = useState({
     email: "",
     password: "",
@@ -41,8 +38,8 @@ const SignIn = () => {
           type: "success",
           text1: `Login Successful!`,
         });
-        const { accessToken, expiresIn, user, refreshToken } = data;
-        console.log(accessToken);
+        const { accessToken, expiresIn, user, cooperative } = data;
+        console.log(user.uuid);
         login(accessToken, expiresIn, user);
         router.replace("/(root)/(tabs)/home");
       }

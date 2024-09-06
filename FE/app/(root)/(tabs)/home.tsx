@@ -45,7 +45,7 @@ const Home = () => {
             <View>
               <Text className="text-white/80 text-xl">Welcome,</Text>
               <Text className="text-white text-2xl font-semibold">
-                Hi, {user ? user.firstName : ""}
+                {user ? user.firstName : ""}
               </Text>
             </View>
           </View>
