@@ -1,71 +1,3 @@
-// import { create } from "zustand";
-// import AsyncStorage from "@react-native-async-storage/async-storage";
-// import { persist, PersistOptions } from "zustand/middleware";
-
-// import { navigateToSignIn } from "@/utils/navigationHelper"; // Import the helper function
-// import { refreshAuthToken } from "@/constants/refreshToken";
-
-// interface AuthState {
-//   token: string | null;
-//   expireAt: string | null;
-//   user: any | null;
-//   login: (token: string, expiresIn: string, user: any) => void;
-//   logout: () => void;
-//   refreshToken: (newToken: string, expiresIn: string) => void;
-//   isTokenExpired: () => boolean;
-//   checkTokenExpiration: () => Promise<void>;
-//   setCooperativeName: (name: string) => void;
-//   cooperativeName: string | null;
-// }
-
-// const useAuthStore = create<AuthState>()(
-//   persist(
-//     (set, get) => ({
-//       token: null,
-//       expireAt: null,
-//       user: null,
-//       cooperativeName: null,
-
-//       login: (token, expiresIn, user) => {
-//         const expireAt = new Date().getTime() + Number(expiresIn) * 1000;
-//         set({ token, expireAt: expireAt.toString(), user });
-//       },
-
-//       logout: async () => {
-//         await AsyncStorage.removeItem("auth-storage");
-//         set({ token: null, expireAt: null, user: null, cooperativeName: null });
-//         // navigateToSignIn();
-//       },
-
-//       setCooperativeName: (name: string) => set({ cooperativeName: name }),
-
-//       refreshToken: (newToken, expiresIn) => {
-//         const expireAt = new Date().getTime() + Number(expiresIn) * 1000;
-//         set({ token: newToken, expireAt: expireAt.toString() });
-//       },
-
-//       isTokenExpired: () => {
-//         const { expireAt } = get();
-//         if (!expireAt) return true;
-//         return new Date().getTime() > Number(expireAt);
-//       },
-
-//       checkTokenExpiration: async () => {
-//         if (get().isTokenExpired()) {
-//           console.warn("Token expired, refresh needed.");
-//           await refreshAuthToken();
-//         }
-//       },
-//     }),
-//     {
-//       name: "auth-storage",
-//       getStorage: () => AsyncStorage,
-//     } as PersistOptions<AuthState>
-//   )
-// );
-
-// export default useAuthStore;
-
 import { create } from "zustand";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { persist, PersistOptions } from "zustand/middleware";
@@ -84,6 +16,8 @@ interface AuthState {
   setCoopUUID: (uuid: string) => void;
   setUniqueId: (uniqueId: string) => void;
   setCooperativeUUID: (uuid: string) => void;
+  SetCoopUniqueId: (uniqueId: string) => void;
+  copUniqueId: string | null;
   cooperativeUUID: string | null;
   coopUUID: string | null;
   coopUniqueId: string | null;
@@ -105,6 +39,7 @@ const useAuthStore = create(
       coopUUID: null,
       coopUniqueId: null,
       cooperativeUUID: null,
+      copUniqueId: null,
 
       login: (token: any, expiresIn: string, user: any) => {
         // console.log(token, expiresIn);
@@ -121,12 +56,14 @@ const useAuthStore = create(
           coopUUID: null,
           coopUniqueId: null,
           cooperativeUUID: null,
+          copUniqueId: null,
         }),
 
       setCooperativeName: (name: string) => set({ cooperativeName: name }),
       setCoopUUID: (uuid: string) => set({ coopUUID: uuid }),
       setUniqueId: (uniqueId: string) => set({ coopUniqueId: uniqueId }),
       setCooperativeUUID: (uuid: string) => set({ cooperativeUUID: uuid }),
+      SetCoopUniqueId: (uniqueId: string) => set({ copUniqueId: uniqueId }),
       refreshToken: async () => {
         try {
           const newToken = await Api().post("");

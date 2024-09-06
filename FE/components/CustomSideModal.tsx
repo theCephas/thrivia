@@ -33,7 +33,12 @@ const CustomSideModal: React.FC<CustomSideModalProps> = ({
   const [error, setError] = useState<string | null>(null);
   const axiosInstance = useAxiosInstance();
   const router = useRouter();
-  const { setCooperativeUUID, setCooperativeName, logout } = useAuthStore();
+  const {
+    setCooperativeUUID,
+    setCooperativeName,
+    logout,
+    SetCoopUniqueId,
+  } = useAuthStore();
 
   const fetchCooperatives = async () => {
     setLoading(true);
@@ -97,6 +102,7 @@ const CustomSideModal: React.FC<CustomSideModalProps> = ({
                     onPress={() => {
                       setCooperativeUUID(coop.cooperative.uuid);
                       setCooperativeName(coop.cooperative.name);
+                      SetCoopUniqueId(coop.cooperative.uniqueId);
                       router.replace(
                         `/(root)/(manager-tabs)/${coop.cooperative.uuid}`
                       );

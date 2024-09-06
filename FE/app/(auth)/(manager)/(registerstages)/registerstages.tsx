@@ -10,7 +10,7 @@ import useAuthStore from "@/store";
 import { useState } from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import Toast from "react-native-toast-message";
-import * as Clipboard from "expo-clipboard"; // Clipboard API
+import * as Clipboard from "expo-clipboard";
 import { router } from "expo-router";
 import axios from "axios";
 
@@ -166,8 +166,8 @@ const RegisterStages = () => {
         id={coopUniqueId}
         buttonText="Copy ID"
         buttonTextCancel="Go Home"
-        onButtonPress={handleGoHome} // Copy ID when "Copy ID" button is pressed
-        OnNext={handleCopyId} // Go home when "Go Home" is pressed
+        onButtonPress={handleGoHome}
+        OnNext={handleCopyId}
       />
     </ScrollView>
   );

@@ -32,9 +32,14 @@ const Home = () => {
     setIsModalVisible(true);
   };
 
-  const { cooperativeName, logout, cooperativeUUID } = useAuthStore();
+  const {
+    cooperativeName,
+    logout,
+    cooperativeUUID,
+    copUniqueId,
+  } = useAuthStore();
   console.log(cooperativeUUID);
-  console.log("cooperative name", cooperativeName);
+  console.log("cooperative name", cooperativeName, copUniqueId);
 
   return (
     <SafeAreaView className="flex-1 bg-[#1d2128]">
