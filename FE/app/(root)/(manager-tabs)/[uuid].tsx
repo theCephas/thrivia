@@ -3,7 +3,7 @@ import Notification from "@/assets/svg/Notification";
 import Settings from "@/assets/svg/Settings";
 import Unsee from "@/assets/svg/Unsee";
 import Swiper from "react-native-swiper";
-import { Text, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRef, useState } from "react";
@@ -11,33 +11,61 @@ import { managerBlDeets, publicBalance } from "@/constants";
 import BgStyling from "@/assets/svg/BgStyling";
 import CustomButton from "@/components/CustomButton";
 import InviteModal from "@/components/InviteModal";
+import { Link, router, useLocalSearchParams, useRouter } from "expo-router";
+import useAuthStore from "@/store";
+import CustomSideModal from "@/components/CustomSideModal";
 
 const Home = () => {
   const swiperRef = useRef<Swiper>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const isLastSlide = activeIndex === publicBalance.length - 1;
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isSliderVisible, setIsSliderVisible] = useState(false);
+
+  const { uuid } = useLocalSearchParams();
+
+  const closeSlider = () => {
+    setIsSliderVisible(false);
+  };
 
   const onSubmit = () => {
     setIsModalVisible(true);
   };
+
+  const {
+    cooperativeName,
+    logout,
+    cooperativeUUID,
+    copUniqueId,
+  } = useAuthStore();
+  console.log(cooperativeUUID);
+  console.log("cooperative name", cooperativeName, copUniqueId);
 
   return (
     <SafeAreaView className="flex-1 bg-[#1d2128]">
       <View className="p-4 pt-5 pb-12 flex-1">
         <View className="flex flex-row justify-between items-center">
           <View className="flex flex-row items-center gap-3">
-            <Homeprofile />
+            <TouchableOpacity onPress={() => setIsSliderVisible(true)}>
+              <Homeprofile />
+            </TouchableOpacity>
             <View>
               <Text className="text-white/80 text-[16px]">Welcome,</Text>
+              <Text className="hidden">Cooperative UUID: {uuid}</Text>
               <Text className="text-white text-[18px] pt-1 font-semibold">
-                Freedom Cooperative
+                {cooperativeName || "your cooperative"}
               </Text>
             </View>
           </View>
           <View className="flex flex-row items-center gap-x-6">
-            <Notification />
-            <Settings />
+            <TouchableOpacity onPress={() => logout()}>
+              <Notification />
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => router.replace("/(root)/(tabs)/home")}
+            >
+              <Settings />
+            </TouchableOpacity>
           </View>
         </View>
 
@@ -149,6 +177,11 @@ const Home = () => {
       <InviteModal
         isVisible={isModalVisible}
         onClose={() => setIsModalVisible(false)}
+      />
+      <CustomSideModal
+        isVisible={isSliderVisible}
+        onClose={closeSlider}
+        title="Cooperative Societies"
       />
     </SafeAreaView>
   );

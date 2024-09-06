@@ -12,6 +12,16 @@ interface AuthState {
   isTokenExpired: () => any;
   checkTokenExpiration: () => Promise<void>;
   user: any | null;
+  setCooperativeName: (name: string) => void;
+  setCoopUUID: (uuid: string) => void;
+  setUniqueId: (uniqueId: string) => void;
+  setCooperativeUUID: (uuid: string) => void;
+  SetCoopUniqueId: (uniqueId: string) => void;
+  copUniqueId: string | null;
+  cooperativeUUID: string | null;
+  coopUUID: string | null;
+  coopUniqueId: string | null;
+  cooperativeName: string | null;
 }
 
 const Api = () => {
@@ -25,6 +35,11 @@ const useAuthStore = create(
       token: null,
       expireAt: null,
       user: null,
+      cooperativeName: null,
+      coopUUID: null,
+      coopUniqueId: null,
+      cooperativeUUID: null,
+      copUniqueId: null,
 
       login: (token: any, expiresIn: string, user: any) => {
         // console.log(token, expiresIn);
@@ -32,8 +47,23 @@ const useAuthStore = create(
         set({ token, expireAt, user });
       },
 
-      logout: () => set({ token: null, expireAt: null, user: null }),
+      logout: () =>
+        set({
+          token: null,
+          expireAt: null,
+          user: null,
+          cooperativeName: null,
+          coopUUID: null,
+          coopUniqueId: null,
+          cooperativeUUID: null,
+          copUniqueId: null,
+        }),
 
+      setCooperativeName: (name: string) => set({ cooperativeName: name }),
+      setCoopUUID: (uuid: string) => set({ coopUUID: uuid }),
+      setUniqueId: (uniqueId: string) => set({ coopUniqueId: uniqueId }),
+      setCooperativeUUID: (uuid: string) => set({ cooperativeUUID: uuid }),
+      SetCoopUniqueId: (uniqueId: string) => set({ copUniqueId: uniqueId }),
       refreshToken: async () => {
         try {
           const newToken = await Api().post("");

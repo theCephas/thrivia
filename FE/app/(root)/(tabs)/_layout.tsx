@@ -44,13 +44,16 @@ export default function Layout() {
 
   const { user, token } = useAuthStore();
 
-  useEffect(() => {
-    !token || !user
-      ? router.replace("/(auth)/signin-options")
-      : token.manager
-      ? router.replace("/(root)/(manager-tabs)/home")
-      : "";
-  }, [token]);
+  // useEffect(() => {
+  //   // !token || !user
+  //   //   ? router.replace("/(auth)/(member)/sign-in")
+  //   //   : router.replace("/(root)/(tabs)/home");
+  //   if (token) {
+  //     router.replace("/(root)/(tabs)/home");
+  //   } else {
+  //     router.replace("/(auth)/(member)/sign-in");
+  //   }
+  // }, [token]);
   return (
     <Tabs
       initialRouteName="index"

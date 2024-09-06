@@ -4,6 +4,9 @@ import Modal from "react-native-modal";
 import * as DocumentPicker from "expo-document-picker";
 import CustomButton from "./CustomButton";
 import Arrowright2 from "@/assets/svg/Arrorright2";
+import useAuthStore from "@/store";
+import * as Clipboard from "expo-clipboard";
+import Toast from "react-native-toast-message";
 
 interface InviteModalProps {
   isVisible: boolean;
@@ -12,6 +15,8 @@ interface InviteModalProps {
 
 const InviteModal: React.FC<InviteModalProps> = ({ isVisible, onClose }) => {
   const [isConfirmVisible, setIsConfirmVisible] = useState(false);
+  const { copUniqueId } = useAuthStore();
+  console.log(copUniqueId);
   const [
     selectedFile,
     setSelectedFile,
@@ -45,6 +50,17 @@ const InviteModal: React.FC<InviteModalProps> = ({ isVisible, onClose }) => {
     setSelectedFile(null);
     setIsConfirmVisible(false);
   };
+
+  const handleCopyId = async () => {
+    if (copUniqueId) {
+      await Clipboard.setStringAsync(copUniqueId);
+      Toast.show({
+        type: "success",
+        text1: "ID copied to clipboard",
+      });
+      setIsConfirmVisible(false);
+    }
+  };
   return (
     <>
       <Modal
@@ -74,7 +90,10 @@ const InviteModal: React.FC<InviteModalProps> = ({ isVisible, onClose }) => {
               <Arrowright2 />
             </View>
           </TouchableOpacity>
-          <View className="w-full flex-1 flex-row px-6 justify-between">
+          <TouchableOpacity
+            onPress={handleCopyId}
+            className="w-full flex-1 flex-row px-6 justify-between"
+          >
             <View className="w-[240px]">
               <Text className="text-xl">Copy Unique ID</Text>
               <Text className="text-[#939090] text-[17px]">
@@ -84,10 +103,10 @@ const InviteModal: React.FC<InviteModalProps> = ({ isVisible, onClose }) => {
             <View className="mt-3">
               <Arrowright2 />
             </View>
-          </View>
+          </TouchableOpacity>
         </View>
       </Modal>
-
+      <Toast position="top" topOffset={100} />
       {/* {selectedFile?.output?.item.name && ( */}
       <Modal
         isVisible={isConfirmVisible}

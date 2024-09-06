@@ -22,7 +22,7 @@ const FormStageTwo: React.FC<FormStageTwoProps> = ({ form, setForm }) => {
         placeholder="Select Bank"
         value={form.selectBank}
         options={["Bank A", "Bank B", "Bank C"]}
-        onSelect={(value) => setForm({ ...form, selectBank: value })}
+        onSelect={setSelectedBank}
         icon={SelectBank}
       />
 
