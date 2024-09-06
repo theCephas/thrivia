@@ -81,7 +81,7 @@ export default function Layout() {
       }}
     >
       <Tabs.Screen
-        name="home"
+        name="[uuid]"
         options={{
           title: "Home",
           headerShown: false,

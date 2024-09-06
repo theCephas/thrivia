@@ -11,7 +11,7 @@ import { managerBlDeets, publicBalance } from "@/constants";
 import BgStyling from "@/assets/svg/BgStyling";
 import CustomButton from "@/components/CustomButton";
 import InviteModal from "@/components/InviteModal";
-import { Link, useLocalSearchParams, useRouter } from "expo-router";
+import { Link, router, useLocalSearchParams, useRouter } from "expo-router";
 import useAuthStore from "@/store";
 import CustomSideModal from "@/components/CustomSideModal";
 
@@ -23,6 +23,7 @@ const Home = () => {
   const [isSliderVisible, setIsSliderVisible] = useState(false);
 
   const { uuid } = useLocalSearchParams();
+
   const closeSlider = () => {
     setIsSliderVisible(false);
   };
@@ -31,8 +32,9 @@ const Home = () => {
     setIsModalVisible(true);
   };
 
-  const { cooperativeName, logout } = useAuthStore();
-  console.log(cooperativeName);
+  const { cooperativeName, logout, cooperativeUUID } = useAuthStore();
+  console.log(cooperativeUUID);
+  console.log("cooperative name", cooperativeName);
 
   return (
     <SafeAreaView className="flex-1 bg-[#1d2128]">
@@ -54,7 +56,11 @@ const Home = () => {
             <TouchableOpacity onPress={() => logout()}>
               <Notification />
             </TouchableOpacity>
-            <Settings />
+            <TouchableOpacity
+              onPress={() => router.replace("/(root)/(tabs)/home")}
+            >
+              <Settings />
+            </TouchableOpacity>
           </View>
         </View>
 

@@ -31,11 +31,10 @@ const RegisterStages = () => {
   const [loading, setLoading] = useState(false);
   const {
     token,
-    setCooperativeName,
+
     setCoopUUID,
     setUniqueId,
     coopUniqueId,
-    coopUUID,
   } = useAuthStore();
 
   console.log(token);
@@ -87,21 +86,15 @@ const RegisterStages = () => {
       });
 
       // Set necessary data in the store
-      setCooperativeName(data.name);
+
       setCoopUUID(data.uuid);
       setUniqueId(data.uniqueId);
-
-      // Show modal after successful registration
       setIsModalVisible(true);
     } catch (err) {
       console.error("Error during registration:", err);
-      // Show an error toast if registration fails
+
       Toast.show({
         type: "error",
-        text1: "Failed to create account",
-        // text2:
-        //   err ||
-        //   "An error occurred, please try again.",
         position: "top",
         topOffset: 100,
       });
@@ -122,7 +115,7 @@ const RegisterStages = () => {
 
   const handleGoHome = () => {
     setIsModalVisible(false);
-    router.replace(`/(root)/(manager-tabs)/${coopUUID}`);
+    router.replace(`/(root)/(tabs)/home`);
   };
 
   return (

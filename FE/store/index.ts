@@ -83,6 +83,8 @@ interface AuthState {
   setCooperativeName: (name: string) => void;
   setCoopUUID: (uuid: string) => void;
   setUniqueId: (uniqueId: string) => void;
+  setCooperativeUUID: (uuid: string) => void;
+  cooperativeUUID: string | null;
   coopUUID: string | null;
   coopUniqueId: string | null;
   cooperativeName: string | null;
@@ -102,6 +104,7 @@ const useAuthStore = create(
       cooperativeName: null,
       coopUUID: null,
       coopUniqueId: null,
+      cooperativeUUID: null,
 
       login: (token: any, expiresIn: string, user: any) => {
         // console.log(token, expiresIn);
@@ -117,11 +120,13 @@ const useAuthStore = create(
           cooperativeName: null,
           coopUUID: null,
           coopUniqueId: null,
+          cooperativeUUID: null,
         }),
 
       setCooperativeName: (name: string) => set({ cooperativeName: name }),
       setCoopUUID: (uuid: string) => set({ coopUUID: uuid }),
       setUniqueId: (uniqueId: string) => set({ coopUniqueId: uniqueId }),
+      setCooperativeUUID: (uuid: string) => set({ cooperativeUUID: uuid }),
       refreshToken: async () => {
         try {
           const newToken = await Api().post("");
