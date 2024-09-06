@@ -169,7 +169,7 @@ const Home = () => {
               }
               onPress={() =>
                 activeIndex === 0
-                  ? router.replace("/(auth)/(member)/(join)/become-memeber")
+                  ? router.replace("/(auth)/(member)/(join)/join-stages")
                   : ""
               }
               className="mt-6"

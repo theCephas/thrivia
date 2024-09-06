@@ -6,9 +6,7 @@ import useAuthStore from "@/store";
 import { LinearGradient } from "expo-linear-gradient";
 import { Link, router } from "expo-router";
 import { useEffect, useRef, useState } from "react";
-import { Image, ScrollView, Text, View } from "react-native";
-
-import { SafeAreaView } from "react-native-safe-area-context";
+import { Text, View } from "react-native";
 import Swiper from "react-native-swiper";
 
 const Welcome = () => {
@@ -20,8 +18,6 @@ const Welcome = () => {
   useEffect(() => {
     if (token) {
       router.replace("/(root)/(tabs)/home");
-    } else {
-      router.replace("/(auth)/(member)/sign-in");
     }
   }, [token]);
 

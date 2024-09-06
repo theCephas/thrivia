@@ -45,7 +45,7 @@ const CustomSideModal: React.FC<CustomSideModalProps> = ({
     setError(null);
     try {
       const response = await axiosInstance.get("/users/cooperatives");
-      console.log("My response", response.data);
+      // console.log("My response", response.data);
       setCooperatives(response.data);
     } catch (err) {
       setError("Failed to load cooperatives");
