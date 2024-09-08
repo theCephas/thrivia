@@ -12,7 +12,6 @@ import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import Toast from "react-native-toast-message";
 import * as Clipboard from "expo-clipboard";
 import { router } from "expo-router";
-import axios from "axios";
 
 const RegisterStages = () => {
   const axiosInstance = useAxiosInstance();

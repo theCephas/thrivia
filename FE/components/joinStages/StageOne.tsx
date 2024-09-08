@@ -2,7 +2,6 @@ import User from "@/assets/svg/User";
 import InputField from "../InputField";
 import DateInput from "../DateInput";
 import CoopIcon from "@/assets/svg/CoopIcon";
-import UserTag from "@/assets/svg/UserTag";
 
 interface StageOneProps {
   form: any;

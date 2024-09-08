@@ -8,13 +8,11 @@ import {
 } from "react-native";
 import Modal from "react-native-modal";
 import Homeprofile from "@/assets/svg/Homeprofile";
-import MenuDotted from "@/assets/svg/MenuDotted";
 import Plus from "@/assets/svg/Plus";
 import { useRouter } from "expo-router";
 import { useAxiosInstance } from "@/constants/axiosInstance"; // Use your axios instance
 import useAuthStore from "@/store";
 import LogOut from "@/assets/svg/LogOut";
-import Home from "@/assets/svg/Home";
 import UserTag from "@/assets/svg/UserTag";
 
 interface CustomSideModalProps {

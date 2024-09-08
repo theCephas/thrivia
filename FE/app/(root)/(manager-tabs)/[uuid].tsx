@@ -11,7 +11,7 @@ import { managerBlDeets, publicBalance } from "@/constants";
 import BgStyling from "@/assets/svg/BgStyling";
 import CustomButton from "@/components/CustomButton";
 import InviteModal from "@/components/InviteModal";
-import { Link, router, useLocalSearchParams, useRouter } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import useAuthStore from "@/store";
 import CustomSideModal from "@/components/CustomSideModal";
 

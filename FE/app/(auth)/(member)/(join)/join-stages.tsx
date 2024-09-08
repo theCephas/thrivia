@@ -84,8 +84,16 @@ const JoinStages = () => {
         position: "top",
         topOffset: 100,
       });
+      setIsModalVisible(2);
     } catch (err) {
       console.log(err);
+      setIsModalVisible(0);
+      Toast.show({
+        type: "error",
+        text1: `${err}`,
+        position: "top",
+        topOffset: 100,
+      });
     } finally {
       setLoading(false);
     }

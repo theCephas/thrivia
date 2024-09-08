@@ -1,7 +1,6 @@
 import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View } from "react-native";
 import Modal from "react-native-modal";
-import CustomButton from "./CustomButton";
 
 interface UploadCSVModalProps {
   isVisible: boolean;

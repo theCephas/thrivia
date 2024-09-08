@@ -8,7 +8,10 @@ export default function Layout() {
         name="loan-request-details"
         options={{ headerShown: false }}
       />
-      {/* <Stack.Screen name="approve-loan" options={{ headerShown: false }} /> */}
+      <Stack.Screen
+        name="[membershipRequestDetails]"
+        options={{ headerShown: false }}
+      />
     </Stack>
   );
 }

@@ -8,7 +8,7 @@ import { useAxiosInstance } from "@/constants/axiosInstance";
 import useAuthStore from "@/store";
 
 import { Link, router } from "expo-router";
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import { ScrollView, Text, View } from "react-native";
 import Toast from "react-native-toast-message";
 
