@@ -130,6 +130,7 @@ export class UsersService {
     application: CreateCooperativeApplicationDto,
     { uuid }: IAuthContext,
   ) {
+    let cooperativeApplicationModel: CooperativeApplications;
     await this.em.transactional(async (em) => {
       const cooperativeExists = await this.cooperativeRepository.findOne({
         uniqueId: application.uniqueId,
@@ -156,7 +157,7 @@ export class UsersService {
         application.phoneNumber,
       );
       application.phoneNumber = phoneNumber.substring(1);
-      const cooperativeApplicationModel =
+      cooperativeApplicationModel =
         this.cooperativeApplicationsRepository.create({
           uuid: v4(),
           uniqueId: application.uniqueId,
@@ -167,11 +168,12 @@ export class UsersService {
           email: application.email,
           address: application.address,
           user: this.usersRepository.getReference(uuid),
-          cooperative: this.cooperativeRepository.getReference(uuid),
+          cooperative: this.cooperativeRepository.getReference(cooperativeExists.uuid),
           status: ApplicationStatus.PENDING,
         });
       await em.persistAndFlush(cooperativeApplicationModel);
     });
+    return cooperativeApplicationModel;
   }
 
   async fetchCooperativeApplication(

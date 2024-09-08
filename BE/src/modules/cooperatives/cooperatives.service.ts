@@ -115,6 +115,7 @@ export class CooperativesService {
         uuid: v4(),
         cooperative: this.cooperativesRepository.getReference(cooperativeModel.uuid),
         user: this.usersRepository.getReference(uuid),
+        role: Role.MANAGER
       });
       await em.persistAndFlush(cooperativeUserModel);
       const cooperativeWalletModel = this.walletsRepository.create({
