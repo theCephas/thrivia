@@ -6,9 +6,10 @@ import { useAxiosInstance } from "@/constants/axiosInstance";
 import useAuthStore from "@/store";
 import { LinearGradient } from "expo-linear-gradient";
 import { router, useLocalSearchParams } from "expo-router";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { TextInput } from "react-native";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import Toast from "react-native-toast-message";
 
 const MembershipRequestDetails = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -22,29 +23,29 @@ const MembershipRequestDetails = () => {
   const [details, setDetails] = useState<any>({});
   const axiosInstance = useAxiosInstance();
 
+  const getDetails = useCallback(async () => {
+    try {
+      const res = await axiosInstance.get(
+        `/cooperatives/${cooperativeUUID}/application/${membershipRequestDetails}`,
+
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const data = await res.data;
+
+      // console.log(data);
+      setDetails(data);
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
   useEffect(() => {
-    const getDetails = async () => {
-      try {
-        const res = await axiosInstance.get(
-          `/cooperatives/${cooperativeUUID}/application/${membershipRequestDetails}`,
-
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              Accept: "application/json",
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        const data = await res.data;
-
-        // console.log(data);
-        setDetails(data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
     getDetails();
   }, []);
 
@@ -62,11 +63,16 @@ const MembershipRequestDetails = () => {
         }
       );
       const data = await res.data;
-      console.log("data", data);
+      await getDetails();
       setIsLoanApprovedModalVisible(true);
-      closeApproveModal();
     } catch (error) {
       console.log(error);
+      Toast.show({
+        type: "error",
+        text1: `${error}`,
+      });
+    } finally {
+      closeApproveModal();
     }
   };
 
@@ -84,7 +90,7 @@ const MembershipRequestDetails = () => {
         }
       );
       const data = await res.data;
-      console.log("data", data);
+      await getDetails();
       closeModal();
     } catch (error) {
       console.log(error);
@@ -130,7 +136,15 @@ const MembershipRequestDetails = () => {
           colors={["#F4F4F433", "#FFFFFF0B"]}
           className="w-[67px] h-[20px] rounded-[4px] border border-[#E8E7E780] flex items-center justify-center"
         >
-          <Text className="text-[#D19806] text-center font-[500] ">
+          <Text
+            className={`text-center font-[500] ${
+              details.status === "PENDING"
+                ? "text-[#D19806]"
+                : details.status === "REJECTED"
+                ? "text-[#C40202]"
+                : "text-primary"
+            }`}
+          >
             {details.status}
           </Text>
         </LinearGradient>
@@ -232,6 +246,8 @@ const MembershipRequestDetails = () => {
           </TouchableOpacity>
         </View>
       </ScrollView>
+
+      <Toast position="top" topOffset={100} />
       <CustomModal
         isVisible={isModalVisible}
         OnNext={closeModal}
