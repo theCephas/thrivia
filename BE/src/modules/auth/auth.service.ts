@@ -55,11 +55,9 @@ export class AuthService {
       lastName: user.lastName,
       phoneNumber: user.phoneNumber,
     };
-    const userModel = this.usersRepository.create({
-      uuid: user.uuid,
-      lastLoggedIn: new Date(),
-    });
-    await this.em.persistAndFlush(userModel);
+    const userModel = await this.usersRepository.findOne({ uuid: user.uuid })
+    userModel.lastLoggedIn = new Date();
+    await this.em.flush();
     delete user.password;
     delete user.createdAt;
     delete user.updatedAt;
@@ -124,23 +122,17 @@ export class AuthService {
       throw new UnauthorizedException('OTP has expired');
     const diffMs = new Date().valueOf() - new Date(otpInDb.createdAt).valueOf();
     const diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000);
-    let otpModel: OTP;
+    let otpModel = await this.otpRepository.findOne({ uuid: otpInDb.uuid });
     if (diffMins >= 10) {
-      otpModel = this.otpRepository.create({
-        uuid: otpInDb.uuid,
-        expiredAt: new Date(),
-      });
-      await this.em.persistAndFlush(otpModel);
+      otpModel.expiredAt = new Date();
+      await this.em.flush();
       throw new UnauthorizedException('OTP has expired');
     }
     switch (otpActionType) {
       case OTPActionType.VERIFY_ACCOUNT:
         const user = await this.usersRepository.findOne({ uuid: userUuid });
-        const userModel = this.usersRepository.create({
-          uuid: user.uuid,
-          phoneVerified: true,
-        });
-        await this.em.persistAndFlush(userModel);
+        user.phoneVerified = true;
+        await this.em.flush();
         break;
       case OTPActionType.RESET_PASSWORD:
         const payload = { id: userUuid };
@@ -211,11 +203,8 @@ export class AuthService {
     if (!passwordMatch)
       throw new BadRequestException('Current password is incorrect');
     const hashedPassword = await bcrypt.hash(newPassword, 12);
-    const userModel = this.usersRepository.create({
-      uuid: user.uuid,
-      password: hashedPassword,
-    });
-    return await this.em.persistAndFlush(userModel);
+    user.password = hashedPassword;
+    return await this.em.flush();
   }
 
   async resetPassword({ password }: NewResetPasswordDto, token: string) {
@@ -237,10 +226,7 @@ export class AuthService {
     const user = await this.usersRepository.findOne({ uuid: id });
     if (!user) throw new NotFoundException('User not found');
     const hashedPassword = await bcrypt.hash(password, 12);
-    const userModel = this.usersRepository.create({
-      uuid: user.uuid,
-      password: hashedPassword,
-    });
-    return await this.em.persistAndFlush(userModel);
+    user.password = hashedPassword;
+    return await this.em.flush();
   }
 }

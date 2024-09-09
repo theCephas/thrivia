@@ -110,21 +110,18 @@ export class CooperativesService {
         slug: `${cooperative.name.toLowerCase().replace(/ /g, '-')}.thrivia.com`,
         createdBy: this.usersRepository.getReference(uuid),
       });
-      await em.persistAndFlush(cooperativeModel);
       const cooperativeUserModel = this.cooperativeUsersRepository.create({
         uuid: v4(),
         cooperative: this.cooperativesRepository.getReference(cooperativeModel.uuid),
         user: this.usersRepository.getReference(uuid),
         role: Role.MANAGER
       });
-      await em.persistAndFlush(cooperativeUserModel);
       const cooperativeWalletModel = this.walletsRepository.create({
         uuid: v4(),
         title: 'Savings',
         cooperative: this.cooperativesRepository.getReference(cooperativeModel.uuid),
         createdBy: this.usersRepository.getReference(uuid),
       });
-      await em.persistAndFlush(cooperativeWalletModel);
       const cooperativeOwnerWalletModel = this.walletsRepository.create({
         uuid: v4(),
         title: 'Savings',
@@ -132,7 +129,11 @@ export class CooperativesService {
         user: this.usersRepository.getReference(uuid),
         createdBy: this.usersRepository.getReference(uuid),
       });
-      await em.persistAndFlush(cooperativeOwnerWalletModel);
+      em.persist(cooperativeModel);
+      em.persist(cooperativeUserModel);
+      em.persist(cooperativeWalletModel);
+      em.persist(cooperativeOwnerWalletModel);
+      await em.flush();
     });
     return cooperativeModel;
   }
@@ -260,8 +261,12 @@ export class CooperativesService {
           user: requestExists.user,
           remark: `Withdrawal from ${requestExists.cooperative.name} to ${requestExists.accountName}`,
         });
+        em.persist(walletModel);
+        em.persist(paymentModel);
+        em.persist(transactionModel);
+        await em.flush();
       } else {
-         paymentModel = this.paymentRepository.create({
+        paymentModel = this.paymentRepository.create({
           transactionId: reference,
           status: 'failed',
           amount: requestExists.amount,
@@ -270,15 +275,13 @@ export class CooperativesService {
           type: PaymentType.OUTGOING,
           currencies: Currencies.NGN,
         });
+        em.persist(paymentModel);
+        await em.flush();
         throw new HttpException(
           'Transaction Failed',
           HttpStatus.EXPECTATION_FAILED,
         );
       }
-      em.persist(walletModel);
-      em.persist(paymentModel);
-      em.persist(transactionModel);
-      await em.flush();
     });
   }
 
