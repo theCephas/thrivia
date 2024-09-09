@@ -21,14 +21,8 @@ const Home = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const router = useRouter();
 
-  const { logout, user, token, coopUUID } = useAuthStore();
+  const {  user, token, coopUUID } = useAuthStore();
 
-  console.log(token, coopUUID);
-
-  const handleLogout = async () => {
-    logout();
-    router.replace("/(auth)/(member)/sign-in");
-  };
 
   const closeModal = () => {
     setIsModalVisible(false);
@@ -49,10 +43,7 @@ const Home = () => {
               </Text>
             </View>
           </View>
-          <TouchableOpacity
-            onPress={handleLogout}
-            className="flex flex-row items-center gap-x-6"
-          >
+          <TouchableOpacity className="flex flex-row items-center gap-x-6">
             <Notification />
             <Settings />
           </TouchableOpacity>
@@ -169,7 +160,7 @@ const Home = () => {
               }
               onPress={() =>
                 activeIndex === 0
-                  ? router.replace("/(auth)/(member)/(join)/become-memeber")
+                  ? router.replace("/(auth)/(member)/(join)/join-stages")
                   : ""
               }
               className="mt-6"

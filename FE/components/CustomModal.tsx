@@ -10,9 +10,10 @@ interface CustomModalProps {
   title: string;
   message: string;
   id?: string | null;
-  buttonText: string;
+  buttonText?: string;
   buttonTextCancel?: string;
   onButtonPress: () => void;
+  UI?: React.ReactNode;
 }
 
 const CustomModal: React.FC<CustomModalProps> = ({
@@ -25,6 +26,7 @@ const CustomModal: React.FC<CustomModalProps> = ({
   buttonText,
   buttonTextCancel,
   onButtonPress,
+  UI,
 }) => {
   return (
     <Modal
@@ -47,9 +49,12 @@ const CustomModal: React.FC<CustomModalProps> = ({
             {id}
           </Text>
         )}
-        <View className="mt-8">
-          <CustomButton title={buttonText} onPress={OnNext && OnNext} />
-        </View>
+        {UI}
+        {buttonText && (
+          <View className="mt-8">
+            <CustomButton title={buttonText} onPress={OnNext && OnNext} />
+          </View>
+        )}
         {buttonTextCancel && (
           <TouchableOpacity
             onPress={onButtonPress}

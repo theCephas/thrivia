@@ -29,10 +29,6 @@ const ApproveLoan = () => {
     setIsModalVisible(true);
   };
 
-  const closeModal = () => {
-    setIsModalVisible(false);
-  };
-
   return (
     <View className="h-full bg-[#1d2128]">
       <TouchableOpacity

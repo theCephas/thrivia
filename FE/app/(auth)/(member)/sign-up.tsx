@@ -8,7 +8,6 @@ import FormLoader from "@/components/FormLoader";
 import InputField from "@/components/InputField";
 import { useAxiosInstance } from "@/constants/axiosInstance";
 import useAuthStore from "@/store";
-import axios from "axios";
 import { Link, router } from "expo-router";
 import { useEffect, useState } from "react";
 import { ScrollView, Text, View } from "react-native";

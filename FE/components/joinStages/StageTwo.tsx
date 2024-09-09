@@ -1,8 +1,7 @@
-import SelectBank from "@/assets/svg/SelectBank";
-import OneTwoThree from "@/assets/svg/OneTwoThree";
-import AccountName from "@/assets/svg/AccountName";
-import Dropdown from "../Dropdown";
 import InputField from "../InputField";
+import Email from "@/assets/svg/Email";
+import Address from "@/assets/svg/Address";
+import Call from "@/assets/svg/Call";
 
 interface StageTwoProps {
   form: any;
@@ -16,27 +15,26 @@ const StageTwo: React.FC<StageTwoProps> = ({ form, setForm }) => {
 
   return (
     <>
-      <Dropdown
-        placeholder="Select Bank"
-        value={form.selectBank}
-        options={["Bank A", "Bank B", "Bank C"]}
-        onSelect={setSelectedBank}
-        icon={SelectBank}
-      />
-
       <InputField
-        placeholder="Account number"
-        icon={OneTwoThree}
-        value={form.accountNumber}
+        placeholder={`Phone Number`}
+        icon={Call}
+        value={form.phoneNumber}
         keyboardType="number-pad"
-        onChangeText={(value) => setForm({ ...form, accountNumber: value })}
+        onChangeText={(value) => setForm({ ...form, phoneNumber: value })}
       />
       <InputField
-        placeholder="Account name"
-        icon={AccountName}
-        value={form.accName}
+        placeholder={`Email Address`}
+        icon={Email}
+        value={form.email}
+        keyboardType="email-address"
+        onChangeText={(value) => setForm({ ...form, email: value })}
+      />
+      <InputField
+        placeholder={`Residential Address`}
+        icon={Address}
+        value={form.add}
         keyboardType="default"
-        onChangeText={(value) => setForm({ ...form, accName: value })}
+        onChangeText={(value) => setForm({ ...form, address: value })}
       />
     </>
   );

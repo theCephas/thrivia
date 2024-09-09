@@ -1,4 +1,3 @@
-import SelectBank from "@/assets/svg/SelectBank";
 import Dropdown from "../Dropdown";
 import InputField from "../InputField";
 import Money from "@/assets/svg/Money";
