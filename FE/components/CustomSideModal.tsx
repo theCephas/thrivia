@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -10,10 +9,10 @@ import Modal from "react-native-modal";
 import Homeprofile from "@/assets/svg/Homeprofile";
 import Plus from "@/assets/svg/Plus";
 import { useRouter } from "expo-router";
-import { useAxiosInstance } from "@/constants/axiosInstance"; // Use your axios instance
 import useAuthStore from "@/store";
 import LogOut from "@/assets/svg/LogOut";
 import UserTag from "@/assets/svg/UserTag";
+import useFetchCoop from "@/constants/useFetchCoop";
 
 interface CustomSideModalProps {
   isVisible: boolean;
@@ -26,10 +25,6 @@ const CustomSideModal: React.FC<CustomSideModalProps> = ({
   onClose,
   title,
 }) => {
-  const [cooperatives, setCooperatives] = useState<any[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const axiosInstance = useAxiosInstance();
   const router = useRouter();
   const {
     setCooperativeUUID,
@@ -38,25 +33,7 @@ const CustomSideModal: React.FC<CustomSideModalProps> = ({
     SetCoopUniqueId,
   } = useAuthStore();
 
-  const fetchCooperatives = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const response = await axiosInstance.get("/users/cooperatives");
-      // console.log("My response", response.data);
-      setCooperatives(response.data);
-    } catch (err) {
-      setError("Failed to load cooperatives");
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
-  useEffect(() => {
-    if (isVisible) {
-      fetchCooperatives();
-    }
-  }, [isVisible]);
+  const { loading, cooperatives, error } = useFetchCoop();
 
   const handleLogout = async () => {
     logout();

@@ -40,7 +40,7 @@ export const publicBalance = [
     id: 2,
     title: "Your Loan balance",
     balance: "₦0.00",
-    action: "+ Add money",
+    action: "+ Apply for loan",
   },
 ];
 

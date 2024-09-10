@@ -6,13 +6,14 @@ import Swiper from "react-native-swiper";
 import { Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { publicBalance, publicBlDeets } from "@/constants";
 import BgStyling from "@/assets/svg/BgStyling";
 import CustomSideModal from "@/components/CustomSideModal";
 import CustomButton from "@/components/CustomButton";
 import { Link, useRouter } from "expo-router";
 import useAuthStore from "@/store";
+import useFetchCoop from "@/constants/useFetchCoop";
 
 const Home = () => {
   const swiperRef = useRef<Swiper>(null);
@@ -21,8 +22,22 @@ const Home = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const router = useRouter();
 
-  const {  user, token, coopUUID } = useAuthStore();
+  const { user, token, expireAt, logout } = useAuthStore();
+  const { cooperatives } = useFetchCoop();
 
+  useEffect(() => {
+    console.log(user);
+    if (!user || !token) {
+      logout();
+      return;
+    }
+    const dateString = user.lastLoggedIn;
+    const date = new Date(dateString);
+    const now = new Date();
+    const differenceInSeconds = Math.floor(now.getTime() - date.getTime());
+
+    if (differenceInSeconds > expireAt) logout();
+  }, [user, expireAt, token]);
 
   const closeModal = () => {
     setIsModalVisible(false);
@@ -147,24 +162,37 @@ const Home = () => {
           </View>
         ) : (
           <View className="absolute top-[470px] w-full pr-4 pl-10">
-            <Text className="text-white text-xl text-center">
-              {activeIndex === 0
-                ? " You are yet to join a cooperative society. Click the button below to get started"
-                : "Recent transitions on loan history will appear here"}
-            </Text>
-            <CustomButton
-              title={
-                activeIndex === 0
-                  ? "Join a cooperative society"
-                  : "Apply for a loan"
-              }
-              onPress={() =>
-                activeIndex === 0
-                  ? router.replace("/(auth)/(member)/(join)/join-stages")
-                  : ""
-              }
-              className="mt-6"
-            />
+            {cooperatives.length === 0 ? (
+              <Text className="text-white text-xl text-center">
+                You are yet to join a cooperative society. Click the button
+                below to get started
+              </Text>
+            ) : (
+              <Text className="text-white text-xl text-center">
+                {activeIndex === 0
+                  ? "Recent transitions history will appear here"
+                  : "Recent transitions on loan history will appear here"}
+              </Text>
+            )}
+            {cooperatives.length === 0 ? (
+              <CustomButton
+                title={"Join a cooperative society"}
+                onPress={() =>
+                  router.replace("/(auth)/(member)/(join)/join-stages")
+                }
+                className="mt-6"
+              />
+            ) : (
+              <CustomButton
+                title={activeIndex === 0 ? "Add Money" : "Apply for a loan"}
+                onPress={() =>
+                  activeIndex === 0
+                    ? router.replace("/(auth)/(member)/(join)/join-stages")
+                    : ""
+                }
+                className="mt-6"
+              />
+            )}
           </View>
         )}
       </View>

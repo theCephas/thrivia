@@ -6,7 +6,7 @@ import { useAxiosInstance } from "@/constants/axiosInstance";
 import useAuthStore from "@/store";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   ScrollView,
   Text,
@@ -27,29 +27,29 @@ const Community = () => {
   const { token, cooperativeUUID } = useAuthStore();
   const axiosInstance = useAxiosInstance();
 
+  const getRequests = useCallback(async () => {
+    try {
+      const res = await axiosInstance.get(
+        `/cooperatives/${cooperativeUUID}/applications`,
+
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const data = await res.data;
+
+      console.log(data);
+      setRequest(data);
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
   useEffect(() => {
-    const getRequests = async () => {
-      try {
-        const res = await axiosInstance.get(
-          `/cooperatives/${cooperativeUUID}/applications`,
-
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              Accept: "application/json",
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        const data = await res.data;
-
-        console.log(data);
-        setRequest(data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
     getRequests();
   }, []);
 
