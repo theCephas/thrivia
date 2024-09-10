@@ -106,4 +106,10 @@ export class UsersController {
   ) {
     return this.usersService.fetchWithdrawalRequests(uuid, request.user as any);
   }
+
+  @Post('set-active-cooperative')
+  @UseGuards(JwtAuthGuard)
+  setActiveCooperative(@Req() request: Request, @Body('coopUuid') coopUuid: string) {
+    return this.usersService.setActiveCooperative(coopUuid, request.user as any);
+  }
 }

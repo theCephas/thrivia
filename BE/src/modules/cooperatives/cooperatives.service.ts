@@ -153,6 +153,13 @@ export class CooperativesService {
     });
   }
 
+  async fetchMembers(cooperativeUuid: string, { uuid }: IAuthContext) {
+    await this.cooperativeGuard(cooperativeUuid, uuid);
+    return this.cooperativeUsersRepository.find({
+      cooperative: { uuid: cooperativeUuid }
+    });
+  }
+
   async fetchWithdrawalRequests(
     cooperativeUuid: string,
     { uuid }: IAuthContext,

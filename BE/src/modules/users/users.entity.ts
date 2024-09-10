@@ -1,5 +1,6 @@
-import { Entity, Filter, PrimaryKey, Property, Unique } from '@mikro-orm/core';
+import { Entity, Filter, ManyToOne, PrimaryKey, Property, Unique } from '@mikro-orm/core';
 import { Timestamp } from '../../base/timestamp.entity';
+import { Cooperatives } from '../cooperatives/cooperatives.entity';
 
 @Filter({
   name: 'notDeleted',
@@ -71,4 +72,13 @@ export class Users extends Timestamp {
 
   @Property({ type: 'longtext', nullable: true })
   additionalDetails: string;
+
+  @ManyToOne(() => Cooperatives, {
+    fieldName: 'active_cooperative',
+    referenceColumnName: 'uuid',
+    joinColumn: 'uuid',
+    columnType: 'varchar(255)',
+    nullable: true,
+  })
+  activeCooperative: Cooperatives;
 }

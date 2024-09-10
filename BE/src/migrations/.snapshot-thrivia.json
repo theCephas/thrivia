@@ -496,6 +496,16 @@
           "nullable": true,
           "length": null,
           "mappedType": "unknown"
+        },
+        "active_cooperative": {
+          "name": "active_cooperative",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "length": 255,
+          "mappedType": "string"
         }
       },
       "name": "users",
@@ -521,6 +531,16 @@
           "unique": true
         },
         {
+          "columnNames": [
+            "active_cooperative"
+          ],
+          "composite": false,
+          "keyName": "users_active_cooperative_index",
+          "constraint": false,
+          "primary": false,
+          "unique": false
+        },
+        {
           "keyName": "PRIMARY",
           "columnNames": [
             "uuid"
@@ -532,7 +552,21 @@
         }
       ],
       "checks": [],
-      "foreignKeys": {},
+      "foreignKeys": {
+        "users_active_cooperative_foreign": {
+          "constraintName": "users_active_cooperative_foreign",
+          "columnNames": [
+            "active_cooperative"
+          ],
+          "localTableName": "users",
+          "referencedColumnNames": [
+            "uuid"
+          ],
+          "referencedTableName": "cooperatives",
+          "deleteRule": "set null",
+          "updateRule": "cascade"
+        }
+      },
       "nativeEnums": {}
     },
     {

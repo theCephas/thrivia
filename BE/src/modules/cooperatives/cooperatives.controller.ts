@@ -49,6 +49,12 @@ export class CooperativesController {
     );
   }
 
+  @Get(':uuid/members')
+  @UseGuards(JwtAuthGuard)
+  fetchMembers(@Param('uuid') uuid: string, @Req() request: Request) {
+    return this.cooperativesService.fetchMembers(uuid, request.user as any);
+  }
+
   @Get(':uuid/withdrawal-requests')
   @UseGuards(JwtAuthGuard)
   fetchWithdrawalRequests(
