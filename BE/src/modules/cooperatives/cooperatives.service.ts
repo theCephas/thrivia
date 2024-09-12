@@ -460,6 +460,13 @@ export class CooperativesService {
     });
   }
 
+  async fetchTransactions(cooperativeUuid: string, walletUuid: string, { uuid }: IAuthContext) {
+    await this.cooperativeGuard(cooperativeUuid, uuid);
+    return this.transactionRepository.find({
+      wallet: { uuid: walletUuid },
+    });
+  }
+
   private async cooperativeGuard(cooperativeUuid: string, userUuid: string) {
     const cooperativeUser = await this.cooperativeUsersRepository.findOne({
       cooperative: { uuid: cooperativeUuid },

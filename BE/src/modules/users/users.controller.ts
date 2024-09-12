@@ -107,6 +107,12 @@ export class UsersController {
     return this.usersService.fetchWithdrawalRequests(uuid, request.user as any);
   }
 
+  @Get('wallets/:uuid/transactions')
+  @UseGuards(JwtAuthGuard)
+  fetchTransactions(@Param('uuid') uuid: string, @Req() request: Request) {
+    return this.usersService.fetchTransactions(uuid, request.user as any);
+  }
+
   @Post('set-active-cooperative')
   @UseGuards(JwtAuthGuard)
   setActiveCooperative(@Req() request: Request, @Body('coopUuid') coopUuid: string) {

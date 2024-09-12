@@ -182,4 +182,10 @@ export class CooperativesController {
       request.user as any,
     );
   }
+
+  @Get(':uuid/wallets/:walletUuid/transactions')
+  @UseGuards(JwtAuthGuard)
+  fetchTransactions(@Param('uuid') uuid: string, @Param('walletUuid') walletUuid: string, @Req() request: Request) {
+    return this.cooperativesService.fetchTransactions(uuid, walletUuid, request.user as any);
+  }
 }

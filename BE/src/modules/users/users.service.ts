@@ -278,6 +278,13 @@ export class UsersService {
     });
   }
 
+  async fetchTransactions(walletUuid: string, { uuid }: IAuthContext) {
+    return this.transactionRepository.find({
+      wallet: { uuid: walletUuid },
+      user: { uuid }
+    });
+  }
+
   async setActiveCooperative(coopUuid: string, { uuid }: IAuthContext) {
     const user = await this.usersRepository.findOne({ uuid });
     if (!user) throw new NotFoundException(`User with uuid: '${uuid}' not found`);
