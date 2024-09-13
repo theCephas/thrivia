@@ -68,6 +68,23 @@ export class WalletsService {
         remark: details.remark,
       });
       wallet.balance += details.amount;
+      if (details.cooperativeWallet) {
+        details.cooperativeWallet.balance += details.amount;
+        const coopTransactionModel = this.transactionRepository.create({
+          uuid: v4(),
+          type: TransactionType.CREDIT,
+          balanceBefore: details.cooperativeWallet.balance,
+          balanceAfter: details.cooperativeWallet.balance + details.amount,
+          amount: details.amount,
+          wallet: this.walletsRepository.getReference(details.cooperativeWallet.uuid),
+          walletSnapshot: JSON.stringify(details.cooperativeWallet),
+          payment: this.paymentsRepository.getReference(details.paymentUuid),
+          user: this.usersRepository.getReference(details.userUuid),
+          remark: details.remark,
+        });
+        em.persist(details.cooperativeWallet);
+        em.persist(coopTransactionModel);
+      }
       em.persist(transactionModel);
       em.persist(wallet);
       await em.flush();

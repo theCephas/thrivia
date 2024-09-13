@@ -1,4 +1,5 @@
 import { IsNumberString, IsString, Length } from 'class-validator';
+import { Wallets } from './wallets.entity';
 
 export class BankDetailsDto {
   @IsNumberString()
@@ -24,6 +25,8 @@ export class CreditWalletDto {
   userUuid: string;
 
   remark: string;
+
+  cooperativeWallet?: Wallets
 }
 
 export class ProviderPayoutDto {
