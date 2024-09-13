@@ -452,7 +452,7 @@ export class CooperativesService {
       payment: { uuid: paymentUuid },
     });
     if (transactionExists) throw new ConflictException('Payment has been used');
-    await this.walletService.creditWallet({
+    return this.walletService.creditWallet({
       walletUuid,
       amount: paymentExists.amount,
       paymentUuid: paymentExists.uuid,

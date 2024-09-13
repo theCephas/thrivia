@@ -10,6 +10,7 @@ import { Transactions, Wallets } from './wallets.entity';
 import { EntityManager, EntityRepository } from '@mikro-orm/core';
 import { Payments } from '../cooperatives/cooperatives.entity';
 import { Users } from '../users/users.entity';
+import { v4 } from 'uuid';
 
 @Injectable()
 export class WalletsService {
@@ -45,6 +46,7 @@ export class WalletsService {
   }
 
   async creditWallet(details: CreditWalletDto) {
+    let transactionModel: Transactions;
     await this.em.transactional(async (em) => {
       const wallet = await this.walletsRepository.findOne({
         uuid: details.walletUuid,
@@ -53,7 +55,8 @@ export class WalletsService {
         throw new NotFoundException(
           `Wallet with id: ${details.walletUuid} does not exist`,
         );
-      const transactionModel = this.transactionRepository.create({
+      transactionModel = this.transactionRepository.create({
+        uuid: v4(),
         type: TransactionType.CREDIT,
         balanceBefore: wallet.balance,
         balanceAfter: wallet.balance + details.amount,
@@ -72,5 +75,6 @@ export class WalletsService {
       em.persist(walletModel);
       await em.flush();
     });
+    return transactionModel;
   }
 }
