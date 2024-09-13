@@ -67,12 +67,9 @@ export class WalletsService {
         user: this.usersRepository.getReference(details.userUuid),
         remark: details.remark,
       });
-      const walletModel = this.walletsRepository.create({
-        uuid: wallet.uuid,
-        balance: wallet.balance + details.amount,
-      });
+      wallet.balance += details.amount;
       em.persist(transactionModel);
-      em.persist(walletModel);
+      em.persist(wallet);
       await em.flush();
     });
     return transactionModel;
