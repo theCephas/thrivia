@@ -6,12 +6,12 @@ import Swiper from "react-native-swiper";
 import { Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { managerBlDeets, publicBalance } from "@/constants";
 import BgStyling from "@/assets/svg/BgStyling";
 import CustomButton from "@/components/CustomButton";
 import InviteModal from "@/components/InviteModal";
-import { router, useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams, useRouter } from "expo-router";
 import useAuthStore from "@/store";
 import CustomSideModal from "@/components/CustomSideModal";
 import SwitchAccounts from "@/assets/svg/SwitchAccounts";
@@ -24,6 +24,7 @@ const Home = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isSliderVisible, setIsSliderVisible] = useState(false);
   const { wallets } = useFetchWallets();
+  const router = useRouter();
 
   const { uuid } = useLocalSearchParams();
 
@@ -35,22 +36,8 @@ const Home = () => {
     setIsModalVisible(true);
   };
 
-  const {
-    cooperativeName,
-    logout,
-    cooperativeUUID,
-    copUniqueId,
-    token,
-    userUuid,
-  } = useAuthStore();
-  console.log(cooperativeUUID);
-  console.log(
-    "cooperative name",
-    cooperativeName,
-    copUniqueId,
-    cooperativeUUID
-  );
-  console.log(token, userUuid);
+  const { cooperativeName, logout } = useAuthStore();
+  console.log(wallets);
 
   return (
     <SafeAreaView className="flex-1 bg-[#1d2128]">
@@ -132,7 +119,12 @@ const Home = () => {
               </View>
               <View className="flex flex-row gap-x-2">
                 <TouchableOpacity
-                  onPress={() => router.replace("/(root)/(others)/add-money")}
+                  onPress={() => {
+                    router.replace({
+                      pathname: "/(root)/(others)/add-money",
+                      params: { role: "MANAGER" },
+                    });
+                  }}
                 >
                   <LinearGradient
                     colors={["#F4F4F433", "#FFFFFF0B"]}
@@ -141,12 +133,23 @@ const Home = () => {
                     <Text className="text-white text-[14px]">+ Add money</Text>
                   </LinearGradient>
                 </TouchableOpacity>
-                <LinearGradient
-                  colors={["#F4F4F433", "#FFFFFF0B"]}
-                  className="flex items-center justify-center border-[#E8E7E780] border rounded-full w-[110px] h-[38px]"
+                <TouchableOpacity
+                  onPress={() => {
+                    router.replace({
+                      pathname: "/(root)/(others)/(member-withdraw)/withdraw",
+                      params: { uuid: item.uuid },
+                    });
+                  }}
                 >
-                  <Text className="text-white text-[14px]">Withdraw money</Text>
-                </LinearGradient>
+                  <LinearGradient
+                    colors={["#F4F4F433", "#FFFFFF0B"]}
+                    className="flex items-center justify-center border-[#E8E7E780] border rounded-full w-[110px] h-[38px]"
+                  >
+                    <Text className="text-white text-[14px]">
+                      Withdraw money
+                    </Text>
+                  </LinearGradient>
+                </TouchableOpacity>
               </View>
             </LinearGradient>
           ))}

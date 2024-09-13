@@ -1,3 +1,5 @@
+// Payment Successful: {"authorizedAmount": 200, "paymentReference": "1726235460623", "status": "SUCCESS", "transactionReference": "MNFY|92|20240913145103|003347"}
+
 import {
   View,
   Text,
@@ -33,6 +35,7 @@ const CustomSideModal: React.FC<CustomSideModalProps> = ({
     logout,
     SetCoopUniqueId,
     setRole,
+    setCooperativeEmail,
   } = useAuthStore();
 
   const { loading, cooperatives, error } = useFetchCoop();
@@ -94,7 +97,7 @@ const CustomSideModal: React.FC<CustomSideModalProps> = ({
                             setCooperativeName(coop.cooperative.name);
                             SetCoopUniqueId(coop.cooperative.uniqueId);
                             setRole(coop.role);
-
+                            setCooperativeEmail(coop.cooperative.contactEmail);
                             if (coop.role === "MANAGER") {
                               router.push(
                                 `/(root)/(manager-tabs)/${coop.cooperative.uuid}`

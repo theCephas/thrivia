@@ -3,13 +3,14 @@ import HomeSvg from "@/assets/svg/Home";
 import People from "@/assets/svg/People";
 import Profile from "@/assets/svg/Profile";
 import useAuthStore from "@/store";
-import { Tabs } from "expo-router";
+import { Tabs, useRouter } from "expo-router"; // import useRouter to navigate
+import { useEffect } from "react";
 import { Text, View } from "react-native";
 import { SvgProps } from "react-native-svg";
 import Home from "./home";
 
 const TabIcon = ({
-  Icon, // Expect a React component for the icon
+  Icon,
   focused,
   label,
 }: {
@@ -40,7 +41,17 @@ const TabIcon = ({
 );
 
 export default function Layout() {
-  const { user } = useAuthStore();
+  const { user, logout, isTokenExpired } = useAuthStore(); // Use isTokenExpired function
+  const router = useRouter();
+
+  useEffect(() => {
+    // Check if token is expired
+    if (isTokenExpired() && user.activeCooperative === null) {
+      logout();
+      router.replace("/(auth)/(member)/sign-in");
+    }
+  }, [isTokenExpired, logout, router]);
+
   return user.activeCooperative ? (
     <Tabs
       initialRouteName="index"
@@ -107,9 +118,6 @@ export default function Layout() {
       />
     </Tabs>
   ) : (
-    // <View className="flex-1 bg-[#1d2128]">
-    // <Text className="text-black mt-20">Not logged in</Text>
     <Home />
-    // </View>
   );
 }

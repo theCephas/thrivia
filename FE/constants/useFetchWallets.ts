@@ -18,6 +18,7 @@ const useFetchWallets = () => {
       );
 
       setWallets(response.data);
+
       setWalletUuid(response.data.uuid);
     } catch (err) {
       setError("Failed to load cooperatives");

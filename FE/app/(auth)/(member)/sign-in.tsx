@@ -22,6 +22,7 @@ const SignIn = () => {
     setCooperativeUUID,
     setCooperativeName,
     SetCoopUniqueId,
+    setCooperativeEmail,
   } = useAuthStore();
   const [loading, setLoading] = useState(false);
   const { setActiveCooperativeAPI } = useSetActiveCooperative();
@@ -40,7 +41,7 @@ const SignIn = () => {
 
       const data = await res.data;
 
-      console.log(data);
+      // console.log(data);
       if (data.accessToken) {
         Toast.show({
           type: "success",
@@ -56,6 +57,7 @@ const SignIn = () => {
           setCooperativeUUID(userActCoop.uuid);
           setCooperativeName(userActCoop.name);
           SetCoopUniqueId(userActCoop.uniqueId);
+          setCooperativeEmail(userActCoop.contactEmail);
           router.replace(
             `/(root)/(manager-tabs)/${user.activeCooperative.uuid}`
           );

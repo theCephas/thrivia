@@ -3,36 +3,94 @@ import Homeprofile from "@/assets/svg/Homeprofile";
 import CustomButton from "@/components/CustomButton";
 import PaymentInputField from "@/components/PaymentInputField";
 import useAuthStore from "@/store";
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { useState } from "react";
-import { SafeAreaView, Text, TouchableOpacity, View } from "react-native";
+import {
+  SafeAreaView,
+  Text,
+  TouchableOpacity,
+  View,
+  Alert,
+} from "react-native";
 import Monnify from "@adsesugh/monnify-react-native";
+import FormLoader from "@/components/FormLoader";
+import { useAxiosInstance } from "@/constants/axiosInstance";
+import Success from "@/assets/svg/Success";
 
 const AddMoney = () => {
   const router = useRouter();
-  const [value, setValue] = useState<number>(0);
-  const { cooperativeName } = useAuthStore();
+  const { role } = useLocalSearchParams();
+  const [value, setValue] = useState<number>(200.0);
+  const { cooperativeName, user, cooperativeEmail, token } = useAuthStore();
   const [modalVisible, setModalVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const axiosInstance = useAxiosInstance();
+  console.log(token);
 
   const paymentParameters = {
     amount: value,
     currency: "NGN",
     reference: `${Date.now()}`,
-    customerFullName: "John Doe",
-    customerEmail: "admin@gmail.com",
-    customerMobileNumber: "08012345689",
-    apiKey: "MK_PROD_GSSGSHTTKLT",
-    contractCode: "8960152607144",
-    paymentDescription: "Payment for goods",
-    mode: "TEST",
+    customerFullName: `${role === "MANAGER" ? cooperativeName : user.name}`,
+    customerEmail: `${role === "MANAGER" ? cooperativeEmail : user.email}`,
+    apiKey: "MK_PROD_GSXRRTTKLT",
+    contractCode: "896041207144",
+    paymentDescription: "Payment for savings",
+    mode: "LIVE",
   };
 
-  const onSuccess = (response: any) => {
+  const onSuccess = async (response: any) => {
     console.log("Payment Successful:", response);
+    setLoading(true);
+    try {
+      const { transactionReference, authorizedAmount } = response;
+      const { data } = await axiosInstance.post(
+        `/cooperatives/verify-transaction/${transactionReference}`
+      );
+      // Check if the verification was successful
+      if (data.amount) {
+        return (
+          <SafeAreaView className="h-full bg-[#1d2128] w-full flex flex-col justify-center items-center">
+            <View className="flex flex-col">
+              <View className=" flex flex-row items-center gap-x-4 justify-center">
+                <Text className="text-white text-[20px]">
+                  Deposit Successful!
+                </Text>
+                <Success width={40} height={40} />
+              </View>
+              <View className="mt-6 flex flex-row items-center justify-center">
+                <Text className="text-white text-base">
+                  NGN {authorizedAmount}
+                </Text>
+              </View>
+              <View className="mt-10">
+                <CustomButton
+                  title="Done"
+                  className="w-full"
+                  onPress={() => router.replace("/(root)/(tabs)/home")}
+                />
+              </View>
+            </View>
+          </SafeAreaView>
+        );
+      } else {
+        // Handle verification failure (if needed)
+        Alert.alert("Error", "Transaction verification failed.");
+      }
+    } catch (error) {
+      console.error("Verification Error:", error);
+      Alert.alert(
+        "Error",
+        "An error occurred while verifying the transaction."
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   const onError = (response: any) => {
     console.log("Payment Failed:", response);
+    Alert.alert("Payment Failed", "The payment could not be completed.");
   };
 
   const onDismiss = () => {
@@ -40,8 +98,8 @@ const AddMoney = () => {
   };
 
   const handleProceed = () => {
-    if (value === null || value <= 0) {
-      alert("Please enter a valid amount");
+    if (value === null || value <= 199.99) {
+      Alert.alert("Invalid Amount", "Please enter a valid amount.");
       return;
     }
     setModalVisible(true);
@@ -59,8 +117,8 @@ const AddMoney = () => {
         </TouchableOpacity>
         <View className="flex flex-col gap-4 items-center px-14 mt-6">
           <Homeprofile />
-          <Text className="text-white text-xl text-center">
-            {cooperativeName} Savings
+          <Text style={{ color: "white", fontSize: 18, textAlign: "center" }}>
+            {role === "MANAGER" ? cooperativeName : user.firstName} Savings
           </Text>
         </View>
         <PaymentInputField
@@ -83,6 +141,7 @@ const AddMoney = () => {
         onDismiss={onDismiss}
         visible={modalVisible}
       />
+      {loading && <FormLoader />}
     </SafeAreaView>
   );
 };

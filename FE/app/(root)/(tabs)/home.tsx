@@ -22,10 +22,10 @@ const Home = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const isLastSlide = activeIndex === publicBalance.length - 1;
   const [isModalVisible, setIsModalVisible] = useState(false);
-
+  const router = useRouter();
   const { user, token, expireAt, logout, userUuid, role } = useAuthStore();
   const { cooperatives } = useFetchCoop();
-  console.log("user uuid:", userUuid, cooperatives);
+  console.log("user uuid:", userUuid, cooperatives, token);
 
   useEffect(() => {
     if (!user || !token) {
@@ -36,7 +36,6 @@ const Home = () => {
     const date = new Date(dateString);
     const now = new Date();
     const differenceInSeconds = Math.floor(now.getTime() - date.getTime());
-
     if (differenceInSeconds > expireAt) logout();
   }, [user, expireAt, token, logout]);
 
@@ -44,6 +43,7 @@ const Home = () => {
     setIsModalVisible(false);
   };
   const { wallets } = useFetchWallets();
+  console.log(wallets);
   return (
     <SafeAreaView className="flex-1 bg-[#1d2128]">
       <View className="p-4 pt-5 pb-12 flex-1">
@@ -114,9 +114,12 @@ const Home = () => {
                     </View>
                     <View className="flex flex-row gap-x-2">
                       <TouchableOpacity
-                        onPress={() =>
-                          router.replace("/(root)/(others)/add-money")
-                        }
+                        onPress={() => {
+                          router.replace({
+                            pathname: "/(root)/(others)/add-money",
+                            params: { role: "MEMBER" },
+                          });
+                        }}
                       >
                         <LinearGradient
                           colors={["#F4F4F433", "#FFFFFF0B"]}
@@ -127,14 +130,24 @@ const Home = () => {
                           </Text>
                         </LinearGradient>
                       </TouchableOpacity>
-                      <LinearGradient
-                        colors={["#F4F4F433", "#FFFFFF0B"]}
-                        className="flex items-center justify-center border-[#E8E7E780] border rounded-full w-[110px] h-[38px]"
+                      <TouchableOpacity
+                        onPress={() => {
+                          router.replace({
+                            pathname:
+                              "/(root)/(others)/(member-withdraw)/withdraw",
+                            params: { uuid: item.uuid },
+                          });
+                        }}
                       >
-                        <Text className="text-white text-[14px]">
-                          Withdraw money
-                        </Text>
-                      </LinearGradient>
+                        <LinearGradient
+                          colors={["#F4F4F433", "#FFFFFF0B"]}
+                          className="flex items-center justify-center border-[#E8E7E780] border rounded-full w-[110px] h-[38px]"
+                        >
+                          <Text className="text-white text-[14px]">
+                            Withdraw money
+                          </Text>
+                        </LinearGradient>
+                      </TouchableOpacity>
                     </View>
                   </LinearGradient>
                 ))}
