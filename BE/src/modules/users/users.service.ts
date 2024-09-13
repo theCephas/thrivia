@@ -214,7 +214,9 @@ export class UsersService {
     const cooperativeWallet = await this.walletsRepository.findOne({
       createdBy: walletExists.cooperative.createdBy,
       cooperative: walletExists.cooperative,
-      title: walletExists.title
+      title: walletExists.title,
+      user: null,
+      uuid: { $ne: walletUuid }
     });
     const paymentExists = await this.paymentRepository.findOne({
       uuid: paymentUuid,
@@ -227,7 +229,7 @@ export class UsersService {
       payment: { uuid: paymentUuid },
     });
     if (transactionExists) throw new ConflictException('Payment has been used');
-    await this.walletService.creditWallet({
+    return this.walletService.creditWallet({
       walletUuid,
       cooperativeWallet,
       amount: paymentExists.amount,

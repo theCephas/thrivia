@@ -59,7 +59,8 @@ export class Cooperatives extends Timestamp {
     referenceColumnName: 'uuid',
     joinColumn: 'uuid',
     columnType: 'varchar(255)',
-    nullable: true
+    nullable: true,
+    eager: true
   })
   createdBy: Users;
 }

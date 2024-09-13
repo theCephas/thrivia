@@ -34,6 +34,7 @@ export class Wallets extends Timestamp {
     joinColumn: 'uuid',
     columnType: 'varchar(255)',
     nullable: true,
+    eager: true
   })
   cooperative: Cooperatives;
 
@@ -96,7 +97,7 @@ export class Transactions extends Timestamp {
   })
   user!: Users;
 
-  @OneToOne(() => Payments, {
+  @ManyToOne(() => Payments, {
     fieldName: 'payment_uuid',
     referenceColumnName: 'uuid',
     joinColumn: 'uuid',

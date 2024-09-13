@@ -1,4 +1,4 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { PaymentProvider } from '../shared/payment-providers/payment-provider.contract';
 import PaymentFactory from '../shared/payment-providers/payment-provider.factory';
@@ -55,6 +55,10 @@ export class WalletsService {
         throw new NotFoundException(
           `Wallet with id: ${details.walletUuid} does not exist`,
         );
+      const transactionExists = await this.transactionRepository.findOne({
+        payment: { uuid: details.paymentUuid }
+      });
+      if (transactionExists) throw new ConflictException(`Payment has already been used`);
       transactionModel = this.transactionRepository.create({
         uuid: v4(),
         type: TransactionType.CREDIT,
@@ -69,12 +73,12 @@ export class WalletsService {
       });
       wallet.balance += details.amount;
       if (details.cooperativeWallet) {
-        details.cooperativeWallet.balance += details.amount;
+        const coopWalletModel = await this.walletsRepository.findOne({ uuid: details.cooperativeWallet.uuid })
         const coopTransactionModel = this.transactionRepository.create({
           uuid: v4(),
           type: TransactionType.CREDIT,
-          balanceBefore: details.cooperativeWallet.balance,
-          balanceAfter: details.cooperativeWallet.balance + details.amount,
+          balanceBefore: coopWalletModel.balance,
+          balanceAfter: coopWalletModel.balance + details.amount,
           amount: details.amount,
           wallet: this.walletsRepository.getReference(details.cooperativeWallet.uuid),
           walletSnapshot: JSON.stringify(details.cooperativeWallet),
@@ -82,7 +86,8 @@ export class WalletsService {
           user: this.usersRepository.getReference(details.userUuid),
           remark: details.remark,
         });
-        em.persist(details.cooperativeWallet);
+        coopWalletModel.balance += details.amount;
+        em.persist(coopWalletModel);
         em.persist(coopTransactionModel);
       }
       em.persist(transactionModel);

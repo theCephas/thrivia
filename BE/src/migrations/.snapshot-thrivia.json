@@ -1549,10 +1549,10 @@
             "payment_uuid"
           ],
           "composite": false,
-          "keyName": "transactions_payment_uuid_unique",
-          "constraint": true,
+          "keyName": "transactions_payment_uuid_index",
+          "constraint": false,
           "primary": false,
-          "unique": true
+          "unique": false
         },
         {
           "keyName": "PRIMARY",
