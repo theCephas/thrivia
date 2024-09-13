@@ -1,11 +1,14 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Text, TextInput, View } from "react-native";
 
 interface PaymentInputProps {
-  value: string;
-  setValue: React.Dispatch<React.SetStateAction<string>>;
+  value: number;
+  setValue: React.Dispatch<React.SetStateAction<number>>;
   focusOnInit: boolean;
 }
+
+// apiKey: "MK_PROD_GSXRRTTKLT",
+//     contractCode: "896041207144",
 
 const PaymentInputField = ({
   value,
@@ -20,6 +23,11 @@ const PaymentInputField = ({
       inputRef.current.focus();
     }
   }, [focusOnInit]);
+
+  const handleChangeText = (text: string) => {
+    const numericValue = text.replace(/[^0-9]/g, ""); // Remove any non-numeric characters
+    setValue(Number(numericValue));
+  };
   return (
     <View className="mt-14 px-6 w-full">
       <Text className="text-xl text-white mb-3">Enter amount</Text>
@@ -30,8 +38,8 @@ const PaymentInputField = ({
 
         <TextInput
           ref={inputRef}
-          value={value}
-          onChangeText={(text) => setValue(text)}
+          value={value.toString()}
+          onChangeText={handleChangeText}
           keyboardType="numeric"
           placeholder="0.00"
           placeholderTextColor="#939090"

@@ -9,10 +9,12 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
+  ScrollView,
 } from "react-native";
 import { InputFieldProps } from "@/types/type"; // Adjust this import to your needs
 import { LinearGradient } from "expo-linear-gradient";
 import ArrowDown from "@/assets/svg/ArrowDown";
+import Modal from "react-native-modal";
 
 interface DropdownProps extends InputFieldProps {
   options: string[];
@@ -80,7 +82,7 @@ const Dropdown = ({
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View className="my-2 w-full relative">
+        <View className="my-2 w-full">
           <TouchableOpacity
             onPress={() => setIsOpen(!isOpen)}
             activeOpacity={0.8}
@@ -107,29 +109,31 @@ const Dropdown = ({
               </View>
             </View>
           </TouchableOpacity>
-          {isOpen && (
-            <LinearGradient
-              colors={["#F4F4F433", "#FFFFFF0B"]}
-              className=" w-[152px] p-2 mt-1 border border-[#E8E7E780] left-[200px] z-50"
-            >
-              {options.map((item, index) => (
-                <TouchableOpacity
-                  key={index}
-                  onPress={() => {
-                    console.log("first");
-                    onSelect(item);
-                  }}
-                  className="py-2 border-b border-[#E8E7E780]"
-                >
-                  <Text className="" style={styles.optionText}>
-                    {item}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-            </LinearGradient>
-          )}
         </View>
       </TouchableWithoutFeedback>
+      <Modal
+        isVisible={isOpen}
+        onBackdropPress={() => setIsOpen(false)}
+        backdropOpacity={0.5}
+        animationIn="slideInUp"
+        animationOut="slideOutDown"
+        className="relative"
+      >
+        <View className="bg-white p-5 h-[600px] w-full bottom-[-20px] absolute overflow-scroll rounded-lg items-center">
+          <Text className="text-lg font-bold mb-3">{placeholder}</Text>
+          <ScrollView contentContainerStyle={{ paddingBottom: 50 }}>
+            {options.map((item, index) => (
+              <TouchableOpacity
+                className="py-3 w-full border-b border-gray-300"
+                key={index}
+                onPress={() => handleSelect(item)}
+              >
+                <Text className="text-base text-black">{item}</Text>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+        </View>
+      </Modal>
     </KeyboardAvoidingView>
   );
 };

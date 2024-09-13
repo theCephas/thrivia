@@ -24,7 +24,7 @@ const SignUp = () => {
   });
   const [loading, setLoading] = useState(false);
 
-  const { token } = useAuthStore();
+  const { token, login, setUserUuid } = useAuthStore();
 
   useEffect(() => {
     let isMounted = true;
@@ -54,10 +54,13 @@ const SignUp = () => {
       if (data.accessToken) {
         Toast.show({
           type: "success",
-          text1: `Account was created successfully`,
+          text1: `Login Successful!`,
         });
+        const { accessToken, expiresIn, user } = data;
+        setUserUuid(user.uuid);
+        login(accessToken, expiresIn, user);
 
-        router.replace("/(auth)/(member)/sign-in");
+        router.replace("/(root)/(tabs)/home");
       }
     } catch (err) {
       Toast.show({

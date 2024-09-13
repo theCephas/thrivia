@@ -1,10 +1,12 @@
 import Finance from "@/assets/svg/Finance";
-import Home from "@/assets/svg/Home";
+import HomeSvg from "@/assets/svg/Home";
 import People from "@/assets/svg/People";
 import Profile from "@/assets/svg/Profile";
+import useAuthStore from "@/store";
 import { Tabs } from "expo-router";
 import { Text, View } from "react-native";
 import { SvgProps } from "react-native-svg";
+import Home from "./home";
 
 const TabIcon = ({
   Icon, // Expect a React component for the icon
@@ -38,7 +40,8 @@ const TabIcon = ({
 );
 
 export default function Layout() {
-  return (
+  const { user } = useAuthStore();
+  return user.activeCooperative ? (
     <Tabs
       initialRouteName="index"
       screenOptions={{
@@ -68,7 +71,7 @@ export default function Layout() {
           title: "Home",
           headerShown: false,
           tabBarIcon: ({ focused }) => (
-            <TabIcon label="Home" Icon={Home} focused={focused} />
+            <TabIcon label="Home" Icon={HomeSvg} focused={focused} />
           ),
         }}
       />
@@ -103,5 +106,10 @@ export default function Layout() {
         }}
       />
     </Tabs>
+  ) : (
+    // <View className="flex-1 bg-[#1d2128]">
+    // <Text className="text-black mt-20">Not logged in</Text>
+    <Home />
+    // </View>
   );
 }

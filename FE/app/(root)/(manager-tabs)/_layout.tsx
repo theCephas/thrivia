@@ -1,5 +1,5 @@
 import Finance from "@/assets/svg/Finance";
-import Home from "@/assets/svg/Home";
+import HomeSvg from "@/assets/svg/Home";
 import People from "@/assets/svg/People";
 import Profile from "@/assets/svg/Profile";
 import { Tabs } from "expo-router";
@@ -69,7 +69,7 @@ export default function Layout() {
           title: "Home",
           headerShown: false,
           tabBarIcon: ({ focused }) => (
-            <TabIcon label="Home" Icon={Home} focused={focused} />
+            <TabIcon label="Home" Icon={HomeSvg} focused={focused} />
           ),
         }}
       />

@@ -22,6 +22,16 @@ interface AuthState {
   coopUUID: string | null;
   coopUniqueId: string | null;
   cooperativeName: string | null;
+  setActiveCooperative: (coopUuid: string, name: string) => void;
+  coopUuid: string | null;
+  coopName: string | null;
+  activeCooperative: string | null;
+  setUserUuid: (uuid: string) => void;
+  userUuid: string | null;
+  setRole: (role: string) => void;
+  role: string | null;
+  setWalletUuid: (uuid: string) => void;
+  walletUuid: string | null;
 }
 
 const Api = () => {
@@ -40,11 +50,25 @@ const useAuthStore = create(
       coopUniqueId: null,
       cooperativeUUID: null,
       copUniqueId: null,
+      activeCooperative: null,
+      coopName: null,
+      coopUuid: null,
+      userUuid: null,
+      role: null,
+      walletUuid: null,
 
       login: (token: any, expiresIn: string, user: any) => {
-        // console.log(token, expiresIn);
+        // console.log("line 52 - hook:", user);
         const expireAt = expiresIn;
-        set({ token, expireAt, user });
+        set({
+          token,
+          expireAt,
+          user,
+          userUuid: user.uuid,
+          coopName: user?.activeCooperative?.name || null,
+          coopUuid: user?.activeCooperative?.uuid || null,
+          activeCooperative: user?.activeCooperative?.uuid || null,
+        });
       },
 
       logout: () =>
@@ -57,6 +81,12 @@ const useAuthStore = create(
           coopUniqueId: null,
           cooperativeUUID: null,
           copUniqueId: null,
+          activeCooperative: null,
+          coopName: null,
+          coopUuid: null,
+          userUuid: null,
+          role: null,
+          walletUuid: null,
         }),
 
       setCooperativeName: (name: string) => set({ cooperativeName: name }),
@@ -64,6 +94,22 @@ const useAuthStore = create(
       setUniqueId: (uniqueId: string) => set({ coopUniqueId: uniqueId }),
       setCooperativeUUID: (uuid: string) => set({ cooperativeUUID: uuid }),
       SetCoopUniqueId: (uniqueId: string) => set({ copUniqueId: uniqueId }),
+      setActiveCooperative: (coopUuid: string, name: string) => {
+        set({
+          coopUuid: coopUuid,
+          coopName: name,
+          activeCooperative: coopUuid,
+        });
+      },
+      setUserUuid(uuid) {
+        set({ userUuid: uuid });
+      },
+      setRole(role) {
+        set({ role: role });
+      },
+      setWalletUuid(uuid) {
+        set({ walletUuid: uuid });
+      },
       refreshToken: async () => {
         try {
           const newToken = await Api().post("");

@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Thrivia",
+    "name": "thrivia",
     "slug": "thrivia",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -9,26 +9,38 @@
     "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./assets/images/splash.png",
-
+      "resizeMode": "contain",
       "backgroundColor": "#1D2128"
     },
     "ios": {
       "supportsTablet": true
     },
     "android": {
-      "thrivia": {
+      "adaptiveIcon": {
         "foregroundImage": "./assets/images/thrivia.png",
         "backgroundColor": "#1D2128"
-      }
+      },
+      "package": "com.thecephas.thrivia"
     },
     "web": {
       "bundler": "metro",
-      "output": "static",
+      "output": "server",
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": ["expo-router"],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "sdkVersion": "51.0.0",
+    "description": "A cooperative application",
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "54e9148c-9509-4308-8c87-ded6e9fd2966"
+      }
+    },
+    "owner": "thecephas"
   }
 }
