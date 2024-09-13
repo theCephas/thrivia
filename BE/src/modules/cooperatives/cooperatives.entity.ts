@@ -269,7 +269,7 @@ export class Payments extends Timestamp {
   @Property()
   channel: string;
 
-  @Property()
+  @Property({ type: 'longtext', nullable: true })
   metadata: string;
 
   @Enum({ items: () => PaymentType })

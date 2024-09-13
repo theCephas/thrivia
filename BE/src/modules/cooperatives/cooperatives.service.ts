@@ -424,6 +424,7 @@ export class CooperativesService {
       currencies: Currencies.NGN,
     });
     await this.em.persistAndFlush(paymentModel);
+    return paymentModel;
   }
 
   async depositMoney(

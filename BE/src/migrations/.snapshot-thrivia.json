@@ -271,13 +271,13 @@
         },
         "metadata": {
           "name": "metadata",
-          "type": "varchar(255)",
+          "type": "longtext",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
-          "nullable": false,
-          "length": 255,
-          "mappedType": "string"
+          "nullable": true,
+          "length": null,
+          "mappedType": "unknown"
         },
         "type": {
           "name": "type",
