@@ -5,17 +5,27 @@ import CustomButton from "@/components/CustomButton";
 import FormLoader from "@/components/FormLoader";
 import InputField from "@/components/InputField";
 import { useAxiosInstance } from "@/constants/axiosInstance";
+import useSetActiveCooperative from "@/constants/useSetActiveCooperative";
 import useAuthStore from "@/store";
 
 import { Link, router } from "expo-router";
-import {  useState } from "react";
+import { useState } from "react";
 import { ScrollView, Text, View } from "react-native";
 import Toast from "react-native-toast-message";
 
 const SignIn = () => {
   const axiosInstance = useAxiosInstance();
-  const { login, token } = useAuthStore();
+  const {
+    login,
+    token,
+    setUserUuid,
+    setCooperativeUUID,
+    setCooperativeName,
+    SetCoopUniqueId,
+    setCooperativeEmail,
+  } = useAuthStore();
   const [loading, setLoading] = useState(false);
+  const { setActiveCooperativeAPI } = useSetActiveCooperative();
   const [form, setForm] = useState({
     email: "",
     password: "",
@@ -31,28 +41,40 @@ const SignIn = () => {
 
       const data = await res.data;
 
-      console.log(data);
-
+      // console.log(data);
       if (data.accessToken) {
         Toast.show({
           type: "success",
           text1: `Login Successful!`,
         });
-        const { accessToken, expiresIn, user, cooperative } = data;
-        console.log(user.uuid);
+        const { accessToken, expiresIn, user } = data;
+        console.log(data);
         login(accessToken, expiresIn, user);
-        router.replace("/(root)/(tabs)/home");
+
+        setUserUuid(user.uuid);
+        const userActCoop = user.activeCooperative;
+        if (userActCoop) {
+          setCooperativeUUID(userActCoop.uuid);
+          setCooperativeName(userActCoop.name);
+          SetCoopUniqueId(userActCoop.uniqueId);
+          setCooperativeEmail(userActCoop.contactEmail);
+          router.replace(
+            `/(root)/(manager-tabs)/${user.activeCooperative.uuid}`
+          );
+        } else {
+          router.replace("/(root)/(tabs)/home");
+        }
       }
     } catch (err) {
       Toast.show({
         type: "error",
         text1: `${err}`,
       });
-      // console.log(err);
     } finally {
       setLoading(false);
     }
   };
+
   return (
     <ScrollView className="relative h-full flex-1 bg-[#1d2128]">
       <View className="flex-1 items-center justify-center flex-col gap-8 bg-[#1d2128] mt-[60px]">

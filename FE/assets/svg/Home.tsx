@@ -1,6 +1,6 @@
 import * as React from "react";
 import Svg, { G, Path, Defs, ClipPath, Rect, SvgProps } from "react-native-svg";
-const Home = (props: SvgProps) => (
+const HomeSvg = (props: SvgProps) => (
   <Svg width={21} height={20} viewBox="0 0 21 20" fill="none" {...props}>
     <G clipPath="url(#clip0_20_3920)">
       <Path
@@ -24,4 +24,4 @@ const Home = (props: SvgProps) => (
     </Defs>
   </Svg>
 );
-export default Home;
+export default HomeSvg;

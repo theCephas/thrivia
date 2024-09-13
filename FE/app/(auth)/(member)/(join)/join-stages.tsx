@@ -17,12 +17,12 @@ import Toast from "react-native-toast-message";
 
 const JoinStages = () => {
   const [currentStage, setCurrentStage] = useState(1);
-  const { user, token } = useAuthStore();
+  const { user, token, cooperativeName } = useAuthStore();
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
     uniqueID: "",
     memberNum: "",
-    fullName: `${user.firstName} ${user.lastName}`,
+    fullName: `${user.firstName}${user.lastName}`,
     date: "",
     address: "",
     email: user.email,
@@ -33,6 +33,12 @@ const JoinStages = () => {
   const nextStage = () => {
     if (currentStage < 2) {
       setCurrentStage(currentStage + 1);
+    }
+  };
+
+  const prevStage = () => {
+    if (currentStage > 1) {
+      setCurrentStage(currentStage - 1);
     }
   };
 
@@ -111,7 +117,7 @@ const JoinStages = () => {
         </View>
         <View>
           <Text className="text-xl w-[298px] font-[500] m-auto text-center text-white ">
-            Become a member of Freedom Cooperative
+            Join a Cooperative
           </Text>
         </View>
       </View>
@@ -128,12 +134,22 @@ const JoinStages = () => {
             }}
           />
 
-          <TouchableOpacity
-            onPress={() => router.replace("/(root)/(tabs)/home")}
-            className={`w-full p-3 mb-5 rounded-full flex flex-row justify-center items-center h-[44px] border border-white`}
-          >
-            <Text className="text-white">Cancel</Text>
-          </TouchableOpacity>
+          {currentStage > 1 && (
+            <TouchableOpacity
+              onPress={prevStage}
+              className={`w-full p-3 mb-5 rounded-full flex flex-row justify-center items-center h-[44px] border border-white`}
+            >
+              <Text className="text-white">Previous</Text>
+            </TouchableOpacity>
+          )}
+          {currentStage < 2 && (
+            <TouchableOpacity
+              onPress={() => router.push("/(root)/(tabs)/home")}
+              className={`w-full p-3 mb-5 rounded-full flex flex-row justify-center items-center h-[44px] border border-white`}
+            >
+              <Text className="text-white">Go home</Text>
+            </TouchableOpacity>
+          )}
         </View>
       </View>
       <Toast position="top" topOffset={100} />

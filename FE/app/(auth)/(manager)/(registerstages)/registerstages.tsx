@@ -34,13 +34,21 @@ const RegisterStages = () => {
     setCoopUUID,
     setUniqueId,
     coopUniqueId,
+    coopUUID,
+    setCooperativeName,
+    setCooperativeUUID,
+    SetCoopUniqueId,
   } = useAuthStore();
-
-  console.log(token);
 
   const nextStage = () => {
     if (currentStage < 2) {
       setCurrentStage(currentStage + 1);
+    }
+  };
+
+  const prevStage = () => {
+    if (currentStage > 1) {
+      setCurrentStage(currentStage - 1);
     }
   };
 
@@ -82,9 +90,14 @@ const RegisterStages = () => {
         position: "top",
         topOffset: 100,
       });
-
       setCoopUUID(data.uuid);
       setUniqueId(data.uniqueId);
+      axiosInstance.post("/users/set-active-cooperative", {
+        coopUuid: data.uuid,
+      });
+      setCooperativeUUID(data.uuid);
+      setCooperativeName(data.name);
+      SetCoopUniqueId(data.uniqueId);
       setIsModalVisible(true);
     } catch (err) {
       console.error("Error during registration:", err);
@@ -106,14 +119,17 @@ const RegisterStages = () => {
         type: "success",
         text1: "ID copied to clipboard",
       });
-      setIsModalVisible(false);
-      router.replace(`/(root)/(tabs)/home`);
+      // setIsModalVisible(false);
+      // router.replace(`/(root)/(tabs)/home`);
     }
   };
 
   const handleGoHome = () => {
-    setIsModalVisible(false);
-    router.replace(`/(root)/(tabs)/home`);
+    if (coopUUID) {
+      setIsModalVisible(false);
+
+      router.replace(`/(root)/(manager-tabs)/${coopUUID}`);
+    }
   };
 
   return (
@@ -140,17 +156,27 @@ const RegisterStages = () => {
 
         <View className={` ${currentStage === 2 ? "mt-[200px]" : "mt-20"}`}>
           {currentStage < 2 && (
-            <CustomButton title="Proceed" onPress={nextStage} />
+            <CustomButton title="Next" onPress={nextStage} />
           )}
           {currentStage === 2 && (
             <CustomButton title="Register" onPress={onSubmit} />
           )}
-          <TouchableOpacity
-            onPress={() => router.back()}
-            className={`w-full p-3 mb-5 rounded-full flex flex-row justify-center items-center h-[44px] border border-white`}
-          >
-            <Text className="text-white">Cancel</Text>
-          </TouchableOpacity>
+          {currentStage > 1 && (
+            <TouchableOpacity
+              onPress={prevStage}
+              className={`w-full p-3 mb-5 rounded-full flex flex-row justify-center items-center h-[44px] border border-white`}
+            >
+              <Text className="text-white">Previous</Text>
+            </TouchableOpacity>
+          )}
+          {currentStage < 2 && (
+            <TouchableOpacity
+              onPress={() => router.push("/(root)/(tabs)/home")}
+              className={`w-full p-3 mb-5 rounded-full flex flex-row justify-center items-center h-[44px] border border-white`}
+            >
+              <Text className="text-white">Go home</Text>
+            </TouchableOpacity>
+          )}
         </View>
       </View>
       <Toast position="top" topOffset={100} />

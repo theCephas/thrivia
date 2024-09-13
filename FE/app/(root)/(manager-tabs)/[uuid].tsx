@@ -6,14 +6,16 @@ import Swiper from "react-native-swiper";
 import { Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { managerBlDeets, publicBalance } from "@/constants";
 import BgStyling from "@/assets/svg/BgStyling";
 import CustomButton from "@/components/CustomButton";
 import InviteModal from "@/components/InviteModal";
-import { router, useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams, useRouter } from "expo-router";
 import useAuthStore from "@/store";
 import CustomSideModal from "@/components/CustomSideModal";
+import SwitchAccounts from "@/assets/svg/SwitchAccounts";
+import useFetchWallets from "@/constants/useFetchWallets";
 
 const Home = () => {
   const swiperRef = useRef<Swiper>(null);
@@ -21,6 +23,8 @@ const Home = () => {
   const isLastSlide = activeIndex === publicBalance.length - 1;
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isSliderVisible, setIsSliderVisible] = useState(false);
+  const { wallets } = useFetchWallets();
+  const router = useRouter();
 
   const { uuid } = useLocalSearchParams();
 
@@ -32,14 +36,8 @@ const Home = () => {
     setIsModalVisible(true);
   };
 
-  const {
-    cooperativeName,
-    logout,
-    cooperativeUUID,
-    copUniqueId,
-  } = useAuthStore();
-  console.log(cooperativeUUID);
-  console.log("cooperative name", cooperativeName, copUniqueId);
+  const { cooperativeName, logout } = useAuthStore();
+  console.log(wallets);
 
   return (
     <SafeAreaView className="flex-1 bg-[#1d2128]">
@@ -50,14 +48,17 @@ const Home = () => {
               <Homeprofile />
             </TouchableOpacity>
             <View>
-              <Text className="text-white/80 text-[16px]">Welcome,</Text>
+              <Text className="text-white/80 text-[18px]">Welcome,</Text>
               <Text className="hidden">Cooperative UUID: {uuid}</Text>
               <Text className="text-white text-[18px] pt-1 font-semibold">
-                {cooperativeName || "your cooperative"}
+                {cooperativeName}
               </Text>
             </View>
           </View>
           <View className="flex flex-row items-center gap-x-6">
+            {/* <TouchableOpacity>
+              <HomeTwo />
+            </TouchableOpacity> */}
             <TouchableOpacity onPress={() => logout()}>
               <Notification />
             </TouchableOpacity>
@@ -69,53 +70,89 @@ const Home = () => {
           </View>
         </View>
 
-        <View className="flex-1 relative mt-8">
-          <Swiper
+        <View className="flex-1 relative mt-6">
+          <TouchableOpacity
+            onPress={() => router.replace("/(root)/(tabs)/home")}
+            className="flex flex-row justify-end items-center h-[40px] gap-x-3"
+          >
+            <Text className="text-white mb-4">Switch to member's view</Text>
+            <View className="mt-[-15px]">
+              <SwitchAccounts />
+            </View>
+          </TouchableOpacity>
+          {/* <Swiper
             ref={swiperRef}
             loop={false}
             dot={
               <View
-                className={`w-[30px] top-[-490px] h-[4px] mx-1 bg-[#939090] rounded-full`}
+                className={`w-[30px] top-[-470px] h-[4px] mx-1 bg-[#939090] rounded-full`}
               />
             }
             activeDot={
-              <View className="w-[70px] top-[-490px] h-[4px] mx-1 bg-white rounded-full" />
+              <View className="w-[70px] top-[-470px] h-[4px] mx-1 bg-white rounded-full" />
             }
             onIndexChanged={(index) => setActiveIndex(index)}
-          >
-            {publicBalance.map((item) => (
-              <LinearGradient
-                key={item.id}
-                colors={
-                  isLastSlide
-                    ? ["#3C2A07", "#92822E", "#4C4611"]
-                    : ["#073C36", "#2E9278", "#114C46"]
-                }
-                start={{ x: 0, y: 1.5 }}
-                end={{ x: 1, y: 0 }}
-                className="flex relative z-10 justify-center h-[160px] w-full rounded-[16px] p-4"
-              >
-                <View className="absolute top-0 z-50 right-[-180px] w-full ">
-                  <BgStyling />
-                </View>
-                <Text className="text-white text-[14px] font-[400]">
-                  {item.title}
+          > */}
+          {wallets.map((item, index) => (
+            <LinearGradient
+              key={index}
+              colors={
+                isLastSlide
+                  ? ["#3C2A07", "#92822E", "#4C4611"]
+                  : ["#073C36", "#2E9278", "#114C46"]
+              }
+              start={{ x: 0, y: 1.5 }}
+              end={{ x: 1, y: 0 }}
+              className="flex relative z-10 justify-center h-[160px] w-full rounded-[16px] p-4"
+            >
+              <View className="absolute top-0 z-50 right-[-168px] w-full ">
+                <BgStyling />
+              </View>
+              <Text className="text-white text-[14px] font-[400]">
+                Your {item.title} balance
+              </Text>
+              <View className="py-4 flex flex-row w-[95%] items-center gap-3">
+                <Text className="text-white text-[20px] font-bold tracking-widest">
+                  ₦{item.balance}
                 </Text>
-                <View className="py-4 flex flex-row items-center gap-3">
-                  <Text className="text-white text-[30px] font-bold tracking-widest">
-                    {item.balance}
-                  </Text>
-                  <Unsee />
-                </View>
-                <LinearGradient
-                  colors={["#F4F4F433", "#FFFFFF0B"]}
-                  className="flex items-center justify-center border-[#E8E7E780] border rounded-full w-[148px] h-[44px]"
+                <Unsee />
+              </View>
+              <View className="flex flex-row gap-x-2">
+                <TouchableOpacity
+                  onPress={() => {
+                    router.replace({
+                      pathname: "/(root)/(others)/add-money",
+                      params: { role: "MANAGER" },
+                    });
+                  }}
                 >
-                  <Text className="text-white text-[14px]">{item.action}</Text>
-                </LinearGradient>
-              </LinearGradient>
-            ))}
-          </Swiper>
+                  <LinearGradient
+                    colors={["#F4F4F433", "#FFFFFF0B"]}
+                    className="flex items-center justify-center border-[#E8E7E780] border rounded-full w-[110px] h-[38px]"
+                  >
+                    <Text className="text-white text-[14px]">+ Add money</Text>
+                  </LinearGradient>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    router.replace({
+                      pathname: "/(root)/(others)/(member-withdraw)/withdraw",
+                      params: { uuid: item.uuid },
+                    });
+                  }}
+                >
+                  <LinearGradient
+                    colors={["#F4F4F433", "#FFFFFF0B"]}
+                    className="flex items-center justify-center border-[#E8E7E780] border rounded-full w-[110px] h-[38px]"
+                  >
+                    <Text className="text-white text-[14px]">
+                      Withdraw money
+                    </Text>
+                  </LinearGradient>
+                </TouchableOpacity>
+              </View>
+            </LinearGradient>
+          ))}
         </View>
 
         {managerBlDeets[activeIndex].data.length < 1 ? (

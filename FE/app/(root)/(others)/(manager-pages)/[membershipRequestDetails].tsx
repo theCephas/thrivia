@@ -232,19 +232,23 @@ const MembershipRequestDetails = () => {
           </LinearGradient>
         </View>
 
-        <View className="mt-6 p-4">
-          <CustomButton
-            title="Approve membership request"
-            onPress={onApprovalClick}
-          />
+        {details.status === "APPROVED" ? (
+          ""
+        ) : (
+          <View className="mt-6 p-4">
+            <CustomButton
+              title="Approve membership request"
+              onPress={onApprovalClick}
+            />
 
-          <TouchableOpacity
-            onPress={onSubmit}
-            className={`w-full p-3 mb-5 rounded-full flex flex-row justify-center items-center h-[44px] border border-white`}
-          >
-            <Text className="text-white">Reject</Text>
-          </TouchableOpacity>
-        </View>
+            <TouchableOpacity
+              onPress={onSubmit}
+              className={`w-full p-3 mb-5 rounded-full flex flex-row justify-center items-center h-[44px] border border-white`}
+            >
+              <Text className="text-white">Reject</Text>
+            </TouchableOpacity>
+          </View>
+        )}
       </ScrollView>
 
       <Toast position="top" topOffset={100} />
