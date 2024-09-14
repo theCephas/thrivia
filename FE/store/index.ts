@@ -2,6 +2,7 @@ import { create } from "zustand";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { persist, PersistOptions } from "zustand/middleware";
 import { useAxiosInstance } from "@/constants/axiosInstance";
+import { router } from "expo-router";
 
 interface AuthState {
   token: any | null;
@@ -34,6 +35,7 @@ interface AuthState {
   role: string | null;
   setWalletUuid: (uuid: string) => void;
   walletUuid: string | null;
+  setUser: (user: any) => void;
 }
 
 const Api = () => {
@@ -73,7 +75,7 @@ const useAuthStore = create(
         });
       },
 
-      logout: () =>
+      logout: () => {
         set({
           token: null,
           expireAt: null,
@@ -90,8 +92,14 @@ const useAuthStore = create(
           userUuid: null,
           role: null,
           walletUuid: null,
-        }),
+        });
+      },
 
+      setUser(user) {
+        set({
+          user: user,
+        });
+      },
       setCooperativeName: (name: string) => set({ cooperativeName: name }),
       setCoopUUID: (uuid: string) => set({ coopUUID: uuid }),
       setUniqueId: (uniqueId: string) => set({ coopUniqueId: uniqueId }),
@@ -122,13 +130,14 @@ const useAuthStore = create(
 
       refreshToken: async () => {
         try {
-          const newToken = await Api().post("");
+          const newToken = await Api().post("/auth/refresh");
           const decodedToken = newToken;
           const expireAt = decodedToken;
           set({ token: newToken, expireAt });
         } catch (error) {
           console.error("Failed to refresh token:", error);
           set({ token: null, expireAt: null });
+          router.replace("/(auth)/(member)/sign-in");
         }
       },
 
@@ -138,9 +147,13 @@ const useAuthStore = create(
       },
 
       checkTokenExpiration: async () => {
-        const state = useAuthStore.getState();
-        if (state.isTokenExpired()) {
-          await state.refreshToken();
+        const { isTokenExpired, refreshToken, logout } = _get();
+        if (isTokenExpired()) {
+          try {
+            await refreshToken(); // Try to refresh the token
+          } catch {
+            logout(); // If refresh fails, logout and redirect to login page
+          }
         }
       },
     }),

@@ -10,8 +10,9 @@ import { useAxiosInstance } from "@/constants/axiosInstance";
 import useAuthStore from "@/store";
 import { Link, router } from "expo-router";
 import { useEffect, useState } from "react";
-import { ScrollView, Text, View } from "react-native";
+import { SafeAreaView, ScrollView, Text, View } from "react-native";
 import Toast from "react-native-toast-message";
+import * as SecureStore from "expo-secure-store";
 const SignUp = () => {
   const axiosInstance = useAxiosInstance();
   const [form, setForm] = useState({
@@ -35,8 +36,48 @@ const SignUp = () => {
       isMounted = false;
     };
   }, [token]);
+  const savePassword = async (password: string) => {
+    try {
+      await SecureStore.setItemAsync("userPassword", password);
+    } catch (error) {
+      console.error("Error saving password:", error);
+    }
+  };
+  const validatePassword = (password: string) => {
+    const passwordRegex = /^(?=.*[0-9]).{8,}$/;
+    return passwordRegex.test(password);
+  };
 
+  const validateForm = () => {
+    if (
+      !form.email ||
+      !form.createPassword ||
+      !form.firstName ||
+      !form.lastName ||
+      !form.phoneNumber
+    ) {
+      Toast.show({
+        type: "error",
+        text1: "Please fill in all fields correctly.",
+      });
+      return false;
+    }
+
+    if (!validatePassword(form.createPassword)) {
+      Toast.show({
+        type: "error",
+        text1:
+          "Password must be at least 8 characters long and contain at least one number.",
+      });
+      return false;
+    }
+
+    return true;
+  };
   const onSignUpPress = async () => {
+    if (!validateForm()) {
+      return; // If validation fails, do not proceed
+    }
     setLoading(true);
     try {
       if (form.createPassword !== form.confirmPassword)
@@ -59,7 +100,7 @@ const SignUp = () => {
         const { accessToken, expiresIn, user } = data;
         setUserUuid(user.uuid);
         login(accessToken, expiresIn, user);
-
+        await savePassword(form.createPassword);
         router.replace("/(root)/(tabs)/home");
       }
     } catch (err) {
@@ -73,81 +114,89 @@ const SignUp = () => {
     }
   };
   return (
-    <ScrollView className="flex-1 bg-[#1d2128] relative">
-      <View className="flex-1 items-center justify-center flex-col gap-8 bg-[#1d2128] mt-[60px]">
-        <View>
-          <Thrivia />
+    <SafeAreaView className="h-full flex-1 pt-[60px] bg-[#1d2128] relativ">
+      <ScrollView>
+        <View className="flex-1 items-center justify-center flex-col gap-4 bg-[#1d2128] mt-[40px]">
+          <View>
+            <Thrivia />
+          </View>
+          <View>
+            <Text className="text-3xl font-bold text-center text-white">
+              Create Your Account
+            </Text>
+            <Text className="text-xl pt-2 text-center text-white ">
+              To get started with us, create a free account
+            </Text>
+          </View>
         </View>
         <View>
-          <Text className="text-3xl font-bold text-center text-white">
-            Create Your Account
-          </Text>
-          <Text className="text-xl pt-2 text-center text-white ">
-            To get started with us, create a free account
-          </Text>
-        </View>
-      </View>
-      <View className="p-5">
-        <InputField
-          placeholder={`First Name`}
-          icon={User}
-          value={form.firstName}
-          onChangeText={(value) => setForm({ ...form, firstName: value })}
-        />
-        <InputField
-          placeholder={`Last Name`}
-          icon={User}
-          value={form.lastName}
-          onChangeText={(value) => setForm({ ...form, lastName: value })}
-        />
-        <InputField
-          placeholder={`Email`}
-          icon={Email}
-          value={form.email}
-          keyboardType="email-address"
-          onChangeText={(value) => setForm({ ...form, email: value })}
-        />
-        <InputField
-          placeholder={`Phone Number`}
-          icon={Call}
-          value={form.phoneNumber}
-          keyboardType="number-pad"
-          onChangeText={(value) => setForm({ ...form, phoneNumber: value })}
-        />
-        <InputField
-          placeholder={`Create Password`}
-          secureTextEntry={true}
-          value={form.createPassword}
-          icon={Lock}
-          onChangeText={(value) => setForm({ ...form, createPassword: value })}
-        />
-        <InputField
-          placeholder={`Confirm Password`}
-          secureTextEntry={true}
-          icon={Lock}
-          value={form.confirmPassword}
-          onChangeText={(value) => setForm({ ...form, confirmPassword: value })}
-        />
+          <View className="px-5 pt-[30px]">
+            <InputField
+              placeholder={`First Name`}
+              icon={User}
+              value={form.firstName}
+              onChangeText={(value) => setForm({ ...form, firstName: value })}
+            />
+            <InputField
+              placeholder={`Last Name`}
+              icon={User}
+              value={form.lastName}
+              onChangeText={(value) => setForm({ ...form, lastName: value })}
+            />
+            <InputField
+              placeholder={`Email`}
+              icon={Email}
+              value={form.email}
+              keyboardType="email-address"
+              onChangeText={(value) => setForm({ ...form, email: value })}
+            />
+            <InputField
+              placeholder={`Phone Number`}
+              icon={Call}
+              value={form.phoneNumber}
+              keyboardType="number-pad"
+              onChangeText={(value) => setForm({ ...form, phoneNumber: value })}
+            />
+            <InputField
+              placeholder={`Create Password`}
+              secureTextEntry={true}
+              value={form.createPassword}
+              icon={Lock}
+              onChangeText={(value) =>
+                setForm({ ...form, createPassword: value })
+              }
+            />
+            <InputField
+              placeholder={`Confirm Password`}
+              secureTextEntry={true}
+              icon={Lock}
+              value={form.confirmPassword}
+              onChangeText={(value) =>
+                setForm({ ...form, confirmPassword: value })
+              }
+            />
 
-        <CustomButton
-          title="Create account"
-          onPress={() => onSignUpPress()}
-          className="mt-6"
-        />
+            <CustomButton
+              title="Create account"
+              onPress={() => onSignUpPress()}
+              className="mt-6"
+            />
 
-        <View className="flex items-center justify-center mb-8">
-          <Link
-            href={"/(auth)/(member)/sign-in"}
-            className="text-white text-[16px] font-bold"
-          >
-            Already have an account?{" "}
-            <Text className="text-primary">Log in</Text>
-          </Link>
+            <View className="flex items-center justify-center mb-8">
+              <Link
+                href={"/(auth)/(member)/sign-in"}
+                className="text-white text-[16px] font-bold"
+              >
+                Already have an account?{" "}
+                <Text className="text-primary">Log in</Text>
+              </Link>
+            </View>
+          </View>
         </View>
-      </View>
+      </ScrollView>
       <Toast position="top" topOffset={100} />
       {loading && <FormLoader />}
-    </ScrollView>
+    </SafeAreaView>
   );
 };
 

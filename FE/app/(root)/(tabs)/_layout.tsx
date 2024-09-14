@@ -3,7 +3,7 @@ import HomeSvg from "@/assets/svg/Home";
 import People from "@/assets/svg/People";
 import Profile from "@/assets/svg/Profile";
 import useAuthStore from "@/store";
-import { Tabs, useRouter } from "expo-router"; // import useRouter to navigate
+import { Redirect, Tabs, useRouter } from "expo-router"; // import useRouter to navigate
 import { useEffect } from "react";
 import { Text, View } from "react-native";
 import { SvgProps } from "react-native-svg";
@@ -41,18 +41,24 @@ const TabIcon = ({
 );
 
 export default function Layout() {
-  const { user, logout, isTokenExpired } = useAuthStore(); // Use isTokenExpired function
+  const { user, logout, isTokenExpired } = useAuthStore();
   const router = useRouter();
 
-  useEffect(() => {
-    // Check if token is expired
-    if (isTokenExpired() && user.activeCooperative === null) {
-      logout();
-      router.replace("/(auth)/(member)/sign-in");
-    }
-  }, [isTokenExpired, logout, router]);
+  // useEffect(() => {
+  //   // Check if user is null or undefined and if token is expired
+  //   if (!user) {
+  //     router.replace("/(auth)/(member)/sign-in");
+  //   } else if (isTokenExpired()) {
+  //     logout();
+  //     router.replace("/(auth)/(member)/sign-in");
+  //   } else if (user.activeCooperative === null) {
+  //     router.push("/(root)/(tabs)/home");
+  //   } else {
+  //     router.push("/(root)/(tabs)/home");
+  //   }
+  // }, [user, isTokenExpired, logout, router]);
 
-  return user.activeCooperative ? (
+  return user?.activeCooperative ? (
     <Tabs
       initialRouteName="index"
       screenOptions={{

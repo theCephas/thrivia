@@ -7,10 +7,12 @@ import Membership from "@/assets/svg/Membership";
 import ReferNEarn from "@/assets/svg/RefernEarn";
 import User from "@/assets/svg/User";
 import UserPic from "@/assets/svg/UserPic";
+import useAuthStore from "@/store";
 import { LinearGradient } from "expo-linear-gradient";
-import { ScrollView, Text, View } from "react-native";
+import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 
 const Profile = () => {
+  const { user, logout } = useAuthStore();
   return (
     <View className="h-full bg-[#1d2128]">
       <View className="mt-14 py-6 px-4 fixed w-full bg-[#0D1015]">
@@ -34,9 +36,11 @@ const Profile = () => {
                   <UserPic />
                 </View>
                 <View>
-                  <Text className="text-white text-[16px]">Victor Idowu</Text>
+                  <Text className="text-white text-[16px]">
+                    {user.firstName} {user.lastName}
+                  </Text>
                   <Text className="text-white text-[14px] pt-[10px]">
-                    FC298-19
+                    {user.email}
                   </Text>
                 </View>
               </View>
@@ -115,13 +119,16 @@ const Profile = () => {
               </View>
               <Arrowright />
             </View>
-            <View className="flex flex-row justify-between items-center px-2">
+            <TouchableOpacity
+              onPress={() => logout()}
+              className="flex flex-row justify-between items-center px-2"
+            >
               <View className="flex flex-row items-center">
                 <LogOut />
                 <Text className="text-white text-[14px] ml-4">Log out</Text>
               </View>
               <Arrowright />
-            </View>
+            </TouchableOpacity>
           </LinearGradient>
         </View>
       </ScrollView>

@@ -25,6 +25,7 @@ const RegisterStages = () => {
     accountNumber: "",
     accName: "",
     selectBank: "",
+    bankCode: "",
   });
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -38,6 +39,9 @@ const RegisterStages = () => {
     setCooperativeName,
     setCooperativeUUID,
     SetCoopUniqueId,
+    cooperativeUUID,
+    user,
+    setUser,
   } = useAuthStore();
 
   const nextStage = () => {
@@ -69,6 +73,7 @@ const RegisterStages = () => {
           contactEmail: form.email,
           contactPhone: `${form.phoneNumber}`,
           bankName: form.selectBank,
+          bankCode: form.bankCode,
           accountNo: `${form.accountNumber}`,
           accountName: form.accName,
         },
@@ -97,6 +102,7 @@ const RegisterStages = () => {
       });
       setCooperativeUUID(data.uuid);
       setCooperativeName(data.name);
+      setUser({ ...user, activeCooperative: data });
       SetCoopUniqueId(data.uniqueId);
       setIsModalVisible(true);
     } catch (err) {
@@ -104,8 +110,9 @@ const RegisterStages = () => {
 
       Toast.show({
         type: "error",
-        position: "top",
+        text1: `${err}`,
         topOffset: 100,
+        position: "top",
       });
     } finally {
       setLoading(false);
@@ -120,7 +127,7 @@ const RegisterStages = () => {
         text1: "ID copied to clipboard",
       });
       // setIsModalVisible(false);
-      // router.replace(`/(root)/(tabs)/home`);
+      router.replace(`/(root)/(manager-tabs)/${cooperativeUUID}`);
     }
   };
 
@@ -128,7 +135,7 @@ const RegisterStages = () => {
     if (coopUUID) {
       setIsModalVisible(false);
 
-      router.replace(`/(root)/(manager-tabs)/${coopUUID}`);
+      router.replace(`/(root)/(manager-tabs)/${cooperativeUUID}`);
     }
   };
 

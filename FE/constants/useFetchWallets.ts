@@ -2,23 +2,30 @@ import { useCallback, useEffect, useState } from "react";
 import { useAxiosInstance } from "./axiosInstance";
 import useAuthStore from "@/store";
 
-const useFetchWallets = () => {
+const useFetchWallets = (roles: string) => {
   const [wallets, setWallets] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const axiosInstance = useAxiosInstance();
-  const { coopUuid, setWalletUuid } = useAuthStore();
+  const { cooperativeUUID, setWalletUuid } = useAuthStore();
 
   const fetchWallets = useCallback(async () => {
+    console.log("from wallets", cooperativeUUID);
     setLoading(true);
     setError(null);
     try {
-      const response = await axiosInstance.get(
-        `/users/cooperative/${coopUuid}/wallets`
-      );
+      let response;
+      if (roles === "manager") {
+        response = await axiosInstance.get(
+          `/cooperatives/${cooperativeUUID}/wallets`
+        );
+      } else {
+        response = await axiosInstance.get(
+          `/users/cooperative/${cooperativeUUID}/wallets`
+        );
+      }
 
       setWallets(response.data);
-
       setWalletUuid(response.data.uuid);
     } catch (err) {
       setError("Failed to load cooperatives");
@@ -26,10 +33,15 @@ const useFetchWallets = () => {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [cooperativeUUID, roles, axiosInstance, setWalletUuid]);
+
   useEffect(() => {
-    fetchWallets();
-  }, []);
+    console.log("from useEffect", cooperativeUUID);
+    if (cooperativeUUID) {
+      fetchWallets();
+    }
+  }, [fetchWallets, cooperativeUUID]);
+
   return { loading, wallets, error };
 };
 

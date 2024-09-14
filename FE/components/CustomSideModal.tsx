@@ -1,5 +1,3 @@
-// Payment Successful: {"authorizedAmount": 200, "paymentReference": "1726235460623", "status": "SUCCESS", "transactionReference": "MNFY|92|20240913145103|003347"}
-
 import {
   View,
   Text,
@@ -13,9 +11,9 @@ import Plus from "@/assets/svg/Plus";
 import { useRouter } from "expo-router";
 import useAuthStore from "@/store";
 import LogOut from "@/assets/svg/LogOut";
-import UserTag from "@/assets/svg/UserTag";
 import useFetchCoop from "@/constants/useFetchCoop";
 import { useAxiosInstance } from "@/constants/axiosInstance";
+import { useState } from "react";
 
 interface CustomSideModalProps {
   isVisible: boolean;
@@ -32,21 +30,57 @@ const CustomSideModal: React.FC<CustomSideModalProps> = ({
   const {
     setCooperativeUUID,
     setCooperativeName,
-    logout,
     SetCoopUniqueId,
     setRole,
     setCooperativeEmail,
+    cooperativeUUID,
+    logout,
   } = useAuthStore();
 
-  const { loading, cooperatives, error } = useFetchCoop();
-  // console.log(cooperatives);
+  const { loadingCoop, cooperatives, error } = useFetchCoop();
+  const axiosInstance = useAxiosInstance();
+  const [selectedCoop, setSelectedCoop] = useState<any>(null); // State to track the selected cooperative
 
   const handleLogout = async () => {
     logout();
     router.replace("/(auth)/(member)/sign-in");
   };
 
-  const axiosInstance = useAxiosInstance();
+  const handleCooperativeSelect = (coop: any) => {
+    console.log(
+      "this is coop mehn",
+      coop.cooperative.name,
+      coop.cooperative.uuid
+    );
+    try {
+      // Set the active cooperative on the server
+      axiosInstance.post("/users/set-active-cooperative", {
+        coopUuid: coop.cooperative.uuid,
+      });
+      // Set cooperative details in the state
+      setCooperativeUUID(coop.cooperative.uuid);
+      setCooperativeName(coop.cooperative.name);
+      SetCoopUniqueId(coop.cooperative.uniqueId);
+      setRole(coop.role);
+      setCooperativeEmail(coop.cooperative.contactEmail);
+
+      // Set selected cooperative in local state
+      setSelectedCoop(coop.cooperative.uuid);
+
+      // Close the modal
+
+      onClose();
+
+      // Navigate to the correct cooperative page
+      if (coop.role === "MANAGER") {
+        router.replace(`/(root)/(manager-tabs)/${coop.cooperative.uuid}`);
+      } else {
+        router.replace(`/(root)/(tabs)/home`);
+      }
+    } catch (error) {
+      console.error("Error setting active cooperative", error);
+    }
+  };
 
   return (
     <Modal
@@ -58,10 +92,7 @@ const CustomSideModal: React.FC<CustomSideModalProps> = ({
       className="relative"
     >
       <View className="bg-[#1D2128] h-screen absolute -bottom-[20px] -left-[20px] right-16 flex flex-col items-start">
-        <ScrollView
-          contentContainerStyle={{ paddingBottom: 300 }}
-          className="p5"
-        >
+        <ScrollView contentContainerStyle={{ paddingBottom: 300 }}>
           <View className="w-full">
             <Text className="text-white font-bold text-xl py-4 border-b px-5 border-[#DADADA] w-[350px]">
               {title}
@@ -69,60 +100,43 @@ const CustomSideModal: React.FC<CustomSideModalProps> = ({
 
             {/* Loading Indicator */}
             <View className="mt-4 w-full px-5">
-              {loading && <ActivityIndicator size="large" color="#fff" />}
+              {loadingCoop && <ActivityIndicator size="large" color="#fff" />}
             </View>
 
+            {/* Error Display */}
             <View className="mt-4 w-full px-5">
               {error && (
                 <Text className="text-red-500 text-lg py-4">{error}</Text>
               )}
             </View>
 
-            {!loading && !error && (
-              <View className="flex flex-col gap-7 px-5 w-full">
+            {!loadingCoop && !error && (
+              <View className="flex flex-col gap-7 w-full">
                 {cooperatives.length > 0 ? (
                   <>
-                    {cooperatives.map((coop, index) => {
-                      // console.log(coop.role);
-                      return (
-                        <TouchableOpacity
-                          onPress={() => {
-                            axiosInstance.post(
-                              "/users/set-active-cooperative",
-                              {
-                                coopUuid: coop.cooperative.uuid,
-                              }
-                            );
-                            setCooperativeUUID(coop.cooperative.uuid);
-                            setCooperativeName(coop.cooperative.name);
-                            SetCoopUniqueId(coop.cooperative.uniqueId);
-                            setRole(coop.role);
-                            setCooperativeEmail(coop.cooperative.contactEmail);
-                            if (coop.role === "MANAGER") {
-                              router.push(
-                                `/(root)/(manager-tabs)/${coop.cooperative.uuid}`
-                              );
-                            } else {
-                              router.push(`/(root)/(tabs)/home`);
-                            }
-                          }}
-                          key={index}
-                          className="flex flex-row justify-between items-center w-full pr-2"
-                        >
-                          <View className="flex flex-row items-center gap-2">
-                            <Homeprofile />
-                            <View className="flex flex-col">
-                              <Text className="text-white text-lg font-bold">
-                                {coop.cooperative.name}
-                              </Text>
-                              <Text className="text-[#DADADA]">
-                                {coop.cooperative.slug}
-                              </Text>
-                            </View>
+                    {cooperatives.map((coop, index) => (
+                      <TouchableOpacity
+                        onPress={() => handleCooperativeSelect(coop)}
+                        key={index}
+                        className={`flex flex-row justify-between items-center w-full ${
+                          selectedCoop === coop.cooperative.uuid
+                            ? "bg-primary"
+                            : ""
+                        }`}
+                      >
+                        <View className="flex flex-row items-center gap-2 py-2 px-5">
+                          <Homeprofile />
+                          <View className="flex flex-col">
+                            <Text className="text-white text-lg font-bold">
+                              {coop.cooperative.name}
+                            </Text>
+                            <Text className="text-[#DADADA]">
+                              {coop.cooperative.slug}
+                            </Text>
                           </View>
-                        </TouchableOpacity>
-                      );
-                    })}
+                        </View>
+                      </TouchableOpacity>
+                    ))}
                   </>
                 ) : (
                   <View>
@@ -158,15 +172,6 @@ const CustomSideModal: React.FC<CustomSideModalProps> = ({
               Register a cooperative
             </Text>
           </TouchableOpacity>
-          {/* <TouchableOpacity
-            onPress={() => router.replace("/(root)/(tabs)/home")}
-            className="flex gap-x-4 flex-row items-center"
-          >
-            <UserTag />
-            <Text className="text-white text-[16px] whitespace-nowrap">
-              Home Tab
-            </Text>
-          </TouchableOpacity> */}
           <TouchableOpacity
             onPress={handleLogout}
             className="flex gap-x-4 flex-row items-center"

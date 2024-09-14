@@ -19,13 +19,21 @@ import Success from "@/assets/svg/Success";
 
 const AddMoney = () => {
   const router = useRouter();
-  const { role } = useLocalSearchParams();
+  const { role, walletUuid } = useLocalSearchParams();
   const [value, setValue] = useState<number>(200.0);
-  const { cooperativeName, user, cooperativeEmail, token } = useAuthStore();
+  const {
+    cooperativeName,
+    user,
+    cooperativeEmail,
+    token,
+    coopUuid,
+  } = useAuthStore();
   const [modalVisible, setModalVisible] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [transactionSuccess, setTransactionSuccess] = useState(false); // New state for success screen
+  const [authorizedAmount, setAuthorizedAmount] = useState<number | null>(null); // Store authorized amount
   const axiosInstance = useAxiosInstance();
-  console.log(token);
+  // console.log(token);
 
   const paymentParameters = {
     amount: value,
@@ -40,45 +48,44 @@ const AddMoney = () => {
   };
 
   const onSuccess = async (response: any) => {
-    console.log("Payment Successful:", response);
+    // console.log("Payment Successful:", response);
     setLoading(true);
     try {
       const { transactionReference, authorizedAmount } = response;
-      const { data } = await axiosInstance.post(
-        `/cooperatives/verify-transaction/${transactionReference}`
+      setAuthorizedAmount(authorizedAmount);
+
+      const {
+        data,
+      } = await axiosInstance.post(
+        `/cooperatives/verify-transaction/${transactionReference}`,
+        { amount: authorizedAmount }
       );
-      // Check if the verification was successful
-      if (data.amount) {
-        return (
-          <SafeAreaView className="h-full bg-[#1d2128] w-full flex flex-col justify-center items-center">
-            <View className="flex flex-col">
-              <View className=" flex flex-row items-center gap-x-4 justify-center">
-                <Text className="text-white text-[20px]">
-                  Deposit Successful!
-                </Text>
-                <Success width={40} height={40} />
-              </View>
-              <View className="mt-6 flex flex-row items-center justify-center">
-                <Text className="text-white text-base">
-                  NGN {authorizedAmount}
-                </Text>
-              </View>
-              <View className="mt-10">
-                <CustomButton
-                  title="Done"
-                  className="w-full"
-                  onPress={() => router.replace("/(root)/(tabs)/home")}
-                />
-              </View>
-            </View>
-          </SafeAreaView>
-        );
+
+      console.log(
+        "WALLET/PAYEMENT uuid: ",
+        data.uuid,
+        transactionReference,
+        walletUuid
+      );
+
+      if (role === "MEMBER") {
+        await axiosInstance.post(`/users/wallets/${walletUuid}/deposit`, {
+          paymentUuid: data.uuid,
+        });
       } else {
-        // Handle verification failure (if needed)
+        await axiosInstance.post(
+          `/cooperatives/${coopUuid}/wallets/${walletUuid}/deposit`,
+          { paymentUuid: data.uuid }
+        );
+      }
+
+      if (data.amount) {
+        setTransactionSuccess(true); // Set success state to true to trigger success screen
+      } else {
         Alert.alert("Error", "Transaction verification failed.");
       }
     } catch (error) {
-      console.error("Verification Error:", error);
+      console.error("Verification Error:", (error as any).response);
       Alert.alert(
         "Error",
         "An error occurred while verifying the transaction."
@@ -89,7 +96,7 @@ const AddMoney = () => {
   };
 
   const onError = (response: any) => {
-    console.log("Payment Failed:", response);
+    // console.log("Payment Failed:", response);
     Alert.alert("Payment Failed", "The payment could not be completed.");
   };
 
@@ -105,6 +112,29 @@ const AddMoney = () => {
     setModalVisible(true);
   };
 
+  if (transactionSuccess && authorizedAmount) {
+    return (
+      <SafeAreaView className="h-full bg-[#1d2128] w-full flex flex-col justify-center items-center">
+        <View className="flex flex-col">
+          <View className=" flex flex-row items-center gap-x-4 justify-center">
+            <Text className="text-white text-[20px]">Deposit Successful!</Text>
+            <Success width={40} height={40} />
+          </View>
+          <View className="mt-6 flex flex-row items-center justify-center">
+            <Text className="text-white text-base">NGN {authorizedAmount}</Text>
+          </View>
+          <View className="mt-10">
+            <CustomButton
+              title="Done"
+              className="w-full"
+              onPress={() => router.replace("/(root)/(tabs)/home")}
+            />
+          </View>
+        </View>
+      </SafeAreaView>
+    );
+  }
+
   return (
     <SafeAreaView className="h-full bg-[#1d2128] w-full flex flex-col justify-between">
       <View>
@@ -118,7 +148,7 @@ const AddMoney = () => {
         <View className="flex flex-col gap-4 items-center px-14 mt-6">
           <Homeprofile />
           <Text style={{ color: "white", fontSize: 18, textAlign: "center" }}>
-            {role === "MANAGER" ? cooperativeName : user.firstName} Savings
+            {cooperativeName}
           </Text>
         </View>
         <PaymentInputField

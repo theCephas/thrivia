@@ -3,11 +3,17 @@ import Notification from "@/assets/svg/Notification";
 import Settings from "@/assets/svg/Settings";
 import Unsee from "@/assets/svg/Unsee";
 import Swiper from "react-native-swiper";
-import { Text, TouchableOpacity, View } from "react-native";
+import {
+  RefreshControl,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
-import { useEffect, useRef, useState } from "react";
-import { managerBlDeets, publicBalance } from "@/constants";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { format } from "date-fns";
 import BgStyling from "@/assets/svg/BgStyling";
 import CustomButton from "@/components/CustomButton";
 import InviteModal from "@/components/InviteModal";
@@ -16,15 +22,23 @@ import useAuthStore from "@/store";
 import CustomSideModal from "@/components/CustomSideModal";
 import SwitchAccounts from "@/assets/svg/SwitchAccounts";
 import useFetchWallets from "@/constants/useFetchWallets";
+import useFetchCoop from "@/constants/useFetchCoop";
+import { ActivityIndicator } from "react-native";
+import { useAxiosInstance } from "@/constants/axiosInstance";
+import ArrowLeftBottom from "@/assets/svg/ArrowLeftBottom";
+import ArrowRightTop from "@/assets/svg/ArrowRightTop";
+import See from "@/assets/svg/See";
 
 const Home = () => {
-  const swiperRef = useRef<Swiper>(null);
-  const [activeIndex, setActiveIndex] = useState(0);
-  const isLastSlide = activeIndex === publicBalance.length - 1;
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isSliderVisible, setIsSliderVisible] = useState(false);
-  const { wallets } = useFetchWallets();
+  const { wallets } = useFetchWallets("manager");
   const router = useRouter();
+  const [transactions, setTransactions] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const axiosInstance = useAxiosInstance();
+  const { cooperatives, loadingCoop } = useFetchCoop();
 
   const { uuid } = useLocalSearchParams();
 
@@ -36,190 +50,318 @@ const Home = () => {
     setIsModalVisible(true);
   };
 
-  const { cooperativeName, logout } = useAuthStore();
-  console.log(wallets);
+  const {
+    cooperativeName,
+    logout,
+    token,
+    cooperativeUUID,
+    role,
+  } = useAuthStore();
+  console.log(cooperativeUUID, role);
+  const fetchTransactions = useCallback(
+    async (walletUuid: string) => {
+      setLoading(true);
+      setError(null);
+      try {
+        const response = await axiosInstance.get(
+          `/cooperatives/${cooperativeUUID}/wallets/${walletUuid}/transactions`
+        );
+
+        setTransactions(response.data);
+      } catch (err) {
+        setError("Failed to load transactions");
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [axiosInstance]
+  );
+
+  // Trigger the transaction fetch whenever the component mounts and wallets are available
+  useEffect(() => {
+    if (wallets.length > 0) {
+      // Automatically fetch transactions for the first wallet
+      fetchTransactions(wallets[0].uuid);
+      console.log(wallets[0].uuid);
+    }
+  }, [wallets, fetchTransactions]);
+  const [refreshing, setRefreshing] = useState(false);
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+
+    fetchTransactions(wallets[0].uuid).finally(() => setRefreshing(false));
+  }, [wallets]);
+
+  const [see, setSee] = useState(true);
+
+  const handleSee = () => {
+    setSee(!see);
+  };
 
   return (
-    <SafeAreaView className="flex-1 bg-[#1d2128]">
-      <View className="p-4 pt-5 pb-12 flex-1">
-        <View className="flex flex-row justify-between items-center">
-          <View className="flex flex-row items-center gap-3">
-            <TouchableOpacity onPress={() => setIsSliderVisible(true)}>
-              <Homeprofile />
-            </TouchableOpacity>
-            <View>
-              <Text className="text-white/80 text-[18px]">Welcome,</Text>
-              <Text className="hidden">Cooperative UUID: {uuid}</Text>
-              <Text className="text-white text-[18px] pt-1 font-semibold">
-                {cooperativeName}
-              </Text>
+    <SafeAreaView className="flex-1 h-full bg-[#1d2128]">
+      <View className="h-full">
+        <View className="p-4 pt-5 pb-12 flex-1">
+          <View className="flex flex-row justify-between items-center">
+            <View className="flex flex-row items-center gap-3">
+              <TouchableOpacity onPress={() => setIsSliderVisible(true)}>
+                <Homeprofile width={30} height={30} />
+              </TouchableOpacity>
+              <View>
+                <Text className="hidden">Cooperative UUID: {uuid}</Text>
+                <Text className="text-white text-[25px] pt-1 font-semibold">
+                  {cooperativeName}
+                </Text>
+              </View>
+            </View>
+            <View className="flex flex-row items-center gap-x-6">
+              <TouchableOpacity onPress={() => logout()}>
+                <Notification />
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => router.replace("/(root)/(tabs)/home")}
+              >
+                <Settings />
+              </TouchableOpacity>
             </View>
           </View>
-          <View className="flex flex-row items-center gap-x-6">
-            {/* <TouchableOpacity>
-              <HomeTwo />
-            </TouchableOpacity> */}
-            <TouchableOpacity onPress={() => logout()}>
-              <Notification />
-            </TouchableOpacity>
+
+          <View className="flex-1 relative mt-6">
             <TouchableOpacity
               onPress={() => router.replace("/(root)/(tabs)/home")}
+              className="flex flex-row justify-end items-center h-[40px] gap-x-3"
             >
-              <Settings />
+              <Text className="text-white mb-4">Switch to member's view</Text>
+              <View className="mt-[-15px]">
+                <SwitchAccounts />
+              </View>
             </TouchableOpacity>
-          </View>
-        </View>
-
-        <View className="flex-1 relative mt-6">
-          <TouchableOpacity
-            onPress={() => router.replace("/(root)/(tabs)/home")}
-            className="flex flex-row justify-end items-center h-[40px] gap-x-3"
-          >
-            <Text className="text-white mb-4">Switch to member's view</Text>
-            <View className="mt-[-15px]">
-              <SwitchAccounts />
-            </View>
-          </TouchableOpacity>
-          {/* <Swiper
-            ref={swiperRef}
-            loop={false}
-            dot={
-              <View
-                className={`w-[30px] top-[-470px] h-[4px] mx-1 bg-[#939090] rounded-full`}
-              />
-            }
-            activeDot={
-              <View className="w-[70px] top-[-470px] h-[4px] mx-1 bg-white rounded-full" />
-            }
-            onIndexChanged={(index) => setActiveIndex(index)}
-          > */}
-          {wallets.map((item, index) => (
-            <LinearGradient
-              key={index}
-              colors={
-                isLastSlide
-                  ? ["#3C2A07", "#92822E", "#4C4611"]
-                  : ["#073C36", "#2E9278", "#114C46"]
+            <ScrollView
+              contentContainerStyle={{ paddingBottom: 80 }}
+              refreshControl={
+                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
               }
-              start={{ x: 0, y: 1.5 }}
-              end={{ x: 1, y: 0 }}
-              className="flex relative z-10 justify-center h-[160px] w-full rounded-[16px] p-4"
             >
-              <View className="absolute top-0 z-50 right-[-168px] w-full ">
-                <BgStyling />
-              </View>
-              <Text className="text-white text-[14px] font-[400]">
-                Your {item.title} balance
-              </Text>
-              <View className="py-4 flex flex-row w-[95%] items-center gap-3">
-                <Text className="text-white text-[20px] font-bold tracking-widest">
-                  ₦{item.balance}
-                </Text>
-                <Unsee />
-              </View>
-              <View className="flex flex-row gap-x-2">
-                <TouchableOpacity
-                  onPress={() => {
-                    router.replace({
-                      pathname: "/(root)/(others)/add-money",
-                      params: { role: "MANAGER" },
-                    });
-                  }}
-                >
-                  <LinearGradient
-                    colors={["#F4F4F433", "#FFFFFF0B"]}
-                    className="flex items-center justify-center border-[#E8E7E780] border rounded-full w-[110px] h-[38px]"
-                  >
-                    <Text className="text-white text-[14px]">+ Add money</Text>
-                  </LinearGradient>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => {
-                    router.replace({
-                      pathname: "/(root)/(others)/(member-withdraw)/withdraw",
-                      params: { uuid: item.uuid },
-                    });
-                  }}
-                >
-                  <LinearGradient
-                    colors={["#F4F4F433", "#FFFFFF0B"]}
-                    className="flex items-center justify-center border-[#E8E7E780] border rounded-full w-[110px] h-[38px]"
-                  >
-                    <Text className="text-white text-[14px]">
-                      Withdraw money
-                    </Text>
-                  </LinearGradient>
-                </TouchableOpacity>
-              </View>
-            </LinearGradient>
-          ))}
-        </View>
-
-        {managerBlDeets[activeIndex].data.length < 1 ? (
-          <View className="absolute top-[400px] flex items-center w-full pl-4">
-            <Text className="text-white text-[16px] w-[200px] leading-[21px] text-center">
-              You don&apos;t have any member in your cooperative society yet.{" "}
-            </Text>
-            <Text className="text-white text-[16px] w-[200px] leading-[21px] text-center pt-4 pb-6">
-              Click the button below to get started
-            </Text>
-            <CustomButton title="Add members" onPress={onSubmit} />
-          </View>
-        ) : (
-          <View className="absolute top-[320px] w-full pl-4">
-            <View className="flex-1 flex-row items-center justify-between border-b border-[#939090] pb-1 ">
-              <Text className="text-white text-[18px] font-semibold ">
-                {managerBlDeets[activeIndex].title}
-              </Text>
-              <Text className="text-primary font-bold text-[16px] pl-12">
-                View all
-              </Text>
-            </View>
-
-            <View className="flex flex-col gap-y-6 mt-1">
-              {managerBlDeets[activeIndex].data.map((item, index) => (
-                <LinearGradient
-                  key={index}
-                  colors={["#F4F4F433", "#FFFFFF0B"]}
-                  start={{ x: 0, y: 1.5 }}
-                  end={{ x: 1, y: 0 }}
-                  className="h-[70px] w-full p-[16px] border-[#E8E7E780] border rounded-[8px] flex justify-between"
-                >
+              <LinearGradient
+                colors={["#073C36", "#2E9278", "#114C46"]}
+                start={{ x: 0, y: 1.5 }}
+                end={{ x: 1, y: 0 }}
+                className="rounded-[9px]"
+              >
+                {wallets.map((item, index) => (
                   <View
-                    className={`absolute top-[20px] left-3 ${
-                      index % 2 === 0 ? "bg-red-500" : "bg-green-500"
-                    }  rounded-full`}
+                    key={index}
+                    className="flex relative z-10 justify-center h-[160px] w-full rounded-[16px] p-4"
                   >
-                    <item.icon />
+                    <View className="absolute top-0 z-50 right-[-168px] w-full ">
+                      <BgStyling />
+                    </View>
+                    <View className="flex flex-row gap-2 items-center">
+                      <Text className="text-white text-[17px] font-[600]">
+                        Your {item.title} balance
+                      </Text>
+                      <TouchableOpacity
+                        onPress={handleSee}
+                        className="ml-3 mt-1"
+                      >
+                        {see ? (
+                          <See height={15} width={15} />
+                        ) : (
+                          <Unsee height={15} width={15} />
+                        )}
+                      </TouchableOpacity>
+                    </View>
+                    <View className="flex flex-col py-3 ">
+                      <View>
+                        <View className="py- flex flex-row w-[95%] items-center gap-3">
+                          <View className="py- flex flex-row w-[95%] items-center ">
+                            <View className="text-white text-[20px] gap-x-1 font-bold flex tracking-widest flex-row items-center">
+                              <Text className="text-white text-[14px] font-bold">
+                                ₦
+                              </Text>
+                              <Text className="text-[30px] mt-1 text-white font-bold">
+                                {see ? "*****" : item.availableBalance}{" "}
+                              </Text>
+                            </View>
+                          </View>
+                        </View>
+                        <View className="flex flex-row items-center gap-2 mt-1">
+                          <Text className="text-[14px] text-white/80">
+                            Total balance:
+                          </Text>
+                          <Text className="text-[14px] text-white/80">
+                            ₦ {see ? "*****" : item.totalBalance}{" "}
+                          </Text>
+                        </View>
+                      </View>
+                    </View>
+                    <View className="flex flex-row gap-x-2">
+                      <TouchableOpacity
+                        onPress={() => {
+                          router.replace({
+                            pathname: "/(root)/(others)/add-money",
+                            params: { role: "MANAGER", walletUuid: item.uuid },
+                          });
+                        }}
+                      >
+                        <LinearGradient
+                          colors={["#F4F4F433", "#FFFFFF0B"]}
+                          className="flex items-center justify-center border-[#E8E7E780] border rounded-full w-[110px] h-[38px]"
+                        >
+                          <Text className="text-white text-[14px]">
+                            + Add money
+                          </Text>
+                        </LinearGradient>
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        onPress={() => {
+                          router.replace({
+                            pathname:
+                              "/(root)/(others)/(manager-withdraw)/withdraw",
+                            params: { uuid: item.uuid },
+                          });
+                        }}
+                      >
+                        <LinearGradient
+                          colors={["#F4F4F433", "#FFFFFF0B"]}
+                          className="flex items-center justify-center border-[#E8E7E780] border rounded-full w-[110px] h-[38px]"
+                        >
+                          <Text className="text-white text-[14px]">
+                            Withdraw money
+                          </Text>
+                        </LinearGradient>
+                      </TouchableOpacity>
+                    </View>
                   </View>
-                  <View className="ml-7">
-                    <Text className="text-white text-[14px] font-semibold ">
-                      {item.type}
-                    </Text>
-                    <Text className="text-white pt-2 text-[14px]">
-                      {item.time}
-                    </Text>
-                  </View>
-                  <View className="">
-                    <Text className="text-white text-right font-bold mt-[-30px] text-[16px]">
-                      ₦{item.amount}
-                    </Text>
-                  </View>
-                </LinearGradient>
-              ))}
-            </View>
+                ))}
+              </LinearGradient>
+            </ScrollView>
           </View>
-        )}
+
+          {loadingCoop ? (
+            <View className="absolute top-[320px] w-full pl-4">
+              <ActivityIndicator size="large" color="#FFFFFF" />
+            </View>
+          ) : (
+            <>
+              {cooperatives.length < 1 ? (
+                <View className="absolute top-[350px] flex items-center w-full pl-4">
+                  <Text className="text-white text-[16px] w-[200px] leading-[21px] text-center">
+                    You don&apos;t have any member in your cooperative society
+                    yet.{" "}
+                  </Text>
+                  <Text className="text-white text-[16px] w-[200px] leading-[21px] text-center pt-4 pb-6">
+                    Click the button below to get started
+                  </Text>
+                  <CustomButton title="Add members" onPress={onSubmit} />
+                </View>
+              ) : (
+                <View className="absolute top-[320px] w-full pl-4">
+                  {loading ? (
+                    <View className="absolute top-[100px] w-full pl-4">
+                      <ActivityIndicator size="large" color="#FFFFFF" />
+                    </View>
+                  ) : (
+                    <>
+                      <View className="flex flex-col mt-1">
+                        {transactions.length < 1 ? (
+                          <View>
+                            <Text className="text-white text-xl text-center">
+                              Recent transactions history will appear here
+                            </Text>
+                            <CustomButton
+                              title={"Add Money"}
+                              onPress={() =>
+                                router.replace("/(root)/(others)/add-money")
+                              }
+                              className="mt-6"
+                            />
+                          </View>
+                        ) : (
+                          <>
+                            <View className="flex-1 flex-row items-center justify-between border-b border-[#939090] pb-1 ">
+                              <Text className="text-white text-[18px] font-semibold ">
+                                Transaction history
+                              </Text>
+                              <Text className="text-primary font-bold text-[16px] pl-12">
+                                View all
+                              </Text>
+                            </View>
+                            <ScrollView
+                              contentContainerStyle={{ paddingBottom: 80 }}
+                            >
+                              {transactions.map((item, index) => {
+                                const formattedDate = format(
+                                  new Date(item.createdAt),
+                                  "d, EEEE yyyy - p"
+                                );
+
+                                return (
+                                  <View key={index}>
+                                    <LinearGradient
+                                      key={index}
+                                      colors={["#F4F4F433", "#FFFFFF0B"]}
+                                      start={{ x: 0, y: 1.5 }}
+                                      end={{ x: 1, y: 0 }}
+                                      className="h-[70px] w-full p-[16px] mt-4 border-[#E8E7E780] border rounded-[8px] flex justify-between"
+                                    >
+                                      <View
+                                        className={`absolute top-[20px] left-3 ${
+                                          item.type !== "credit"
+                                            ? "bg-red-500"
+                                            : "bg-green-500"
+                                        }  rounded-full`}
+                                      >
+                                        {item.type === "credit" ? (
+                                          <ArrowLeftBottom />
+                                        ) : (
+                                          <ArrowRightTop />
+                                        )}
+                                      </View>
+                                      <View className="ml-7">
+                                        <Text className="text-white text-[20px] font-semibold">
+                                          {item.type === "credit"
+                                            ? "You were credited"
+                                            : "You were debited"}
+                                        </Text>
+                                        <Text className="text-white pt-2 text-[16px]">
+                                          {formattedDate}
+                                        </Text>
+                                      </View>
+                                      <View className="">
+                                        <Text className="text-white text-right font-bold mt-[-30px] text-[18px]">
+                                          ₦{item.amount}
+                                        </Text>
+                                        {/* <Text className="text-white text-right font-bold mt-[-30px] text-[18px]">
+{user.firstName}
+</Text> */}
+                                      </View>
+                                    </LinearGradient>
+                                  </View>
+                                );
+                              })}
+                            </ScrollView>
+                          </>
+                        )}
+                      </View>
+                    </>
+                  )}
+                </View>
+              )}
+            </>
+          )}
+        </View>
+        <InviteModal
+          isVisible={isModalVisible}
+          onClose={() => setIsModalVisible(false)}
+        />
+        <CustomSideModal
+          isVisible={isSliderVisible}
+          onClose={closeSlider}
+          title="Cooperative Societies"
+        />
       </View>
-      <InviteModal
-        isVisible={isModalVisible}
-        onClose={() => setIsModalVisible(false)}
-      />
-      <CustomSideModal
-        isVisible={isSliderVisible}
-        onClose={closeSlider}
-        title="Cooperative Societies"
-      />
     </SafeAreaView>
   );
 };
