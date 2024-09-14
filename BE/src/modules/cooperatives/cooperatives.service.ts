@@ -238,14 +238,19 @@ export class CooperativesService {
         reference,
         narration: `Withdrawal from ${requestExists.cooperative.name} to ${requestExists.accountName}`,
       });
-      let walletModel: Wallets;
+      const walletModel = await this.walletsRepository.findOne({ uuid: requestExists.wallet.uuid });
+      const cooperativeWallet = await this.walletsRepository.findOne({
+      createdBy: walletModel.cooperative.createdBy,
+      cooperative: walletModel.cooperative,
+      title: walletModel.title,
+      user: null,
+      uuid: { $ne: walletModel.uuid }
+    });
       let paymentModel: Payments;
       let transactionModel: Transactions;
       if (response.status === 'success') {
-        walletModel = this.walletsRepository.create({
-          uuid: requestExists.wallet.uuid,
-          balance: requestExists.wallet.balance - requestExists.amount,
-        });
+        walletModel.totalBalance -= requestExists.amount;
+        cooperativeWallet.totalBalance -= requestExists.amount;
         const paymentUuid = v4();
         paymentModel = this.paymentRepository.create({
           uuid: paymentUuid,
@@ -258,9 +263,10 @@ export class CooperativesService {
           currencies: Currencies.NGN,
         });
         transactionModel = this.transactionRepository.create({
+          uuid: v4(),
           type: TransactionType.DEBIT,
-          balanceBefore: requestExists.wallet.balance,
-          balanceAfter: requestExists.wallet.balance - requestExists.amount,
+          balanceBefore: requestExists.wallet.totalBalance,
+          balanceAfter: requestExists.wallet.totalBalance - requestExists.amount,
           amount: requestExists.amount,
           wallet: this.walletsRepository.getReference(requestExists.wallet.uuid),
           walletSnapshot: JSON.stringify(requestExists.wallet),
@@ -268,12 +274,26 @@ export class CooperativesService {
           user: requestExists.user,
           remark: `Withdrawal from ${requestExists.cooperative.name} to ${requestExists.accountName}`,
         });
+        const coopTransactionModel = this.transactionRepository.create({
+          uuid: v4(),
+          type: TransactionType.DEBIT,
+          balanceBefore: cooperativeWallet.totalBalance,
+          balanceAfter: cooperativeWallet.totalBalance - requestExists.amount,
+          amount: requestExists.amount,
+          wallet: cooperativeWallet,
+          walletSnapshot: JSON.stringify(cooperativeWallet),
+          payment: this.paymentRepository.getReference(paymentUuid),
+          user: requestExists.user,
+          remark: `Withdrawal from ${requestExists.cooperative.name} to ${requestExists.accountName}`
+        });
         em.persist(walletModel);
         em.persist(paymentModel);
         em.persist(transactionModel);
+        em.persist(coopTransactionModel);
         await em.flush();
       } else {
         paymentModel = this.paymentRepository.create({
+          uuid: v4(),
           transactionId: reference,
           status: 'failed',
           amount: requestExists.amount,

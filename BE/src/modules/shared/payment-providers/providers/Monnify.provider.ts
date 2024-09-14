@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, Logger } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger, ServiceUnavailableException } from '@nestjs/common';
 import { MonnifyConfig } from 'src/config/types/monnify.config';
 import axios, { AxiosError } from 'axios';
 import { camelCaseKeysToUnderscore } from 'src/utils';
@@ -98,6 +98,7 @@ export class MonnifyProvider implements PaymentProvider {
       )
       .catch((error) => {
         console.log(util.inspect(error.response, true, null, false));
+        throw new ServiceUnavailableException("Withdrawal currently unavailable");
         throw error;
       });
     return {

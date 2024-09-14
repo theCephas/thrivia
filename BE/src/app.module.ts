@@ -13,6 +13,8 @@ import { AuthModule } from './modules/auth/auth.module';
 import { CooperativesModule } from './modules/cooperatives/cooperatives.module';
 import { CacheModule } from '@nestjs/cache-manager';
 import { WalletsModule } from './modules/wallets/wallets.module';
+import { ScheduleModule } from '@nestjs/schedule';
+import CronModule from './modules/cron/cron.module';
 
 @Module({
   imports: [
@@ -23,11 +25,13 @@ import { WalletsModule } from './modules/wallets/wallets.module';
     }),
     DatabaseModule.forRoot(),
     CacheModule.register({ isGlobal: true }),
+    ScheduleModule.forRoot(),
     SharedModule,
     UsersModule,
     AuthModule,
     CooperativesModule,
-    WalletsModule
+    WalletsModule,
+    CronModule
   ],
   controllers: [AppController],
   providers: [

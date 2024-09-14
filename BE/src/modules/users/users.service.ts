@@ -254,7 +254,7 @@ export class UsersService {
     const amountWithCharge = this.paymentProvider.calculatePayoutAmount(
       request.amount,
     );
-    if (amountWithCharge > walletExists.balance) {
+    if (amountWithCharge > walletExists.availableBalance) {
       throw new NotAcceptableException('Insufficient balance');
     }
     if (request.amount < 50)

@@ -62,8 +62,8 @@ export class WalletsService {
       transactionModel = this.transactionRepository.create({
         uuid: v4(),
         type: TransactionType.CREDIT,
-        balanceBefore: wallet.balance,
-        balanceAfter: wallet.balance + details.amount,
+        balanceBefore: wallet.totalBalance,
+        balanceAfter: wallet.totalBalance + details.amount,
         amount: details.amount,
         wallet: this.walletsRepository.getReference(wallet.uuid),
         walletSnapshot: JSON.stringify(wallet),
@@ -71,14 +71,14 @@ export class WalletsService {
         user: this.usersRepository.getReference(details.userUuid),
         remark: details.remark,
       });
-      wallet.balance += details.amount;
+      wallet.totalBalance += details.amount;
       if (details.cooperativeWallet) {
         const coopWalletModel = await this.walletsRepository.findOne({ uuid: details.cooperativeWallet.uuid })
         const coopTransactionModel = this.transactionRepository.create({
           uuid: v4(),
           type: TransactionType.CREDIT,
-          balanceBefore: coopWalletModel.balance,
-          balanceAfter: coopWalletModel.balance + details.amount,
+          balanceBefore: coopWalletModel.totalBalance,
+          balanceAfter: coopWalletModel.totalBalance + details.amount,
           amount: details.amount,
           wallet: this.walletsRepository.getReference(details.cooperativeWallet.uuid),
           walletSnapshot: JSON.stringify(details.cooperativeWallet),
@@ -86,7 +86,7 @@ export class WalletsService {
           user: this.usersRepository.getReference(details.userUuid),
           remark: details.remark,
         });
-        coopWalletModel.balance += details.amount;
+        coopWalletModel.totalBalance += details.amount;
         em.persist(coopWalletModel);
         em.persist(coopTransactionModel);
       }

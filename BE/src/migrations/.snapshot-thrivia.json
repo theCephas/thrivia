@@ -1248,8 +1248,20 @@
           "length": 255,
           "mappedType": "string"
         },
-        "balance": {
-          "name": "balance",
+        "available_balance": {
+          "name": "available_balance",
+          "type": "numeric(10,2)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "precision": 10,
+          "scale": 2,
+          "default": "0",
+          "mappedType": "decimal"
+        },
+        "total_balance": {
+          "name": "total_balance",
           "type": "numeric(10,2)",
           "unsigned": false,
           "autoincrement": false,
@@ -1520,6 +1532,17 @@
           "nullable": false,
           "length": 255,
           "mappedType": "string"
+        },
+        "locked": {
+          "name": "locked",
+          "type": "tinyint(1)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "length": 1,
+          "default": "true",
+          "mappedType": "boolean"
         }
       },
       "name": "transactions",

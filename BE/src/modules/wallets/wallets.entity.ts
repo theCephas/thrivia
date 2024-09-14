@@ -26,7 +26,10 @@ export class Wallets extends Timestamp {
   title!: string;
 
   @Property({ type: 'decimal', precision: 10, scale: 2, default: 0 })
-  balance: number;
+  availableBalance: number;
+
+  @Property({ type: 'decimal', precision: 10, scale: 2, default: 0 })
+  totalBalance: number;
 
   @ManyToOne(() => Cooperatives, {
     fieldName: 'cooperative_uuid',
@@ -110,4 +113,7 @@ export class Transactions extends Timestamp {
 
   @Property()
   remark: string;
+
+  @Property({ default: true })
+  locked: boolean;
 }
