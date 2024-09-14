@@ -188,4 +188,10 @@ export class CooperativesController {
   fetchTransactions(@Param('uuid') uuid: string, @Param('walletUuid') walletUuid: string, @Req() request: Request) {
     return this.cooperativesService.fetchTransactions(uuid, walletUuid, request.user as any);
   }
+
+  @Post(':uuid/wallets/:walletUuid/withdraw')
+  @UseGuards(JwtAuthGuard)
+  withdraw(@Param('uuid') uuid: string, @Param('walletUuid') walletUuid: string, @Body() body: PaymentInfo, @Req() request: Request) {
+    return this.cooperativesService.withdraw(uuid, walletUuid, body, request.user as any);
+  }
 }

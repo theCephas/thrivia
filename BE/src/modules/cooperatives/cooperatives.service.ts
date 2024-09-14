@@ -214,6 +214,7 @@ export class CooperativesService {
     { uuid }: IAuthContext,
   ) {
     await this.cooperativeGuard(cooperativeUuid, uuid);
+    let paymentModel: Payments;
     await this.em.transactional(async (em) => {
       const requestExists = await this.withdrawalRequestRepository.findOne(
         {
@@ -241,13 +242,12 @@ export class CooperativesService {
       console.log("response", response);
       const walletModel = await this.walletsRepository.findOne({ uuid: requestExists.wallet.uuid });
       const cooperativeWallet = await this.walletsRepository.findOne({
-      createdBy: walletModel.cooperative.createdBy,
-      cooperative: walletModel.cooperative,
-      title: walletModel.title,
-      user: null,
-      uuid: { $ne: walletModel.uuid }
-    });
-      let paymentModel: Payments;
+        createdBy: walletModel.cooperative.createdBy,
+        cooperative: walletModel.cooperative,
+        title: walletModel.title,
+        user: null,
+        uuid: { $ne: walletModel.uuid }
+      });
       let transactionModel: Transactions;
       if (response.status === 'success') {
         walletModel.totalBalance -= requestExists.amount;
@@ -311,6 +311,7 @@ export class CooperativesService {
         );
       }
     });
+    return paymentModel;
   }
 
   async rejectApplication(
@@ -487,6 +488,93 @@ export class CooperativesService {
     return this.transactionRepository.find({
       wallet: { uuid: walletUuid },
     });
+  }
+
+  async withdraw(cooperativeUuid: string, walletUuid: string, body: PaymentInfo, { uuid }: IAuthContext) {
+    await this.cooperativeGuard(cooperativeUuid, uuid);
+    let paymentModel: Payments;
+    await this.em.transactional(async (em) => {
+      const cooperativeModel = await this.cooperativesRepository.findOne({ uuid: cooperativeUuid });
+      const walletExists = await this.walletsRepository.findOne({
+        uuid: walletUuid,
+      });
+      if (!walletExists)
+        throw new NotFoundException(
+          `Wallet with uuid: '${walletUuid}' does not exist`,
+        );
+      const amountWithCharge = this.paymentProvider.calculatePayoutAmount(
+        body.amount,
+      );
+      if (amountWithCharge > walletExists.availableBalance) {
+        throw new NotAcceptableException('Insufficient balance');
+      }
+      if (body.amount < 50)
+        throw new NotAcceptableException('You cannot withdraw less than 50');
+      if (body.amount > 500000)
+        throw new NotAcceptableException(
+          'You cannot withdraw more than 500,000 at once',
+        );
+      const reference = nanoid();
+      const response = await this.paymentProvider.payout({
+        amount: body.amount,
+        bankCode: cooperativeModel.bankCode,
+        accountNumber: cooperativeModel.accountNo,
+        accountName: cooperativeModel.accountName,
+        reference,
+        narration: `Withdrawal from ${cooperativeModel.name}`,
+      });
+      console.log("response", response);
+      const walletModel = await this.walletsRepository.findOne({ uuid: walletUuid });
+      let transactionModel: Transactions;
+      if (response.status === 'success') {
+        walletModel.totalBalance -= body.amount;
+        const paymentUuid = v4();
+        paymentModel = this.paymentRepository.create({
+          uuid: paymentUuid,
+          transactionId: reference,
+          status: 'successful',
+          amount: body.amount,
+          channel: 'withdrawal',
+          metadata: JSON.stringify(response.data),
+          type: PaymentType.OUTGOING,
+          currencies: Currencies.NGN,
+        });
+        transactionModel = this.transactionRepository.create({
+          uuid: v4(),
+          type: TransactionType.DEBIT,
+          balanceBefore: walletModel.totalBalance,
+          balanceAfter: walletModel.totalBalance - body.amount,
+          amount: body.amount,
+          wallet: this.walletsRepository.getReference(walletModel.uuid),
+          walletSnapshot: JSON.stringify(walletModel),
+          payment: this.paymentRepository.getReference(paymentUuid),
+          user: this.usersRepository.getReference(uuid),
+          remark: `Withdrawal from ${cooperativeModel.name}`,
+        });
+        em.persist(walletModel);
+        em.persist(paymentModel);
+        em.persist(transactionModel);
+        await em.flush();
+      } else {
+        paymentModel = this.paymentRepository.create({
+          uuid: v4(),
+          transactionId: reference,
+          status: 'failed',
+          amount: body.amount,
+          channel: 'withdrawal',
+          metadata: JSON.stringify(response.data),
+          type: PaymentType.OUTGOING,
+          currencies: Currencies.NGN,
+        });
+        em.persist(paymentModel);
+        await em.flush();
+        throw new HttpException(
+          'Transaction Failed',
+          HttpStatus.EXPECTATION_FAILED,
+        );
+      }
+    });
+    return paymentModel;
   }
 
   private async cooperativeGuard(cooperativeUuid: string, userUuid: string) {

@@ -20,6 +20,9 @@ export class CreateCooperativeDto {
   bankName: string;
 
   @IsString()
+  bankCode: string;
+
+  @IsString()
   accountNo: string;
 
   @IsString()

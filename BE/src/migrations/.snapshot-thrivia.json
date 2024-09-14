@@ -673,6 +673,16 @@
           "length": 255,
           "mappedType": "string"
         },
+        "bank_code": {
+          "name": "bank_code",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "length": 255,
+          "mappedType": "string"
+        },
         "account_no": {
           "name": "account_no",
           "type": "varchar(255)",

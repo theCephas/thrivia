@@ -39,6 +39,9 @@ export class Cooperatives extends Timestamp {
   @Property()
   bankName!: string;
 
+  @Property({ nullable: true })
+  bankCode: string;
+
   @Property()
   accountNo!: string;
 
