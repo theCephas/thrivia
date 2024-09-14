@@ -238,6 +238,7 @@ export class CooperativesService {
         reference,
         narration: `Withdrawal from ${requestExists.cooperative.name} to ${requestExists.accountName}`,
       });
+      console.log("response", response);
       const walletModel = await this.walletsRepository.findOne({ uuid: requestExists.wallet.uuid });
       const cooperativeWallet = await this.walletsRepository.findOne({
       createdBy: walletModel.cooperative.createdBy,
