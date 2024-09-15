@@ -3,7 +3,7 @@ import { useAxiosInstance } from "./axiosInstance";
 
 const useFetchCoop = () => {
   const [cooperatives, setCooperatives] = useState<any[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loadingCoop, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const axiosInstance = useAxiosInstance();
 
@@ -24,7 +24,7 @@ const useFetchCoop = () => {
   useEffect(() => {
     fetchCooperatives();
   }, []);
-  return { loading, cooperatives, error };
+  return { loadingCoop, cooperatives, error };
 };
 
 export default useFetchCoop;

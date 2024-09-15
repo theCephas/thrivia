@@ -1,6 +1,8 @@
 import Dot from "@/assets/svg/Dot";
 import Filter from "@/assets/svg/Filter";
 import Search from "@/assets/svg/Search";
+import CustomButton from "@/components/CustomButton";
+import InviteModal from "@/components/InviteModal";
 import { useAxiosInstance } from "@/constants/axiosInstance";
 import useAuthStore from "@/store";
 import { LinearGradient } from "expo-linear-gradient";
@@ -12,6 +14,7 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  RefreshControl,
 } from "react-native";
 import { Checkbox } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -23,8 +26,14 @@ const Community = () => {
   const [members, setMembers] = useState<any[]>([]);
   const [checkedState, setCheckedState] = useState<boolean[]>([]);
   const [activeNav, setActiveNav] = useState("members");
+  const [refreshing, setRefreshing] = useState(false);
   const { token, cooperativeUUID } = useAuthStore();
   const axiosInstance = useAxiosInstance();
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const onSubmit = () => {
+    setIsModalVisible(true);
+  };
 
   const getRequests = useCallback(async () => {
     try {
@@ -56,7 +65,6 @@ const Community = () => {
           },
         }
       );
-      // Filter members with role "MEMBER"
       const filteredMembers = res.data.filter(
         (member: any) => member.role === "MEMBER"
       );
@@ -84,6 +92,11 @@ const Community = () => {
       prev.map((item, idx) => (idx === index ? !item : item))
     );
   };
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    Promise.all([getMembers(), getRequests()]).then(() => setRefreshing(false));
+  }, [getMembers, getRequests]);
 
   const MemberItem = ({ item, index }: { item: any; index: number }) => (
     <View key={index}>
@@ -195,14 +208,33 @@ const Community = () => {
           <Filter />
         </View>
       </View>
-
-      <ScrollView contentContainerStyle={{ paddingBottom: 75 }}>
+      <View className="px-4">
+        <CustomButton title="Add members" onPress={onSubmit} />
+      </View>
+      <ScrollView
+        contentContainerStyle={{ paddingBottom: 75 }}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
         <View className="p-4">
-          {data.map((item, index) => (
-            <MemberItem item={item} index={index} key={index} />
-          ))}
+          {data.length > 0 ? (
+            data.map((item, index) => (
+              <MemberItem item={item} index={index} key={index} />
+            ))
+          ) : (
+            <Text className="text-white text-center pt-5">
+              {activeNav === "members"
+                ? "No members for now..."
+                : "No requests yet..."}
+            </Text>
+          )}
         </View>
       </ScrollView>
+      <InviteModal
+        isVisible={isModalVisible}
+        onClose={() => setIsModalVisible(false)}
+      />
     </SafeAreaView>
   );
 };

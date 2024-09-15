@@ -9,12 +9,19 @@ import AccountName from "@/assets/svg/AccountName";
 import Coins from "@/assets/svg/Coins";
 import Help from "@/assets/svg/Help";
 import { useAxiosInstance } from "@/constants/axiosInstance";
-import { Text, View, TouchableOpacity, ScrollView } from "react-native";
+import {
+  Text,
+  View,
+  TouchableOpacity,
+  ScrollView,
+  TextInput,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router, useLocalSearchParams } from "expo-router";
 import ArrowBack from "@/assets/svg/ArrowBack";
 import Toast from "react-native-toast-message";
 import useAuthStore from "@/store";
+import * as SecureStore from "expo-secure-store";
 
 const Withdraw = () => {
   const [banks, setBanks] = useState<any[]>([]);
@@ -24,14 +31,16 @@ const Withdraw = () => {
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const axiosInstance = useAxiosInstance();
-  const { walletUuid } = useAuthStore(); // Get user UUID from auth store
+  const { walletUuid } = useAuthStore();
+  const [password, setPassword] = useState("");
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [form, setForm] = useState({
     accountNumber: "",
     accountName: "",
     bankName: "",
     bankCode: "",
     amount: "",
-    reason: "",
+    purpose: "",
   });
   console.log(walletUuid);
 
@@ -43,6 +52,7 @@ const Withdraw = () => {
           name: bank.name,
           code: bank.code,
         }));
+        console.log(bankList);
         setBanks(bankList);
       } catch (error) {
         setError("Failed to load banks");
@@ -122,10 +132,10 @@ const Withdraw = () => {
     }));
   };
 
-  const handleReasonChange = (value: string) => {
+  const handlepurposeChange = (value: string) => {
     setForm((prevForm) => ({
       ...prevForm,
-      reason: value,
+      purpose: value,
     }));
   };
 
@@ -135,7 +145,7 @@ const Withdraw = () => {
       !form.accountNumber ||
       !form.accountName ||
       !form.amount ||
-      !form.reason
+      !form.purpose
     ) {
       Toast.show({
         type: "error",
@@ -144,7 +154,7 @@ const Withdraw = () => {
       });
       return;
     }
-    setShowConfirmationModal(true);
+    setShowPasswordModal(true); // Show password modal for confirmation
   };
 
   const { uuid } = useLocalSearchParams();
@@ -152,15 +162,26 @@ const Withdraw = () => {
 
   const confirmWithdrawal = async () => {
     try {
+      const savedPassword = await SecureStore.getItemAsync("userPassword");
+
+      if (savedPassword !== password) {
+        Toast.show({
+          type: "error",
+          text1: "Incorrect Password",
+          text2: "Please try again.",
+        });
+        return;
+      }
       await axiosInstance.post(`/users/wallets/${uuid}/withdrawal-request`, {
         bankName: form.bankName,
-        accountName: form.accountName, // Ensure proper field names
+        accountName: form.accountName,
         accountNumber: form.accountNumber,
         amount: parseFloat(form.amount),
-        reason: form.reason,
+        purpose: form.purpose,
         bankCode: form.bankCode,
       });
-      setShowConfirmationModal(false);
+      console.log(form.bankCode);
+      setShowPasswordModal(false);
       setShowSuccessModal(true);
     } catch (error) {
       setError("Failed to process withdrawal request");
@@ -168,7 +189,7 @@ const Withdraw = () => {
         type: "error",
         text1: `${error}`,
       });
-      setShowConfirmationModal(false);
+      setShowPasswordModal(false);
     }
   };
 
@@ -228,9 +249,9 @@ const Withdraw = () => {
           onChangeText={handleAmountChange}
         />
         <InputField
-          placeholder="Reason for withdrawal"
-          value={form.reason}
-          onChangeText={handleReasonChange}
+          placeholder="Purpose for withdrawal"
+          value={form.purpose}
+          onChangeText={handlepurposeChange}
           icon={Help}
         />
         {error && <Text style={{ color: "red" }}>{error}</Text>}
@@ -239,15 +260,25 @@ const Withdraw = () => {
         </View>
       </View>
 
-      {/* Confirmation Modal */}
       <CustomModal
-        isVisible={showConfirmationModal}
-        onButtonPress={() => setShowConfirmationModal(false)}
+        isVisible={showPasswordModal}
+        onButtonPress={() => setShowPasswordModal(false)}
         OnNext={confirmWithdrawal}
         buttonText="Confirm"
         buttonTextCancel="Cancel"
-        title="Confirm Withdrawal"
-        message={`Are you sure you want to withdraw ${form.amount} from your account?`}
+        title="Enter Password"
+        message="Please enter your password to confirm the withdrawal."
+        UI={
+          <View className="mt-6 flex flex-row ">
+            <TextInput
+              className="rounded-full text-[15px] text-black flex-1 focus:outline-none border border-gray-600 pl-4 h-11"
+              placeholder="Password"
+              secureTextEntry={true}
+              value={password}
+              onChangeText={setPassword}
+            />
+          </View>
+        }
       />
 
       {/* Success Modal */}

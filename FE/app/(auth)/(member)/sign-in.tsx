@@ -5,9 +5,9 @@ import CustomButton from "@/components/CustomButton";
 import FormLoader from "@/components/FormLoader";
 import InputField from "@/components/InputField";
 import { useAxiosInstance } from "@/constants/axiosInstance";
-import useSetActiveCooperative from "@/constants/useSetActiveCooperative";
-import useAuthStore from "@/store";
 
+import useAuthStore from "@/store";
+import * as SecureStore from "expo-secure-store";
 import { Link, router } from "expo-router";
 import { useState } from "react";
 import { ScrollView, Text, View } from "react-native";
@@ -25,13 +25,34 @@ const SignIn = () => {
     setCooperativeEmail,
   } = useAuthStore();
   const [loading, setLoading] = useState(false);
-  const { setActiveCooperativeAPI } = useSetActiveCooperative();
+
   const [form, setForm] = useState({
     email: "",
     password: "",
   });
+  const savePassword = async (password: string) => {
+    try {
+      await SecureStore.setItemAsync("userPassword", password);
+    } catch (error) {
+      console.error("Error saving password:", error);
+    }
+  };
+
+  const validateForm = () => {
+    if (!form.email || !form.password) {
+      Toast.show({
+        type: "error",
+        text1: "Please fill in all fields correctly.",
+      });
+      return false;
+    }
+    return true;
+  };
 
   const onSignInPress = async () => {
+    if (!validateForm()) {
+      return;
+    }
     setLoading(true);
     try {
       const res = await axiosInstance.post("/auth/login", {
@@ -41,18 +62,20 @@ const SignIn = () => {
 
       const data = await res.data;
 
-      // console.log(data);
       if (data.accessToken) {
         Toast.show({
           type: "success",
           text1: `Login Successful!`,
         });
+
         const { accessToken, expiresIn, user } = data;
-        console.log(data);
         login(accessToken, expiresIn, user);
 
         setUserUuid(user.uuid);
         const userActCoop = user.activeCooperative;
+
+        await savePassword(form.password);
+
         if (userActCoop) {
           setCooperativeUUID(userActCoop.uuid);
           setCooperativeName(userActCoop.name);
@@ -74,7 +97,6 @@ const SignIn = () => {
       setLoading(false);
     }
   };
-
   return (
     <ScrollView className="relative h-full flex-1 bg-[#1d2128]">
       <View className="flex-1 items-center justify-center flex-col gap-8 bg-[#1d2128] mt-[60px]">

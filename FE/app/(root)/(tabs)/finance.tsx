@@ -1,80 +1,235 @@
-import ArrowBack from "@/assets/svg/ArrowBack";
-import LoanHistory from "@/components/applyLoanStages/LoanHistory";
-import LoanMain from "@/components/applyLoanStages/LoanMain";
-import ViewApplication from "@/components/applyLoanStages/ViewApplication";
-import { LinearGradient } from "expo-linear-gradient";
-import { useState } from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { useCallback, useEffect, useState } from "react";
+import {
+  ScrollView,
+  Text,
+  View,
+  RefreshControl,
+  ActivityIndicator,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Toast from "react-native-toast-message";
+import { useAxiosInstance } from "@/constants/axiosInstance";
+import useAuthStore from "@/store";
+import useFetchWallets from "@/constants/useFetchWallets";
 
 const Finance = () => {
-  const [activeNav, setActiveNav] = useState(0);
-  const [viewPage, setViewPage] = useState("main");
+  const [withdrawalRequests, setWithdrawalRequests] = useState<any[]>([]);
+  const [membersWithdrawalRequests, setMembersWithdrawalRequests] = useState<
+    any[]
+  >([]);
+  const { token, cooperativeUUID, role } = useAuthStore();
+  const axiosInstance = useAxiosInstance();
+  const [refreshing, setRefreshing] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const { wallets } = useFetchWallets("member");
+
+  // Fetch withdrawal requests
+  const getWithdrawalRequests = useCallback(async () => {
+    setLoading(true);
+    try {
+      const res = await axiosInstance.get(
+        `/cooperatives/${cooperativeUUID}/withdrawal-requests`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      setWithdrawalRequests(res.data);
+    } catch (error) {
+      console.error("Failed to fetch withdrawal requests:", error);
+      Toast.show({
+        type: "error",
+        text1: `${error}`,
+      });
+    } finally {
+      setLoading(false);
+    }
+  }, [axiosInstance, cooperativeUUID, token]);
+
+  // Fetch user's withdrawal requests by wallet UUID
+  const getUsersWithdrawalRequests = useCallback(
+    async (walletUuid: string) => {
+      setLoading(true);
+      try {
+        const res = await axiosInstance.get(
+          `/users/wallets/${walletUuid}/withdrawal-requests`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        setMembersWithdrawalRequests(res.data);
+      } catch (error) {
+        console.error("Failed to fetch user's withdrawal requests:", error);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [axiosInstance, token]
+  );
+
+  // Trigger initial data fetch
+  useEffect(() => {
+    getWithdrawalRequests();
+    if (wallets.length > 0) {
+      // Use the first wallet's UUID for fetching the withdrawal requests
+      getUsersWithdrawalRequests(wallets[0].uuid);
+    }
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+  }, [getWithdrawalRequests, getUsersWithdrawalRequests, wallets]);
+
+  // Refresh handler
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    try {
+      await getWithdrawalRequests();
+      if (wallets.length > 0) {
+        await getUsersWithdrawalRequests(wallets[0].uuid);
+      }
+    } finally {
+      setRefreshing(false);
+    }
+  }, [getWithdrawalRequests, getUsersWithdrawalRequests, wallets]);
 
   return (
-    <SafeAreaView className="h-full bg-[#1d2128] w-full flex flex-col ">
-      <View className={`w-full bg-[#0D1015] mt-6 py-6`}>
-        {viewPage === "main" ? (
-          <Text className="text-white text-2xl font-bold w-full items-center  text-center">
-            Finances
-          </Text>
-        ) : (
-          <TouchableOpacity
-            onPress={() => setViewPage("main")}
-            className="w-full flex flex-row items-center gap-6 pl-4"
-          >
-            <ArrowBack />
-            <Text className="text-white text-2xl font-bold">
-              {viewPage === "history"
-                ? "Transaction history"
-                : "Loan application"}
+    <>
+      {role === "MEMBER" ? (
+        <SafeAreaView className="flex-1 flex items-center flex-col bg-[#1d2128]">
+          <View className="flex-row flex justify-between items-center p-4">
+            <Text className="text-white font-semibold mt-5 text-center text-[18px]">
+              Withdrawal Requests
             </Text>
-          </TouchableOpacity>
-        )}
-      </View>
-
-      {viewPage === "main" && (
-        <LoanMain
-          activeNav={activeNav}
-          setActiveNav={setActiveNav}
-          setViewPage={setViewPage}
-        />
+          </View>
+          <ScrollView
+            contentContainerStyle={{ paddingBottom: 80 }}
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
+            className="w-full p-4"
+          >
+            {loading ? (
+              <View className="w-full pl-4">
+                <ActivityIndicator size="large" color="#FFFFFF" />
+              </View>
+            ) : membersWithdrawalRequests.length === 0 ? (
+              <View className="w-full flex items-center mt-10">
+                <Text className="text-white text-lg">
+                  No withdrawal requests yet
+                </Text>
+              </View>
+            ) : (
+              <View className="">
+                {membersWithdrawalRequests.map((request, index) => (
+                  <View
+                    key={index}
+                    className="bg-[#2d3038] p-4 mb-4 rounded-lg"
+                  >
+                    <Text className="text-white font-bold text-lg">
+                      {request.accountName} | <Text>{request.bankName}</Text>
+                    </Text>
+                    <Text className="text-white/90 mt-2">
+                      Member Name:{" "}
+                      {request.wallet.cooperative.createdBy.firstName}{" "}
+                      {request.wallet.cooperative.createdBy.lastName}
+                    </Text>
+                    <Text className="text-white/90 mt-2">
+                      Amount:{" "}
+                      <Text className="font-bold">₦{request.amount}</Text>
+                    </Text>
+                    <Text className={`text-white/90 mt-1`}>
+                      Status:{" "}
+                      <Text
+                        className={
+                          request.status === "PENDING"
+                            ? "text-amber-400"
+                            : request.status === "APPROVED"
+                            ? "text-green-400"
+                            : "text-red-400"
+                        }
+                      >
+                        {request.status}
+                      </Text>
+                    </Text>
+                  </View>
+                ))}
+              </View>
+            )}
+          </ScrollView>
+        </SafeAreaView>
+      ) : (
+        <SafeAreaView className="flex-1 flex items-center flex-col bg-[#1d2128]">
+          <View className="flex-row flex justify-between items-center p-4">
+            <Text className="text-white font-semibold mt-5 text-center text-[18px]">
+              Withdrawal Requests
+            </Text>
+          </View>
+          <ScrollView
+            contentContainerStyle={{ paddingBottom: 80 }}
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
+            className="w-full p-4"
+          >
+            {loading ? (
+              <View className="w-full pl-4">
+                <ActivityIndicator size="large" color="#FFFFFF" />
+              </View>
+            ) : withdrawalRequests.length === 0 ? (
+              <View className="w-full flex items-center mt-10">
+                <Text className="text-white text-lg">
+                  No withdrawal requests yet
+                </Text>
+              </View>
+            ) : (
+              <View className="">
+                {withdrawalRequests.map((request, index) => (
+                  <View
+                    key={index}
+                    className="bg-[#2d3038] p-4 mb-4 rounded-lg"
+                  >
+                    <Text className="text-white font-bold text-lg">
+                      {request.accountName} | <Text>{request.bankName}</Text>
+                    </Text>
+                    <Text className="text-white/90 mt-2">
+                      Member Name:{" "}
+                      {request.wallet.cooperative.createdBy.firstName}{" "}
+                      {request.wallet.cooperative.createdBy.lastName}
+                    </Text>
+                    <Text className="text-white/90 mt-2">
+                      Amount:{" "}
+                      <Text className="font-bold">₦{request.amount}</Text>
+                    </Text>
+                    <Text className={`text-white/90 mt-1`}>
+                      Status:{" "}
+                      <Text
+                        className={
+                          request.status === "PENDING"
+                            ? "text-amber-400"
+                            : request.status === "APPROVED"
+                            ? "text-green-400"
+                            : "text-red-400"
+                        }
+                      >
+                        {request.status}
+                      </Text>
+                    </Text>
+                  </View>
+                ))}
+              </View>
+            )}
+          </ScrollView>
+        </SafeAreaView>
       )}
-
-      <View className="px-4 w-full mt-8">
-        <View className="border-b border-gray-50 pb-2 flex flex-row justify-between">
-          <Text className="text-white text-xl font-bold">
-            {viewPage === "main"
-              ? "Loan history"
-              : viewPage === "history"
-              ? "Loan transactions"
-              : "Loan application details"}
-          </Text>
-          {viewPage === "main" && (
-            <TouchableOpacity onPress={() => setViewPage("history")}>
-              <Text className="text-primary font-bold text-lg">View all</Text>
-            </TouchableOpacity>
-          )}
-          {viewPage === "view-application" && (
-            <LinearGradient
-              colors={[
-                "rgba(244, 244, 244, 0.2)",
-                "rgba(255, 255, 255, 0.044)",
-              ]}
-              start={{ x: 0, y: 0.5 }}
-              end={{ x: 1, y: 0.5 }}
-              className="rounded-lg overflow-hidden border border-white"
-            >
-              <Text className="text-warning-500 font-bold px-3 py-1">
-                Pending
-              </Text>
-            </LinearGradient>
-          )}
-        </View>
-      </View>
-      {viewPage === "history" && <LoanHistory />}
-      {viewPage === "view-application" && <ViewApplication />}
-    </SafeAreaView>
+      <Toast />
+    </>
   );
 };
 

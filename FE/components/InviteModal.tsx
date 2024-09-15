@@ -40,7 +40,7 @@ const InviteModal: React.FC<InviteModalProps> = ({ isVisible, onClose }) => {
 
   const handleConfirmUpload = () => {
     // Handle the confirmed upload here
-    console.log("File uploaded:", selectedFile);
+    // console.log("File uploaded:", selectedFile);
     setIsConfirmVisible(false);
     onClose();
   };
@@ -57,8 +57,8 @@ const InviteModal: React.FC<InviteModalProps> = ({ isVisible, onClose }) => {
         type: "success",
         text1: "ID copied to clipboard",
       });
-      setIsConfirmVisible(false);
     }
+    setIsConfirmVisible(false);
   };
   return (
     <>

@@ -7,6 +7,10 @@ export default function Layout() {
       <Stack.Screen name="(manager-pages)" options={{ headerShown: false }} />
       <Stack.Screen name="(member-loan)" options={{ headerShown: false }} />
       <Stack.Screen name="(member-withdraw)" options={{ headerShown: false }} />
+      <Stack.Screen
+        name="(manager-withdraw)"
+        options={{ headerShown: false }}
+      />
     </Stack>
   );
 }
