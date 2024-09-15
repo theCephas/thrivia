@@ -63,7 +63,7 @@ export class AuthService {
     delete user.updatedAt;
     return {
       accessToken: this.jwtService.sign(payload),
-      expiresIn: 3.6e6,
+      expiresIn: 1.2e6,
       refreshToken: this.jwtService.sign(payload, { expiresIn: '7d' }),
       user,
     };
