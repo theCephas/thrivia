@@ -127,7 +127,7 @@ const Home = () => {
         </View>
 
         <View className="flex-1 relative mt-6">
-          {user.activeCooperative ? (
+          {user?.activeCooperative ? (
             <>
               {/* {role !== "MANAGER" ? (
                 ""
@@ -319,7 +319,7 @@ const Home = () => {
                         </View>
                         <View className="">
                           <Text className="text-white text-right font-OnestBold mt-[-30px] text-[15px]">
-                            ₦{item.amount}
+                            {see ? "****" : `₦${item.amount}`}
                           </Text>
                           {/* <Text className="text-white text-right   mt-[-30px] text-[15px]">
                         {user.firstName}
