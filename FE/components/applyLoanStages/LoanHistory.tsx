@@ -23,13 +23,13 @@ const LoanHistory = () => {
             </View>
 
             <View>
-              <Text className="text-white text-[16px] font-semibold ">
+              <Text className="text-white text-[16px] font-Onest  font-semibold ">
                 {item.type}
               </Text>
               <Text className="text-white pt-2 text-[14px]">{item.time}</Text>
             </View>
           </View>
-          <Text className="text-lg font-bold text-white">{item.amount}</Text>
+          <Text className="text-lg font-Onest   text-white">{item.amount}</Text>
         </LinearGradient>
       ))}
     </View>

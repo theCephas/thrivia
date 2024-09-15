@@ -49,8 +49,6 @@ const JoinStages = () => {
   };
 
   const onSubmit = async () => {
-    console.log(user, token, form.date);
-
     const date = new Date(form.date);
 
     const year = date.getFullYear();
@@ -82,7 +80,6 @@ const JoinStages = () => {
       );
 
       const data = res.data;
-      console.log("Response data", data);
 
       Toast.show({
         type: "success",
@@ -92,7 +89,6 @@ const JoinStages = () => {
       });
       setIsModalVisible(2);
     } catch (err) {
-      console.log(err);
       setIsModalVisible(0);
       Toast.show({
         type: "error",
@@ -116,7 +112,7 @@ const JoinStages = () => {
           <CircleProgress stage={currentStage} totalStages={2} />
         </View>
         <View>
-          <Text className="text-xl w-[298px] font-[500] m-auto text-center text-white ">
+          <Text className="text-[16px] font-Onest w-[298px] font-[500] m-auto text-center text-white ">
             Join a Cooperative
           </Text>
         </View>
@@ -139,7 +135,7 @@ const JoinStages = () => {
               onPress={prevStage}
               className={`w-full p-3 mb-5 rounded-full flex flex-row justify-center items-center h-[44px] border border-white`}
             >
-              <Text className="text-white">Previous</Text>
+              <Text className="text-white font-Onest">Previous</Text>
             </TouchableOpacity>
           )}
           {currentStage < 2 && (
@@ -147,7 +143,7 @@ const JoinStages = () => {
               onPress={() => router.push("/(root)/(tabs)/home")}
               className={`w-full p-3 mb-5 rounded-full flex flex-row justify-center items-center h-[44px] border border-white`}
             >
-              <Text className="text-white">Go home</Text>
+              <Text className="text-white font-Onest">Go home</Text>
             </TouchableOpacity>
           )}
         </View>

@@ -53,12 +53,10 @@ const Welcome = () => {
           {onboarding.map((item) => (
             <View key={item.id} className="flex flex-col relative">
               <View className="absolute bottom-[-460px]">
-                <Text className="text-white font-onest font-bold text-3xl text-left">
-                  {" "}
+                <Text className="text-white font-OnestSemiBold text-[20px] text-left">
                   {item.title}
                 </Text>
-                <Text className="text-lg text-left text-white mt-3">
-                  {" "}
+                <Text className="text-[16px] leading-8 font-Onest text-left text-white mt-3">
                   {item.description}
                 </Text>
               </View>
@@ -68,6 +66,7 @@ const Welcome = () => {
 
         <CustomButton
           title={isLastSlide ? "Get Started" : "Next"}
+          // fontVariant="Onest"
           onPress={() =>
             isLastSlide
               ? router.replace("/(auth)/(member)/sign-up")
@@ -76,9 +75,12 @@ const Welcome = () => {
           className={"w-11/12 mt-16 m-auto mb-6"}
         />
         <View className="flex items-center justify-center mb-8">
-          <Link href={"/(auth)/(member)/sign-in"} className="text-white">
-            Already have an account?{" "}
-            <Text className="text-primary">Log in</Text>
+          <Link
+            href={"/(auth)/(member)/sign-in"}
+            className="text-white font-Onest"
+          >
+            <Text className="font-Onest">Already have an account? </Text>
+            <Text className="text-primary font-Onest">Log in</Text>
           </Link>
         </View>
         {/* </View> */}

@@ -24,7 +24,9 @@ const LoanMain = ({ activeNav, setActiveNav, setViewPage }: Props) => {
             onPress={() => setActiveNav(i)}
             className="pt-8 flex flex-col items-center"
           >
-            <Text className={`text-white text-xl px-3`}>{text}</Text>
+            <Text className={`text-white text-[16px] font-Onest px-3`}>
+              {text}
+            </Text>
 
             <View
               className={`h-1 mt-1 w-full bg-primary rounded-t-[50px] transition-opacity duration-500 ${
@@ -49,16 +51,14 @@ const LoanMain = ({ activeNav, setActiveNav, setViewPage }: Props) => {
             Loan balance
           </Text>
           <View className="py-4 flex flex-row items-center gap-3">
-            <Text className="text-white text-4xl font-bold tracking-widest">
-              ₦0.00
-            </Text>
+            <Text className="text-white text-4xl   tracking-widest">₦0.00</Text>
             <Unsee />
           </View>
           <TouchableOpacity
             onPress={() => {}}
             className="flex flex-row items-center"
           >
-            <Text className="text-white text-lg font-bold pr-1">
+            <Text className="text-white text-lg font-Onest   pr-1">
               Transaction history
             </Text>
             <View className="-rotate-90 scale-90">
@@ -88,7 +88,7 @@ const LoanMain = ({ activeNav, setActiveNav, setViewPage }: Props) => {
             end={{ x: 1, y: 0.5 }}
             className="w-full flex flex-row justify-center items-center"
           >
-            <Text className="text-white text-lg font-bold p-3">
+            <Text className="text-white text-lg font-Onest   p-3">
               {hasPendingLoan ? "View application" : "Apply for loan"}
             </Text>
           </LinearGradient>

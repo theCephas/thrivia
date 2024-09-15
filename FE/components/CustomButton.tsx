@@ -31,11 +31,21 @@ const getTextVariantStyle = (variant: ButtonProps["textVariant"]) => {
   }
 };
 
+const getFontVariantStyle = (variant: ButtonProps["fontVariant"]) => {
+  switch (variant) {
+    case "Onest":
+      return "font-Onest";
+    default:
+      return "font-Onest";
+  }
+};
+
 const CustomButton = ({
   onPress,
   title,
   bgVariant = "primary",
   textVariant = "default",
+  fontVariant = "default",
   IconLeft,
   IconRight,
   className,
@@ -49,7 +59,11 @@ const CustomButton = ({
     {...props}
   >
     {IconLeft && <IconLeft />}
-    <Text className={`text-lg font-bold ${getTextVariantStyle(textVariant)}`}>
+    <Text
+      className={`text-lg   ${getTextVariantStyle(
+        textVariant
+      )} ${getFontVariantStyle(fontVariant)}`}
+    >
       {title}
     </Text>
     {IconRight && <IconRight />}

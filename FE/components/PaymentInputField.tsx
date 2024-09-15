@@ -25,14 +25,16 @@ const PaymentInputField = ({
   }, [focusOnInit]);
 
   const handleChangeText = (text: string) => {
-    const numericValue = text.replace(/[^0-9]/g, ""); // Remove any non-numeric characters
+    const numericValue = text.replace(/[^0-9]/g, "");
     setValue(Number(numericValue));
   };
   return (
     <View className="mt-14 px-6 w-full">
-      <Text className="text-xl text-white mb-3">Enter amount</Text>
+      <Text className="text-[16px] font-Onest text-white mb-3">
+        Enter amount
+      </Text>
       <View className="flex flex-row h-10 w-full items-end">
-        <Text className="text-lg text-white pb-1 px-1 mr-4 border-b border-[#939090]">
+        <Text className="text-lg font-Onest text-white pb-1 px-1 mr-4 border-b border-[#939090]">
           NGN
         </Text>
 
@@ -43,7 +45,7 @@ const PaymentInputField = ({
           keyboardType="numeric"
           placeholder="0.00"
           placeholderTextColor="#939090"
-          className="text-white text-2xl border-b border-[#939090] flex-grow"
+          className="text-white font-Onest text-2xl border-b border-[#939090] flex-grow"
         />
       </View>
     </View>

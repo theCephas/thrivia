@@ -18,7 +18,7 @@ const BecomeMemeber = () => {
           <Image source={require("@/assets/images/thrivia.png")} className="" />
         </View>
         <View>
-          <Text className="text-3xl font-bold text-center text-white mt-3 px-10">
+          <Text className="text-3xl   text-center text-white mt-3 px-10">
             Start your thriving journey with us
           </Text>
         </View>

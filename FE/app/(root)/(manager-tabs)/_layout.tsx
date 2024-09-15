@@ -22,13 +22,13 @@ const TabIcon = ({
   >
     <View
       className={`w-12 h-12 items-center justify-center ${
-        focused ? "border-b-primary border-b-2 w-[45px] font-bold" : ""
+        focused ? "border-b-primary border-b-2 w-[45px]  " : ""
       }`}
     >
       <Icon width={24} height={24} stroke={focused ? "white" : "#939090"} />
       <Text
-        className={`text-xs mt-1 ${
-          focused ? "text-white font-bold" : "text-[#aaa]"
+        className={`text-[10px] font-Onest mt-1 ${
+          focused ? "text-white  " : "text-[#aaa]"
         }`}
       >
         {label}

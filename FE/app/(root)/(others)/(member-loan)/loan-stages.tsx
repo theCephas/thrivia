@@ -51,16 +51,16 @@ const JoinStages = () => {
           <CircleProgress stage={currentStage} totalStages={3} />
         </View>
         <View>
-          <Text className="text-2xl font-bold m-auto text-center text-white ">
+          <Text className="text-2xl   m-auto text-center text-white ">
             Need funds on the go?
           </Text>
-          <Text className="text-center text-lg text-white px-14">
+          <Text className="text-center text-lg font-Onest text-white px-14">
             Apply for a loan with Freedom Cooperative to get started
           </Text>
         </View>
       </View>
       <View className="p-5">
-        <Text className="text-white text-lg font-bold">
+        <Text className="text-white text-lg font-Onest  ">
           {currentStage === 1
             ? "Personal details"
             : currentStage === 2

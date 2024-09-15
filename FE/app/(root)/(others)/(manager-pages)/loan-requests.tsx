@@ -23,7 +23,7 @@ const LoanRequests = () => {
         className="mt-14 py-6 px-4 fixed w-full bg-[#0D1015]"
       >
         <ArrowBack />
-        <Text className="text-white text-center mt-[-21px] text-2xl font-bold">
+        <Text className="text-white text-center mt-[-21px] text-2xl  ">
           Loan requests
         </Text>
       </TouchableOpacity>
@@ -33,7 +33,7 @@ const LoanRequests = () => {
           <TextInput
             placeholder="Search"
             placeholderTextColor="#fff"
-            className="w-[300px] border px-10 border-white rounded-full h-[40px] text-white text-[18px]"
+            className="w-[300px] border px-10 border-white rounded-full h-[40px] text-white text-[15px]"
           />
           <Search className="absolute top-3 left-3 " />
         </View>
@@ -57,10 +57,10 @@ const LoanRequests = () => {
                     }`}
                   />
                   <View>
-                    <Text className="text-white text-[20px] font-semibold ">
+                    <Text className="text-white text-[14px] font-Onest font-semibold ">
                       {item.type}
                     </Text>
-                    <Text className="text-white pt-2 text-[16px]">
+                    <Text className="text-white pt-2 text-[14px]">
                       {item.time}
                     </Text>
                   </View>
@@ -85,14 +85,14 @@ const LoanRequests = () => {
                         "/(others)/(manager-pages)/loan-request-details"
                       )
                     }
-                    className="text-white text-[20px] z-50 font-bold w-full "
+                    className="text-white text-[14px] font-Onest z-50   w-full "
                   >
                     View Details
                   </Text>
-                  <Text className="text-white text-[20px] z-50 py-4 font-bold w-full ">
+                  <Text className="text-white text-[14px] font-Onest z-50 py-4   w-full ">
                     View member profile
                   </Text>
-                  <Text className="text-white text-[20px] z-50 font-bold w-full ">
+                  <Text className="text-white text-[14px] font-Onest z-50   w-full ">
                     Delete
                   </Text>
                 </LinearGradient>

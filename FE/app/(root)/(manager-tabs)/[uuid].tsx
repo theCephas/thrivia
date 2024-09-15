@@ -57,7 +57,7 @@ const Home = () => {
     cooperativeUUID,
     role,
   } = useAuthStore();
-  console.log(cooperativeUUID, role);
+
   const fetchTransactions = useCallback(
     async (walletUuid: string) => {
       setLoading(true);
@@ -70,7 +70,6 @@ const Home = () => {
         setTransactions(response.data);
       } catch (err) {
         setError("Failed to load transactions");
-        console.error(err);
       } finally {
         setLoading(false);
       }
@@ -83,7 +82,6 @@ const Home = () => {
     if (wallets.length > 0) {
       // Automatically fetch transactions for the first wallet
       fetchTransactions(wallets[0].uuid);
-      console.log(wallets[0].uuid);
     }
   }, [wallets, fetchTransactions]);
   const [refreshing, setRefreshing] = useState(false);
@@ -101,7 +99,7 @@ const Home = () => {
 
   return (
     <SafeAreaView className="flex-1 h-full bg-[#1d2128]">
-      <View className="h-full">
+      <View className="h-full px-1">
         <View className="p-4 pt-5 pb-12 flex-1">
           <View className="flex flex-row justify-between items-center">
             <View className="flex flex-row items-center gap-3">
@@ -110,18 +108,16 @@ const Home = () => {
               </TouchableOpacity>
               <View>
                 <Text className="hidden">Cooperative UUID: {uuid}</Text>
-                <Text className="text-white text-[25px] pt-1 font-semibold">
+                <Text className="text-white text-[25px] font-OnestSemiBold  pt-1">
                   {cooperativeName}
                 </Text>
               </View>
             </View>
             <View className="flex flex-row items-center gap-x-6">
-              <TouchableOpacity onPress={() => logout()}>
+              <TouchableOpacity>
                 <Notification />
               </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => router.replace("/(root)/(tabs)/home")}
-              >
+              <TouchableOpacity>
                 <Settings />
               </TouchableOpacity>
             </View>
@@ -132,7 +128,9 @@ const Home = () => {
               onPress={() => router.replace("/(root)/(tabs)/home")}
               className="flex flex-row justify-end items-center h-[40px] gap-x-3"
             >
-              <Text className="text-white mb-4">Switch to member's view</Text>
+              <Text className="text-white mb-4 font-Onest">
+                Switch to member's view
+              </Text>
               <View className="mt-[-15px]">
                 <SwitchAccounts />
               </View>
@@ -152,13 +150,13 @@ const Home = () => {
                 {wallets.map((item, index) => (
                   <View
                     key={index}
-                    className="flex relative z-10 justify-center h-[160px] w-full rounded-[16px] p-4"
+                    className="flex relative z-10 justify-center h-[168px] w-full rounded-[16px] p-4"
                   >
                     <View className="absolute top-0 z-50 right-[-168px] w-full ">
                       <BgStyling />
                     </View>
                     <View className="flex flex-row gap-2 items-center">
-                      <Text className="text-white text-[17px] font-[600]">
+                      <Text className="text-white text-[17px] font-Onest font-[600]">
                         Your {item.title} balance
                       </Text>
                       <TouchableOpacity
@@ -176,21 +174,21 @@ const Home = () => {
                       <View>
                         <View className="py- flex flex-row w-[95%] items-center gap-3">
                           <View className="py- flex flex-row w-[95%] items-center ">
-                            <View className="text-white text-[20px] gap-x-1 font-bold flex tracking-widest flex-row items-center">
-                              <Text className="text-white text-[14px] font-bold">
+                            <View className="text-white text-[20px] gap-x-1   flex tracking-widest flex-row items-center">
+                              <Text className="text-white text-[14px] font-OnestBold">
                                 ₦
                               </Text>
-                              <Text className="text-[30px] mt-1 text-white font-bold">
+                              <Text className="text-[25px] font-OnestBold mt-2 text-white">
                                 {see ? "*****" : item.availableBalance}{" "}
                               </Text>
                             </View>
                           </View>
                         </View>
-                        <View className="flex flex-row items-center gap-2 mt-1">
-                          <Text className="text-[14px] text-white/80">
+                        <View className="flex flex-row items-center gap-2">
+                          <Text className="text-[14px] font-Onest text-white/80">
                             Total balance:
                           </Text>
-                          <Text className="text-[14px] text-white/80">
+                          <Text className="text-[14px] font-Onest text-white/80">
                             ₦ {see ? "*****" : item.totalBalance}{" "}
                           </Text>
                         </View>
@@ -209,7 +207,7 @@ const Home = () => {
                           colors={["#F4F4F433", "#FFFFFF0B"]}
                           className="flex items-center justify-center border-[#E8E7E780] border rounded-full w-[110px] h-[38px]"
                         >
-                          <Text className="text-white text-[14px]">
+                          <Text className="text-white text-[12px] font-Onest">
                             + Add money
                           </Text>
                         </LinearGradient>
@@ -227,7 +225,7 @@ const Home = () => {
                           colors={["#F4F4F433", "#FFFFFF0B"]}
                           className="flex items-center justify-center border-[#E8E7E780] border rounded-full w-[110px] h-[38px]"
                         >
-                          <Text className="text-white text-[14px]">
+                          <Text className="text-white text-[12px] font-Onest">
                             Withdraw money
                           </Text>
                         </LinearGradient>
@@ -247,11 +245,11 @@ const Home = () => {
             <>
               {cooperatives.length < 1 ? (
                 <View className="absolute top-[350px] flex items-center w-full pl-4">
-                  <Text className="text-white text-[16px] w-[200px] leading-[21px] text-center">
+                  <Text className="text-white text-[16px] font-Onest  w-[200px] leading-[21px] text-center">
                     You don&apos;t have any member in your cooperative society
                     yet.{" "}
                   </Text>
-                  <Text className="text-white text-[16px] w-[200px] leading-[21px] text-center pt-4 pb-6">
+                  <Text className="text-white text-[16px] font-Onest  w-[200px] leading-[21px] text-center pt-4 pb-6">
                     Click the button below to get started
                   </Text>
                   <CustomButton title="Add members" onPress={onSubmit} />
@@ -267,7 +265,7 @@ const Home = () => {
                       <View className="flex flex-col mt-1">
                         {transactions.length < 1 ? (
                           <View>
-                            <Text className="text-white text-xl text-center">
+                            <Text className="text-white text-[16px] font-Onest text-center">
                               Recent transactions history will appear here
                             </Text>
                             <CustomButton
@@ -281,12 +279,10 @@ const Home = () => {
                         ) : (
                           <>
                             <View className="flex-1 flex-row items-center justify-between border-b border-[#939090] pb-1 ">
-                              <Text className="text-white text-[18px] font-semibold ">
+                              <Text className="text-white text-[18px] font-OnestSemiBold ">
                                 Transaction history
                               </Text>
-                              <Text className="text-primary font-bold text-[16px] pl-12">
-                                View all
-                              </Text>
+                              <Text className="text-primary text-[16px] font-OnestSemiBold  pl-12"></Text>
                             </View>
                             <ScrollView
                               contentContainerStyle={{ paddingBottom: 80 }}
@@ -320,20 +316,20 @@ const Home = () => {
                                         )}
                                       </View>
                                       <View className="ml-7">
-                                        <Text className="text-white text-[20px] font-semibold">
+                                        <Text className="text-white text-[14px] font-Onest font-semibold">
                                           {item.type === "credit"
                                             ? "You were credited"
                                             : "You were debited"}
                                         </Text>
-                                        <Text className="text-white pt-2 text-[16px]">
+                                        <Text className="text-white pt-2 text-[12px] font-Onest">
                                           {formattedDate}
                                         </Text>
                                       </View>
                                       <View className="">
-                                        <Text className="text-white text-right font-bold mt-[-30px] text-[18px]">
+                                        <Text className="text-white text-right font-OnestBold mt-[-30px] text-[16px]">
                                           ₦{item.amount}
                                         </Text>
-                                        {/* <Text className="text-white text-right font-bold mt-[-30px] text-[18px]">
+                                        {/* <Text className="text-white text-right   mt-[-30px] text-[15px]">
 {user.firstName}
 </Text> */}
                                       </View>

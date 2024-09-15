@@ -74,13 +74,16 @@ const Withdraw = () => {
           className="flex flex-row justify-center mt-6 py-6 w-full items-center bg-[#0D1015]"
         >
           <ArrowBack />
-          <Text className="text-white ml-3 text-2xl font-bold">
+          <Text className="text-white ml-3 text-2xl font-Onest ">
             Withdraw money
           </Text>
         </TouchableOpacity>
         <View className="flex flex-col gap-4 items-center px-14 mt-6">
           <Homeprofile />
-          <Text style={{ color: "white", fontSize: 18, textAlign: "center" }}>
+          <Text
+            className="font-Onest"
+            style={{ color: "white", fontSize: 18, textAlign: "center" }}
+          >
             {cooperativeName}
           </Text>
         </View>
@@ -112,7 +115,7 @@ const Withdraw = () => {
         UI={
           <View className="mt-6 flex flex-row ">
             <TextInput
-              className="rounded-full text-[15px] text-black flex-1 focus:outline-none border border-gray-600 pl-4 h-11"
+              className="rounded-full text-[15px] font-Onest text-black flex-1 focus:outline-none border border-gray-600 pl-4 h-11"
               placeholder="Password"
               secureTextEntry={true}
               value={password}

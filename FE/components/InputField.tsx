@@ -53,12 +53,13 @@ const InputField = ({
     }),
     fontSize: animatedIsFocused.interpolate({
       inputRange: [0, 1],
-      outputRange: [18, 14],
+      outputRange: [14, 14],
     }),
     color: animatedIsFocused.interpolate({
       inputRange: [0, 1],
       outputRange: ["#aaa", "#aaa"],
     }),
+    fontFamily: "Onest",
   };
 
   return (
@@ -82,7 +83,7 @@ const InputField = ({
             )}
             <TextInput
               style={styles.input}
-              className={`rounded-full text-[15px] text-white flex-1 ${inputStyle}`}
+              className={`rounded-full text-[14px] font-Onest text-white flex-1 ${inputStyle}`}
               secureTextEntry={secureTextEntry}
               onFocus={handleFocus}
               onBlur={handleBlur}
@@ -103,7 +104,8 @@ const styles = StyleSheet.create({
     paddingRight: 16,
     paddingTop: 20,
     paddingBottom: 0,
-    fontSize: 16,
+    fontSize: 14,
+    fontFamily: "Onest",
   },
   placeholder: {
     position: "absolute",

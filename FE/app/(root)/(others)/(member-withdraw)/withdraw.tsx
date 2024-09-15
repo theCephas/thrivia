@@ -42,7 +42,6 @@ const Withdraw = () => {
     amount: "",
     purpose: "",
   });
-  console.log(walletUuid);
 
   useEffect(() => {
     const fetchBanks = async () => {
@@ -52,7 +51,7 @@ const Withdraw = () => {
           name: bank.name,
           code: bank.code,
         }));
-        console.log(bankList);
+
         setBanks(bankList);
       } catch (error) {
         setError("Failed to load banks");
@@ -158,7 +157,6 @@ const Withdraw = () => {
   };
 
   const { uuid } = useLocalSearchParams();
-  console.log(uuid);
 
   const confirmWithdrawal = async () => {
     try {
@@ -180,7 +178,7 @@ const Withdraw = () => {
         purpose: form.purpose,
         bankCode: form.bankCode,
       });
-      console.log(form.bankCode);
+
       setShowPasswordModal(false);
       setShowSuccessModal(true);
     } catch (error) {
@@ -205,10 +203,10 @@ const Withdraw = () => {
         className="flex flex-row justify-center mt-12 mb-10 py-6 w-full items-center bg-[#0D1015]"
       >
         <ArrowBack />
-        <Text className="text-white ml-3 text-2xl font-bold">Withdraw</Text>
+        <Text className="text-white ml-3 text-2xl  ">Withdraw</Text>
       </TouchableOpacity>
       <View className="mb-10">
-        <Text className="text-white text-center text-[18px]">
+        <Text className="text-white text-center text-[15px]">
           Withdraw funds out of your wallet
         </Text>
       </View>
@@ -271,7 +269,7 @@ const Withdraw = () => {
         UI={
           <View className="mt-6 flex flex-row ">
             <TextInput
-              className="rounded-full text-[15px] text-black flex-1 focus:outline-none border border-gray-600 pl-4 h-11"
+              className="rounded-full text-[15px] font-Onest text-black flex-1 focus:outline-none border border-gray-600 pl-4 h-11"
               placeholder="Password"
               secureTextEntry={true}
               value={password}

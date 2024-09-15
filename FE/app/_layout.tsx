@@ -7,24 +7,20 @@ import "react-native-reanimated";
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  const [fontsLoaded] = useFonts({
+  const [loaded] = useFonts({
     Onest: require("../assets/fonts/Onest-Regular.ttf"),
     "Onest-Bold": require("../assets/fonts/Onest-Bold.ttf"),
     "Onest-Medium": require("../assets/fonts/Onest-Medium.ttf"),
     "Onest-SemiBold": require("../assets/fonts/Onest-SemiBold.ttf"),
   });
 
-  const onLayoutRootView = useCallback(async () => {
-    if (fontsLoaded) {
-      await SplashScreen.hideAsync();
-    }
-  }, [fontsLoaded]);
-
   useEffect(() => {
-    onLayoutRootView();
-  }, [fontsLoaded]);
+    if (loaded) {
+      SplashScreen.hideAsync();
+    }
+  }, [loaded]);
 
-  if (!fontsLoaded) {
+  if (!loaded) {
     return null;
   }
 

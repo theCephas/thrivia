@@ -104,11 +104,8 @@ const SignIn = () => {
           <Thrivia />
         </View>
         <View>
-          <Text className="text-3xl font-bold text-center text-white">
-            Welcome back!
-          </Text>
-          <Text className="text-xl pt-2 text-center text-white ">
-            Let's thrive together
+          <Text className="text-[16px] font-Onest pt-2 text-center text-white ">
+            Welcome back! Let's thrive together!
           </Text>
         </View>
       </View>
@@ -138,10 +135,10 @@ const SignIn = () => {
           <View className="flex items-center justify-center mb-8">
             <Link
               href={"/(auth)/(member)/sign-up"}
-              className="text-white text-[16px] font-bold"
+              className="text-white text-[14px] font-Onest   "
             >
-              Don't have an account?{" "}
-              <Text className="text-primary">Create one</Text>
+              <Text className="font-Onest">Don't have an account? </Text>
+              <Text className="text-primary font-Onest">Create one</Text>
             </Link>
           </View>
         </View>

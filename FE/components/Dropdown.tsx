@@ -69,12 +69,13 @@ const Dropdown = ({
     }),
     fontSize: animatedIsFocused.interpolate({
       inputRange: [0, 1],
-      outputRange: [18, 14],
+      outputRange: [14, 14],
     }),
     color: animatedIsFocused.interpolate({
       inputRange: [0, 1],
       outputRange: ["#aaa", "#aaa"],
     }),
+    fontFamily: "Onest",
   };
 
   return (
@@ -100,7 +101,7 @@ const Dropdown = ({
               )}
               <Text
                 style={styles.input}
-                className={`rounded-full text-[15px] text-white flex-1 ${labelStyle}`}
+                className={`rounded-full text-[15px] font-Onest text-white flex-1 ${labelStyle}`}
               >
                 {value || ""}
               </Text>
@@ -120,7 +121,7 @@ const Dropdown = ({
         className="relative"
       >
         <View className="bg-white p-5 h-[600px] w-full bottom-[-20px] absolute overflow-scroll rounded-lg items-center">
-          <Text className="text-lg font-bold mb-3">{placeholder}</Text>
+          <Text className="text-lg font-Onest   mb-3">{placeholder}</Text>
           <ScrollView contentContainerStyle={{ paddingBottom: 50 }}>
             {options.map((item, index) => (
               <TouchableOpacity
@@ -128,7 +129,9 @@ const Dropdown = ({
                 key={index}
                 onPress={() => handleSelect(item)}
               >
-                <Text className="text-base text-black">{item}</Text>
+                <Text className="text-[14px] font-Onest text-black">
+                  {item}
+                </Text>
               </TouchableOpacity>
             ))}
           </ScrollView>
@@ -144,7 +147,8 @@ const styles = StyleSheet.create({
     paddingRight: 16,
     paddingTop: 20,
     paddingBottom: 0,
-    fontSize: 16,
+    fontSize: 14,
+    fontFamily: "Onest",
   },
   placeholder: {
     position: "absolute",

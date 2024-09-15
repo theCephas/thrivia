@@ -47,11 +47,6 @@ const CustomSideModal: React.FC<CustomSideModalProps> = ({
   };
 
   const handleCooperativeSelect = (coop: any) => {
-    console.log(
-      "this is coop mehn",
-      coop.cooperative.name,
-      coop.cooperative.uuid
-    );
     try {
       // Set the active cooperative on the server
       axiosInstance.post("/users/set-active-cooperative", {
@@ -94,7 +89,7 @@ const CustomSideModal: React.FC<CustomSideModalProps> = ({
       <View className="bg-[#1D2128] h-screen absolute -bottom-[20px] -left-[20px] right-16 flex flex-col items-start">
         <ScrollView contentContainerStyle={{ paddingBottom: 300 }}>
           <View className="w-full">
-            <Text className="text-white font-bold text-xl py-4 border-b px-5 border-[#DADADA] w-[350px]">
+            <Text className="text-white   text-[16px] font-Onest py-4 border-b px-5 border-[#DADADA] w-[350px]">
               {title}
             </Text>
 
@@ -106,7 +101,9 @@ const CustomSideModal: React.FC<CustomSideModalProps> = ({
             {/* Error Display */}
             <View className="mt-4 w-full px-5">
               {error && (
-                <Text className="text-red-500 text-lg py-4">{error}</Text>
+                <Text className="text-red-500 text-lg font-Onest py-4">
+                  {error}
+                </Text>
               )}
             </View>
 
@@ -127,10 +124,10 @@ const CustomSideModal: React.FC<CustomSideModalProps> = ({
                         <View className="flex flex-row items-center gap-2 py-2 px-5">
                           <Homeprofile />
                           <View className="flex flex-col">
-                            <Text className="text-white text-lg font-bold">
+                            <Text className="text-white text-[16px] font-Onest  ">
                               {coop.cooperative.name}
                             </Text>
-                            <Text className="text-[#DADADA]">
+                            <Text className="text-[#DADADA] font-Onest text-[10px]">
                               {coop.cooperative.slug}
                             </Text>
                           </View>
@@ -139,8 +136,8 @@ const CustomSideModal: React.FC<CustomSideModalProps> = ({
                     ))}
                   </>
                 ) : (
-                  <View>
-                    <Text className="text-white text-lg font-bold">
+                  <View className="px-5">
+                    <Text className="text-white text-lg font-Onest  ">
                       No cooperatives yet
                     </Text>
                   </View>
@@ -157,7 +154,7 @@ const CustomSideModal: React.FC<CustomSideModalProps> = ({
             className="flex gap-x-4 flex-row"
           >
             <Plus width={16} height={16} />
-            <Text className="text-white text-[16px] whitespace-nowrap">
+            <Text className="text-white text-[14px] font-Onest  whitespace-nowrap">
               Join a cooperative
             </Text>
           </TouchableOpacity>
@@ -168,7 +165,7 @@ const CustomSideModal: React.FC<CustomSideModalProps> = ({
             className="flex gap-x-4 flex-row"
           >
             <Plus width={16} height={16} />
-            <Text className="text-white text-[16px] whitespace-nowrap">
+            <Text className="text-white text-[14px] font-Onest  whitespace-nowrap">
               Register a cooperative
             </Text>
           </TouchableOpacity>
@@ -177,7 +174,7 @@ const CustomSideModal: React.FC<CustomSideModalProps> = ({
             className="flex gap-x-4 flex-row items-center"
           >
             <LogOut />
-            <Text className="text-white text-[16px] whitespace-nowrap">
+            <Text className="text-white text-[14px] font-Onest  whitespace-nowrap">
               Log Out
             </Text>
           </TouchableOpacity>

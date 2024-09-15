@@ -66,8 +66,7 @@ const SignUp = () => {
     if (!validatePassword(form.createPassword)) {
       Toast.show({
         type: "error",
-        text1:
-          "Password must be at least 8 characters long and contain at least one number.",
+        text1: "Number(s) and at least 8 characters for password",
       });
       return false;
     }
@@ -108,7 +107,6 @@ const SignUp = () => {
         type: "error",
         text1: `${err}`,
       });
-      // console.log(err);
     } finally {
       setLoading(false);
     }
@@ -121,10 +119,7 @@ const SignUp = () => {
             <Thrivia />
           </View>
           <View>
-            <Text className="text-3xl font-bold text-center text-white">
-              Create Your Account
-            </Text>
-            <Text className="text-xl pt-2 text-center text-white ">
+            <Text className="text-[16px] font-Onest pt-2 text-center text-white ">
               To get started with us, create a free account
             </Text>
           </View>
@@ -185,10 +180,10 @@ const SignUp = () => {
             <View className="flex items-center justify-center mb-8">
               <Link
                 href={"/(auth)/(member)/sign-in"}
-                className="text-white text-[16px] font-bold"
+                className="text-white text-[14px] font-Onest   "
               >
-                Already have an account?{" "}
-                <Text className="text-primary">Log in</Text>
+                <Text className="font-Onest">Already have an account? </Text>
+                <Text className="text-primary font-Onest">Log in</Text>
               </Link>
             </View>
           </View>

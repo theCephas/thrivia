@@ -112,10 +112,10 @@ const Community = () => {
                 />
               </View>
               <View>
-                <Text className="text-white text-[14px] font-semibold">
+                <Text className="text-white text-[14px] font-Onest font-semibold">
                   {item.user.firstName} {item.user.lastName}
                 </Text>
-                <Text className="text-white pt-2 text-[12px]">
+                <Text className="text-white pt-2 text-[12px] font-Onest ">
                   {item.user.email}
                 </Text>
               </View>
@@ -130,10 +130,10 @@ const Community = () => {
                 />
               </View>
               <View>
-                <Text className="text-white text-[14px] font-semibold">
+                <Text className="text-white text-[14px] font-Onest font-semibold">
                   {item.user.firstName} {item.user.lastName} membership request
                 </Text>
-                <Text className="text-white pt-2 text-[12px]">
+                <Text className="text-white pt-2 text-[12px] font-Onest ">
                   {item.status}
                 </Text>
               </View>
@@ -162,14 +162,14 @@ const Community = () => {
                 "";
               }
             }}
-            className="text-white text-[15px] z-50 font-bold w-full"
+            className="text-white text-[15px] font-Onest z-50   w-full"
           >
             View Details
           </Text>
-          <Text className="text-white text-[15px] z-50 py-4 font-bold w-full">
+          <Text className="text-white text-[15px] font-Onest z-50 py-4   w-full">
             Block Member
           </Text>
-          <Text className="text-white text-[15px] z-50 font-bold w-full">
+          <Text className="text-white text-[15px] font-Onest z-50   w-full">
             Delete
           </Text>
         </LinearGradient>
@@ -190,7 +190,7 @@ const Community = () => {
             onPress={() => setActiveNav(text.toLowerCase())}
             key={i}
           >
-            <Text className="text-xl text-white">{text}</Text>
+            <Text className="text-[16px] font-Onest text-white">{text}</Text>
           </TouchableOpacity>
         ))}
       </View>

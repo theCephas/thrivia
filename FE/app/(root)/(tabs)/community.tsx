@@ -29,7 +29,7 @@ const Community = () => {
   return (
     <View className="h-full bg-[#1d2128]">
       <View className="mt-12 py-6 px-4 fixed w-full bg-[#0D1015]">
-        <Text className="text-white text-center text-2xl font-bold">
+        <Text className="text-white text-center text-2xl font-OnestBold ">
           Members
         </Text>
       </View>
@@ -50,7 +50,7 @@ const Community = () => {
 
       <ScrollView contentContainerStyle={{ paddingBottom: 75 }}>
         <View className="p-4">
-          <Text className="text-white text-center text-[30px] font-bold">
+          <Text className="text-white text-center font-Onest text-[30px]  ">
             Coming soon
           </Text>
         </View>
