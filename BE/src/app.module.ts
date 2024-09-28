@@ -15,6 +15,7 @@ import { CacheModule } from '@nestjs/cache-manager';
 import { WalletsModule } from './modules/wallets/wallets.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import CronModule from './modules/cron/cron.module';
+import { LoansModule } from './modules/loans/loans.module';
 
 @Module({
   imports: [
@@ -31,7 +32,8 @@ import CronModule from './modules/cron/cron.module';
     AuthModule,
     CooperativesModule,
     WalletsModule,
-    CronModule
+    CronModule,
+    LoansModule
   ],
   controllers: [AppController],
   providers: [

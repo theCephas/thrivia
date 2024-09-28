@@ -4,12 +4,14 @@ import { Transactions, Wallets } from "../wallets/wallets.entity";
 import { EntityManager, EntityRepository } from "@mikro-orm/core";
 import { Cron } from "@nestjs/schedule";
 import moment from "moment-timezone";
+import { UsersService } from "../users/users.service";
 
 @Injectable()
 export class CronTasksService {
   constructor(
     @InjectRepository(Transactions) private readonly transactionRepository: EntityRepository<Transactions>,
     @InjectRepository(Wallets) private readonly walletRepository: EntityRepository<Wallets>,
+    private readonly usersService: UsersService,
     private readonly em: EntityManager
   ) { }
   
@@ -48,5 +50,10 @@ export class CronTasksService {
       }
       await em.flush();
     });
+  }
+
+  @Cron('*/15 * * * *', { timeZone: 'Africa/Lagos' })
+  async wakeDBUp() {
+    await this.usersService.findByEmailOrPhone('');
   }
 }

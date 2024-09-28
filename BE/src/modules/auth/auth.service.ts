@@ -108,7 +108,7 @@ export class AuthService {
     delete payload.exp;
     return {
       accessToken: this.jwtService.sign(payload),
-      expiresIn: 3.6e6,
+      expiresIn: 1.2e6,
     };
   }
 

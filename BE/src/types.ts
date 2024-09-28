@@ -51,6 +51,15 @@ export enum ApplicationStatus {
   REJECTED = 'REJECTED',
 }
 
+export enum LoanStatus {
+  PENDING = 'PENDING',
+  ACTIVE = 'ACTIVE',
+  REJECTED = 'REJECTED',
+  CANCELLED = 'CANCELLED',
+  CLOSED = 'CLOSED',
+  OVERDUE = 'OVERDUE'
+}
+
 export enum PaymentType {
   INCOMING = 'incoming',
   OUTGOING = 'outgoing',

@@ -15,7 +15,6 @@ import {
 } from './users.dto';
 import { UsersService } from './users.service';
 import { JwtAuthGuard } from 'src/guards/jwt-auth-guard';
-import { Role } from 'src/types';
 import { Request } from 'express';
 import { DepositMoneyDto } from '../cooperatives/cooperatives.dto';
 
