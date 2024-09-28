@@ -10,7 +10,6 @@ const useFetchWallets = (roles: string) => {
   const { cooperativeUUID, setWalletUuid } = useAuthStore();
 
   const fetchWallets = useCallback(async () => {
-    console.log("from wallets", cooperativeUUID);
     setLoading(true);
     setError(null);
     try {
@@ -36,7 +35,6 @@ const useFetchWallets = (roles: string) => {
   }, [cooperativeUUID, roles, axiosInstance, setWalletUuid]);
 
   useEffect(() => {
-    console.log("from useEffect", cooperativeUUID);
     if (cooperativeUUID) {
       fetchWallets();
     }

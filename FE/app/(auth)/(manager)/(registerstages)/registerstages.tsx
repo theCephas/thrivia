@@ -63,7 +63,6 @@ const RegisterStages = () => {
   const onSubmit = async () => {
     setLoading(true);
     try {
-      console.log("Token being sent in headers:", token);
       const res = await axiosInstance.post(
         "/cooperatives",
         {
@@ -87,7 +86,6 @@ const RegisterStages = () => {
       );
 
       const data = res.data;
-      console.log("Response data", data);
 
       Toast.show({
         type: "success",
@@ -149,7 +147,7 @@ const RegisterStages = () => {
           <CircleProgress stage={currentStage} totalStages={2} />
         </View>
         <View>
-          <Text className="text-xl w-[298px] font-[500] m-auto text-center text-white">
+          <Text className="text-[16px] font-Onest w-[298px] font-[500] m-auto text-center text-white">
             To proceed, register your cooperative business
           </Text>
         </View>
@@ -173,7 +171,9 @@ const RegisterStages = () => {
               onPress={prevStage}
               className={`w-full p-3 mb-5 rounded-full flex flex-row justify-center items-center h-[44px] border border-white`}
             >
-              <Text className="text-white">Previous</Text>
+              <Text className="text-white font-Onest text-[14px]">
+                Previous
+              </Text>
             </TouchableOpacity>
           )}
           {currentStage < 2 && (
@@ -181,7 +181,7 @@ const RegisterStages = () => {
               onPress={() => router.push("/(root)/(tabs)/home")}
               className={`w-full p-3 mb-5 rounded-full flex flex-row justify-center items-center h-[44px] border border-white`}
             >
-              <Text className="text-white">Go home</Text>
+              <Text className="text-white font-Onest">Go home</Text>
             </TouchableOpacity>
           )}
         </View>

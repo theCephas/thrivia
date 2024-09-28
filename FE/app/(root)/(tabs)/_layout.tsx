@@ -25,13 +25,13 @@ const TabIcon = ({
   >
     <View
       className={`w-12 h-12 items-center justify-center ${
-        focused ? "border-b-primary border-b-2 w-[45px] font-bold" : ""
+        focused ? "border-b-primary border-b-2 w-[45px]  " : ""
       }`}
     >
       <Icon width={24} height={24} stroke={focused ? "white" : "#939090"} />
       <Text
-        className={`text-xs mt-1 ${
-          focused ? "text-white font-bold" : "text-[#aaa]"
+        className={`text-[10px] font-Onest mt-1 ${
+          focused ? "text-white  " : "text-[#aaa]"
         }`}
       >
         {label}
@@ -43,20 +43,6 @@ const TabIcon = ({
 export default function Layout() {
   const { user, logout, isTokenExpired } = useAuthStore();
   const router = useRouter();
-
-  // useEffect(() => {
-  //   // Check if user is null or undefined and if token is expired
-  //   if (!user) {
-  //     router.replace("/(auth)/(member)/sign-in");
-  //   } else if (isTokenExpired()) {
-  //     logout();
-  //     router.replace("/(auth)/(member)/sign-in");
-  //   } else if (user.activeCooperative === null) {
-  //     router.push("/(root)/(tabs)/home");
-  //   } else {
-  //     router.push("/(root)/(tabs)/home");
-  //   }
-  // }, [user, isTokenExpired, logout, router]);
 
   return user?.activeCooperative ? (
     <Tabs

@@ -38,11 +38,8 @@ const MembershipRequestDetails = () => {
       );
       const data = await res.data;
 
-      // console.log(data);
       setDetails(data);
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   }, []);
 
   useEffect(() => {
@@ -66,7 +63,6 @@ const MembershipRequestDetails = () => {
       await getDetails();
       setIsLoanApprovedModalVisible(true);
     } catch (error) {
-      console.log(error);
       Toast.show({
         type: "error",
         text1: `${error}`,
@@ -92,9 +88,7 @@ const MembershipRequestDetails = () => {
       const data = await res.data;
       await getDetails();
       closeModal();
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   const onSubmit = () => {
@@ -123,13 +117,13 @@ const MembershipRequestDetails = () => {
         className="mt-14 py-6 px-4 fixed w-full bg-[#0D1015]"
       >
         <ArrowBack />
-        <Text className="text-white text-center mt-[-21px] text-2xl font-bold">
+        <Text className="text-white text-center mt-[-21px] text-2xl  ">
           Membership requests
         </Text>
       </TouchableOpacity>
 
       <View className="flex-row items-center justify-between border-b border-[#939090] pt-6 pb-1 mx-4 ">
-        <Text className="text-white text-[18px] font-[500] ">
+        <Text className="text-white text-[15px] font-Onest font-[500] ">
           {details.fullName} application request
         </Text>
         <LinearGradient
@@ -155,7 +149,7 @@ const MembershipRequestDetails = () => {
         className="h-full "
       >
         <View className="mx-4 pt-4">
-          <Text className="text-white text-[18px] font-[500] mb-8">
+          <Text className="text-white text-[15px] font-Onest font-[500] mb-8">
             Personal details
           </Text>
           <LinearGradient
@@ -262,7 +256,7 @@ const MembershipRequestDetails = () => {
         UI={
           <View className="mt-6 flex flex-row ">
             <TextInput
-              className={`rounded-full text-[15px] text-black flex-1 focus:outline-none border border-gray-600 pl-4 h-11`}
+              className={`rounded-full text-[15px] font-Onest text-black flex-1 focus:outline-none border border-gray-600 pl-4 h-11`}
               placeholder="Reason for rejection"
               value={reason}
               onChangeText={(val) => setReason(val)}

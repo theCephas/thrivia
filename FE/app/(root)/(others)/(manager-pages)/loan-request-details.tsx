@@ -44,13 +44,13 @@ const LoanRequestDetails = () => {
         className="mt-14 py-6 px-4 fixed w-full bg-[#0D1015]"
       >
         <ArrowBack />
-        <Text className="text-white text-center mt-[-21px] text-2xl font-bold">
+        <Text className="text-white text-center mt-[-21px] text-2xl  ">
           Loan requests
         </Text>
       </TouchableOpacity>
 
       <View className="flex-row items-center justify-between border-b border-[#939090] pt-6 pb-1 mx-4 ">
-        <Text className="text-white text-[18px] font-[500] ">
+        <Text className="text-white text-[15px] font-Onest font-[500] ">
           Cephas Iseoluwa loan request
         </Text>
         <LinearGradient
@@ -68,7 +68,7 @@ const LoanRequestDetails = () => {
         className="h-full "
       >
         <View className="mx-4 pt-4">
-          <Text className="text-white text-[18px] font-[500] mb-8">
+          <Text className="text-white text-[15px] font-Onest font-[500] mb-8">
             Personal details
           </Text>
           <LinearGradient
@@ -146,7 +146,7 @@ const LoanRequestDetails = () => {
         </View>
 
         <View className="mx-4 pt-4">
-          <Text className="text-white text-[18px] font-[500] mb-8">
+          <Text className="text-white text-[15px] font-Onest font-[500] mb-8">
             Loan details
           </Text>
           <LinearGradient
@@ -196,7 +196,7 @@ const LoanRequestDetails = () => {
         </View>
 
         <View className="mx-4 pt-4">
-          <Text className="text-white text-[18px] font-[500] mb-8">
+          <Text className="text-white text-[15px] font-Onest font-[500] mb-8">
             Financial information
           </Text>
           <LinearGradient

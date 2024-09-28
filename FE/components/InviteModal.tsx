@@ -15,7 +15,6 @@ interface InviteModalProps {
 const InviteModal: React.FC<InviteModalProps> = ({ isVisible, onClose }) => {
   const [isConfirmVisible, setIsConfirmVisible] = useState(false);
   const { copUniqueId } = useAuthStore();
-  console.log(copUniqueId);
   const [
     selectedFile,
     setSelectedFile,
@@ -26,21 +25,13 @@ const InviteModal: React.FC<InviteModalProps> = ({ isVisible, onClose }) => {
       // type: "text/csv",
       copyToCacheDirectory: true,
     });
-
-    // if (result.assets?.values.name === "success") {
-
-    // } else {
-    //   // Handle cancellation or error
-    //   setIsConfirmVisible(false);
-    //   setSelectedFile(null);
-    // }
     setSelectedFile(result);
     setIsConfirmVisible(true);
   };
 
   const handleConfirmUpload = () => {
     // Handle the confirmed upload here
-    // console.log("File uploaded:", selectedFile);
+
     setIsConfirmVisible(false);
     onClose();
   };
@@ -71,14 +62,14 @@ const InviteModal: React.FC<InviteModalProps> = ({ isVisible, onClose }) => {
       >
         <View className="bg-white h-[200px] flex items-center rounded-t-[30px] w-full absolute bottom-[-20px]">
           <View className="w-[50px] h-[5px] rounded-full bg-primary mt-[2px]" />
-          <Text className="text-primary font-bold text-[20px] text-center my-[20px]">
+          <Text className="text-primary   text-[14px] font-Onest text-center my-[20px]">
             Add Members
           </Text>
           <TouchableOpacity
-            className="w-full flex-1 flex-row px-6 justify-between"
+            className="w-full flex-1 flex-row px-6 justify-between hidden"
             onPress={pickDocument}
           >
-            <View>
+            <View className="">
               <Text className="text-xl">CSV File Upload</Text>
               <Text className="text-[#939090] text-[17px]">
                 Upload membership CSV file
@@ -91,11 +82,11 @@ const InviteModal: React.FC<InviteModalProps> = ({ isVisible, onClose }) => {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={handleCopyId}
-            className="w-full flex-1 flex-row px-6 justify-between"
+            className="w-full flex-1 flex-row px-6 mt-4 justify-between"
           >
             <View className="w-[240px]">
-              <Text className="text-xl">Copy Unique ID</Text>
-              <Text className="text-[#939090] text-[17px]">
+              <Text className="text-xl font-OnestSemiBold">Copy Unique ID</Text>
+              <Text className="text-[#939090] font-Onest text-[12px]">
                 Copy unique id, share, and add members.
               </Text>
             </View>
@@ -115,13 +106,13 @@ const InviteModal: React.FC<InviteModalProps> = ({ isVisible, onClose }) => {
         animationOut="slideOutDown"
       >
         <View className="bg-white h-[200px] flex items-center rounded-[8px] w-full ">
-          <Text className="text-primary font-bold text-[20px] text-center my-[20px]">
+          <Text className="text-primary   text-[20px] text-center my-[20px]">
             Upload document?
           </Text>
           <View>
             <Text>{selectedFile?.output?.item.length}</Text>
           </View>
-          <Text className="text-center text-lg w-[300px] my-[20px]">
+          <Text className="text-center text-lg font-Onest w-[300px] my-[20px]">
             Are you sure you want to upload this list of members?
           </Text>
 

@@ -10,7 +10,7 @@ const ViewApplication = () => {
         className="h-full "
       >
         <View className="mx-4 pt-4">
-          <Text className="text-white text-[18px] font-[500] mb-8">
+          <Text className="text-white text-[15px] font-Onest font-[500] mb-8">
             Personal details
           </Text>
           <LinearGradient
@@ -88,7 +88,7 @@ const ViewApplication = () => {
         </View>
 
         <View className="mx-4 pt-4">
-          <Text className="text-white text-[18px] font-[500] mb-8">
+          <Text className="text-white text-[15px] font-Onest font-[500] mb-8">
             Loan details
           </Text>
           <LinearGradient
@@ -138,7 +138,7 @@ const ViewApplication = () => {
         </View>
 
         <View className="mx-4 pt-4">
-          <Text className="text-white text-[18px] font-[500] mb-8">
+          <Text className="text-white text-[15px] font-Onest font-[500] mb-8">
             Financial information
           </Text>
           <LinearGradient

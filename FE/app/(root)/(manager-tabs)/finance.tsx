@@ -139,7 +139,7 @@ const Finance = () => {
   return (
     <SafeAreaView className="flex-1 flex items-center flex-col bg-[#1d2128]">
       <View className="flex-row flex justify-between items-center p-4">
-        <Text className="text-white font-semibold mt-5 text-center text-[18px]">
+        <Text className="text-white font-OnestSemiBold mt-5 text-center text-[15px]">
           Withdrawal Requests
         </Text>
       </View>
@@ -157,34 +157,36 @@ const Finance = () => {
           </View>
         ) : withdrawalRequests.length === 0 ? (
           <View className="w-full flex items-center mt-10">
-            <Text className="text-white text-lg">
+            <Text className="text-white text-lg font-Onest">
               No withdrawal requests yet
             </Text>
           </View>
         ) : (
-          <View className="border-b border-gray-400">
+          <View className="">
             {withdrawalRequests.map((request, index) => (
               <View key={index} className="bg-[#2d3038] p-4 mb-4 rounded-lg">
-                <Text className="text-white font-bold text-lg">
+                <Text className="text-white font-OnestSemiBold text-[16px]">
                   {request.accountName} | <Text>{request.bankName}</Text>
                 </Text>
-                <Text className="text-white/90 mt-2">
+                <Text className="text-white/90 mt-2 font-Onest text-[14px]">
                   Member Name: {request.wallet.cooperative.createdBy.firstName}{" "}
                   {request.wallet.cooperative.createdBy.lastName}
                 </Text>
-                <Text className="text-white/90 mt-2">
-                  Amount: <Text className="font-bold">₦{request.amount}</Text>
+                <Text className="text-white/90 mt-2 font-Onest text-[14px]">
+                  Amount:{" "}
+                  <Text className="font-OnestSemiBold">₦{request.amount}</Text>
                 </Text>
-                <Text className={`text-white/90 mt-1`}>
+                <Text className={`text-white/90 mt-1 font-Onest text-[14px]`}>
                   Status:{" "}
                   <Text
-                    className={
+                    className={`${
                       request.status === "PENDING"
                         ? "text-amber-400"
                         : request.status === "APPROVED"
                         ? "text-green-400"
                         : "text-red-400"
-                    }
+                    } font-OnestSemiBold
+                    `}
                   >
                     {request.status}
                   </Text>
@@ -196,7 +198,7 @@ const Finance = () => {
                         className="bg-green-600 w-[80px] h-[30px] flex items-center justify-center rounded-[6px]"
                         onPress={() => approveRequest(request.uuid)}
                       >
-                        <Text className="text-white font-semibold">
+                        <Text className="text-white font-OnestSemiBold text-[12px]">
                           Approve
                         </Text>
                       </TouchableOpacity>
@@ -205,7 +207,9 @@ const Finance = () => {
                         className="bg-red-600 w-[80px] h-[30px] flex items-center justify-center rounded-[6px]"
                         onPress={() => openRejectionModal(request.uuid)}
                       >
-                        <Text className="text-white font-semibold">Reject</Text>
+                        <Text className="text-white font-OnestSemiBold text-[12px]">
+                          Reject
+                        </Text>
                       </TouchableOpacity>
                     </>
                   )}
@@ -218,7 +222,7 @@ const Finance = () => {
                       )
                     }
                   >
-                    <Text className="text-white font-semibold">
+                    <Text className="text-white font-OnestSemiBold text-[12px]">
                       View Details
                     </Text>
                   </TouchableOpacity>
@@ -240,7 +244,7 @@ const Finance = () => {
         UI={
           <View className="mt-6 flex flex-row ">
             <TextInput
-              className="rounded-full text-[15px] text-black flex-1 focus:outline-none border border-gray-600 pl-4 h-11"
+              className="rounded-full text-[15px] font-Onest text-black flex-1 focus:outline-none border border-gray-600 pl-4 h-11"
               placeholder="Reason for rejection"
               value={rejectionReason}
               onChangeText={(val) => setRejectionReason(val)}

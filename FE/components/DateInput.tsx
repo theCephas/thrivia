@@ -32,7 +32,7 @@ export default function DateInput({ onChangeDate }: Props) {
       </Text>
       <TextInput
         style={styles.input}
-        className={`rounded-full text-[15px] text-white flex-1 ${
+        className={`rounded-full text-[15px] font-Onest text-white flex-1 ${
           !date ? "ml-3" : "ml-0"
         }`}
         value={date ? date.toDateString() : ""}

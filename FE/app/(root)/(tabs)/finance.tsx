@@ -104,7 +104,7 @@ const Finance = () => {
       {role === "MEMBER" ? (
         <SafeAreaView className="flex-1 flex items-center flex-col bg-[#1d2128]">
           <View className="flex-row flex justify-between items-center p-4">
-            <Text className="text-white font-semibold mt-5 text-center text-[18px]">
+            <Text className="text-white font-OnestSemiBold mt-5 text-center text-[15px]">
               Withdrawal Requests
             </Text>
           </View>
@@ -121,7 +121,7 @@ const Finance = () => {
               </View>
             ) : membersWithdrawalRequests.length === 0 ? (
               <View className="w-full flex items-center mt-10">
-                <Text className="text-white text-lg">
+                <Text className="text-white text-lg font-Onest">
                   No withdrawal requests yet
                 </Text>
               </View>
@@ -132,28 +132,30 @@ const Finance = () => {
                     key={index}
                     className="bg-[#2d3038] p-4 mb-4 rounded-lg"
                   >
-                    <Text className="text-white font-bold text-lg">
+                    <Text className="text-white font-OnestSemiBold text-[16px]">
                       {request.accountName} | <Text>{request.bankName}</Text>
                     </Text>
-                    <Text className="text-white/90 mt-2">
+                    <Text className="text-white/90 mt-2 font-Onest text-[14px]">
                       Member Name:{" "}
                       {request.wallet.cooperative.createdBy.firstName}{" "}
                       {request.wallet.cooperative.createdBy.lastName}
                     </Text>
-                    <Text className="text-white/90 mt-2">
-                      Amount:{" "}
-                      <Text className="font-bold">₦{request.amount}</Text>
+                    <Text className="text-white/90 mt-2 font-Onest text-[14px]">
+                      Amount: <Text className=" ">₦{request.amount}</Text>
                     </Text>
-                    <Text className={`text-white/90 mt-1`}>
+                    <Text
+                      className={`text-white/90 mt-1 font-Onest text-[14px]`}
+                    >
                       Status:{" "}
                       <Text
-                        className={
+                        className={`${
                           request.status === "PENDING"
                             ? "text-amber-400"
                             : request.status === "APPROVED"
                             ? "text-green-400"
                             : "text-red-400"
-                        }
+                        } font-OnestSemiBold
+                    `}
                       >
                         {request.status}
                       </Text>
@@ -167,7 +169,7 @@ const Finance = () => {
       ) : (
         <SafeAreaView className="flex-1 flex items-center flex-col bg-[#1d2128]">
           <View className="flex-row flex justify-between items-center p-4">
-            <Text className="text-white font-semibold mt-5 text-center text-[18px]">
+            <Text className="text-white font-OnestSemiBold mt-5 text-center text-[15px]">
               Withdrawal Requests
             </Text>
           </View>
@@ -184,7 +186,7 @@ const Finance = () => {
               </View>
             ) : withdrawalRequests.length === 0 ? (
               <View className="w-full flex items-center mt-10">
-                <Text className="text-white text-lg">
+                <Text className="text-white text-lg font-Onest">
                   No withdrawal requests yet
                 </Text>
               </View>
@@ -195,28 +197,30 @@ const Finance = () => {
                     key={index}
                     className="bg-[#2d3038] p-4 mb-4 rounded-lg"
                   >
-                    <Text className="text-white font-bold text-lg">
+                    <Text className="text-white font-OnestSemiBold text-[16px]">
                       {request.accountName} | <Text>{request.bankName}</Text>
                     </Text>
-                    <Text className="text-white/90 mt-2">
+                    <Text className="text-white/90 mt-2 font-Onest text-[14px]">
                       Member Name:{" "}
                       {request.wallet.cooperative.createdBy.firstName}{" "}
                       {request.wallet.cooperative.createdBy.lastName}
                     </Text>
-                    <Text className="text-white/90 mt-2">
-                      Amount:{" "}
-                      <Text className="font-bold">₦{request.amount}</Text>
+                    <Text className="text-white/90 mt-2 font-Onest text-[14px]">
+                      Amount: <Text className=" ">₦{request.amount}</Text>
                     </Text>
-                    <Text className={`text-white/90 mt-1`}>
+                    <Text
+                      className={`text-white/90 mt-1 font-Onest text-[14px]`}
+                    >
                       Status:{" "}
                       <Text
-                        className={
+                        className={`${
                           request.status === "PENDING"
                             ? "text-amber-400"
                             : request.status === "APPROVED"
                             ? "text-green-400"
                             : "text-red-400"
-                        }
+                        } font-OnestSemiBold
+                    `}
                       >
                         {request.status}
                       </Text>

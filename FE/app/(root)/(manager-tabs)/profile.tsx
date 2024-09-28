@@ -9,14 +9,19 @@ import User from "@/assets/svg/User";
 import UserPic from "@/assets/svg/UserPic";
 import useAuthStore from "@/store";
 import { LinearGradient } from "expo-linear-gradient";
+import { router } from "expo-router";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 
 const Profile = () => {
   const { user, logout } = useAuthStore();
+  const handleLogout = async () => {
+    logout();
+    router.replace("/(auth)/(member)/sign-in");
+  };
   return (
     <View className="h-full bg-[#1d2128]">
       <View className="mt-14 py-6 px-4 fixed w-full bg-[#0D1015]">
-        <Text className="text-white text-center text-2xl font-bold">
+        <Text className="text-white text-center text-2xl font-Onest  ">
           Profile
         </Text>
       </View>
@@ -36,22 +41,24 @@ const Profile = () => {
                   <UserPic />
                 </View>
                 <View>
-                  <Text className="text-white text-[16px]">
+                  <Text className="text-white font-Onest text-[16px]">
                     {user.firstName} {user.lastName}
                   </Text>
-                  <Text className="text-white text-[14px] pt-[10px]">
+                  <Text className="text-white text-[14px] font-Onest pt-[10px]">
                     {user.email}
                   </Text>
                 </View>
               </View>
               <View className="w-[81px] h-[20px] flex items-center justify-center bg-[#f4f4f4] rounded-full ">
-                <Text className="text-primary text-[10px]">Active member</Text>
+                <Text className="text-primary text-[10px] font-Onest ">
+                  Active member
+                </Text>
               </View>
             </View>
           </LinearGradient>
         </View>
         <View className="mx-4 pt-4">
-          <Text className="text-white text-[18px] font-[500] mb-8">
+          <Text className="text-white text-[15px] font-Onest font-[500] mb-8">
             Account details
           </Text>
           <LinearGradient
@@ -61,7 +68,7 @@ const Profile = () => {
             <View className="flex flex-row justify-between items-center pb-2 border-b border-[#939090] px-2">
               <View className="flex flex-row items-center">
                 <User />
-                <Text className="text-white text-[14px] ml-4">
+                <Text className="text-white text-[14px] font-Onest ml-4">
                   Personal info
                 </Text>
               </View>
@@ -70,7 +77,7 @@ const Profile = () => {
             <View className="flex flex-row justify-between items-center pb-2 border-b border-[#939090] px-2">
               <View className="flex flex-row items-center">
                 <Membership />
-                <Text className="text-white text-[14px] ml-4">
+                <Text className="text-white text-[14px] font-Onest ml-4">
                   Membership details
                 </Text>
               </View>
@@ -79,7 +86,7 @@ const Profile = () => {
             <View className="flex flex-row justify-between items-center pb-2 border-b border-[#939090] px-2">
               <View className="flex flex-row items-center">
                 <FinanceProfile />
-                <Text className="text-white text-[14px] ml-4">
+                <Text className="text-white text-[14px] font-Onest ml-4">
                   Financial information
                 </Text>
               </View>
@@ -88,7 +95,7 @@ const Profile = () => {
             <View className="flex flex-row justify-between items-center px-2">
               <View className="flex flex-row items-center">
                 <ReferNEarn />
-                <Text className="text-white text-[14px] ml-4">
+                <Text className="text-white text-[14px] font-Onest ml-4">
                   Refer and earn
                 </Text>
               </View>
@@ -98,7 +105,7 @@ const Profile = () => {
         </View>
 
         <View className="mx-4 pt-8">
-          <Text className="text-white text-[18px] font-[500] mb-8">
+          <Text className="text-white text-[15px] font-Onest font-[500] mb-8">
             Help and support
           </Text>
           <LinearGradient
@@ -108,24 +115,30 @@ const Profile = () => {
             <View className="flex flex-row justify-between items-center pb-2 border-b border-[#939090] px-2">
               <View className="flex flex-row items-center">
                 <Help />
-                <Text className="text-white text-[14px] ml-4">Help center</Text>
+                <Text className="text-white text-[14px] font-Onest ml-4">
+                  Help center
+                </Text>
               </View>
               <Arrowright />
             </View>
             <View className="flex flex-row justify-between items-center pb-2 border-b border-[#939090] px-2">
               <View className="flex flex-row items-center">
                 <Faqs />
-                <Text className="text-white text-[14px] ml-4">FAQs</Text>
+                <Text className="text-white text-[14px] font-Onest ml-4">
+                  FAQs
+                </Text>
               </View>
               <Arrowright />
             </View>
             <TouchableOpacity
-              onPress={() => logout()}
+              onPress={handleLogout}
               className="flex flex-row justify-between items-center px-2"
             >
               <View className="flex flex-row items-center">
                 <LogOut />
-                <Text className="text-white text-[14px] ml-4">Log out</Text>
+                <Text className="text-white text-[14px] font-Onest ml-4">
+                  Log out
+                </Text>
               </View>
               <Arrowright />
             </TouchableOpacity>

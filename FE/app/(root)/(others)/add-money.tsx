@@ -33,7 +33,6 @@ const AddMoney = () => {
   const [transactionSuccess, setTransactionSuccess] = useState(false); // New state for success screen
   const [authorizedAmount, setAuthorizedAmount] = useState<number | null>(null); // Store authorized amount
   const axiosInstance = useAxiosInstance();
-  // console.log(token);
 
   const paymentParameters = {
     amount: value,
@@ -41,14 +40,12 @@ const AddMoney = () => {
     reference: `${Date.now()}`,
     customerFullName: `${role === "MANAGER" ? cooperativeName : user.name}`,
     customerEmail: `${role === "MANAGER" ? cooperativeEmail : user.email}`,
-    apiKey: "MK_PROD_GSXRRTTKLT",
-    contractCode: "896041207144",
+    apiKey: process.env.EXPO_PUBLIC_MONNIFY_KEY!,
+    contractCode: process.env.EXPO_PUBLIC_CONTRACT_CODE!,
     paymentDescription: "Payment for savings",
     mode: "LIVE",
   };
-
   const onSuccess = async (response: any) => {
-    // console.log("Payment Successful:", response);
     setLoading(true);
     try {
       const { transactionReference, authorizedAmount } = response;
@@ -59,13 +56,6 @@ const AddMoney = () => {
       } = await axiosInstance.post(
         `/cooperatives/verify-transaction/${transactionReference}`,
         { amount: authorizedAmount }
-      );
-
-      console.log(
-        "WALLET/PAYEMENT uuid: ",
-        data.uuid,
-        transactionReference,
-        walletUuid
       );
 
       if (role === "MEMBER") {
@@ -96,7 +86,6 @@ const AddMoney = () => {
   };
 
   const onError = (response: any) => {
-    // console.log("Payment Failed:", response);
     Alert.alert("Payment Failed", "The payment could not be completed.");
   };
 
@@ -117,11 +106,15 @@ const AddMoney = () => {
       <SafeAreaView className="h-full bg-[#1d2128] w-full flex flex-col justify-center items-center">
         <View className="flex flex-col">
           <View className=" flex flex-row items-center gap-x-4 justify-center">
-            <Text className="text-white text-[20px]">Deposit Successful!</Text>
+            <Text className="text-white text-[20px] font-Onest">
+              Deposit Successful!
+            </Text>
             <Success width={40} height={40} />
           </View>
           <View className="mt-6 flex flex-row items-center justify-center">
-            <Text className="text-white text-base">NGN {authorizedAmount}</Text>
+            <Text className="text-white text-[14px] font-Onest">
+              NGN {authorizedAmount}
+            </Text>
           </View>
           <View className="mt-10">
             <CustomButton
@@ -143,11 +136,16 @@ const AddMoney = () => {
           className="flex flex-row justify-center mt-14 py-6 w-full items-center bg-[#0D1015]"
         >
           <ArrowBack />
-          <Text className="text-white ml-3 text-2xl font-bold">Add money</Text>
+          <Text className="text-white ml-3 text-2xl font-Onest ">
+            Add money
+          </Text>
         </TouchableOpacity>
         <View className="flex flex-col gap-4 items-center px-14 mt-6">
           <Homeprofile />
-          <Text style={{ color: "white", fontSize: 18, textAlign: "center" }}>
+          <Text
+            className="font-OnestSemiBold"
+            style={{ color: "white", fontSize: 18, textAlign: "center" }}
+          >
             {cooperativeName}
           </Text>
         </View>

@@ -38,14 +38,14 @@ const CustomModal: React.FC<CustomModalProps> = ({
       className="relative"
     >
       <View className="bg-white p-5 rounded-t-[30px] w-full absolute bottom-[-20px]">
-        <Text className="text-primary font-bold text-[20px] text-center mb-[20px]">
+        <Text className="text-primary   text-[14px] font-Onest text-center mb-[20px]">
           {title}
         </Text>
         <Text className="leading-[17.85px] text-center w-[300px] text-[#656565] ">
           {message}
         </Text>
         {id && (
-          <Text className="text-center font-bold text-[25px] mt-10 text-[#656565] ">
+          <Text className="text-center   text-[25px] font-Onest  mt-10 text-[#656565] ">
             {id}
           </Text>
         )}

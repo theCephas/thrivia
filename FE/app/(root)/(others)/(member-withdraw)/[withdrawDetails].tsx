@@ -29,11 +29,8 @@ const WithdrawDetails = () => {
       );
       const data = await res.data;
 
-      console.log(data);
       setDetails(data);
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   }, []);
 
   useEffect(() => {
@@ -46,12 +43,12 @@ const WithdrawDetails = () => {
         className="mt-4 py-6 px-4 fixed w-full bg-[#0D1015]"
       >
         <ArrowBack />
-        <Text className="text-white text-center mt-[-21px] text-2xl font-bold">
+        <Text className="text-white text-center mt-[-21px] text-2xl  ">
           Withdrawal request details
         </Text>
       </TouchableOpacity>
       <View className="mx-4 pt-4">
-        <Text className="text-white text-[18px] font-[500] mb-8">
+        <Text className="text-white text-[15px] font-Onest font-[500] mb-8">
           Personal details
         </Text>
         <LinearGradient
