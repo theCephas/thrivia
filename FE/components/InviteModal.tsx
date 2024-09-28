@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import Modal from "react-native-modal";
 import * as DocumentPicker from "expo-document-picker";
-import Arrowright2 from "@/assets/svg/Arrorright2";
-import useAuthStore from "@/store";
+import Arrowright2 from "../assets/svg/Arrorright2";
+import useAuthStore from "../store";
 import * as Clipboard from "expo-clipboard";
 import Toast from "react-native-toast-message";
 

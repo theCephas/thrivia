@@ -6,13 +6,13 @@ import {
   ActivityIndicator,
 } from "react-native";
 import Modal from "react-native-modal";
-import Homeprofile from "@/assets/svg/Homeprofile";
-import Plus from "@/assets/svg/Plus";
+import Homeprofile from "../assets/svg/Homeprofile";
+import Plus from "../assets/svg/Plus";
 import { useRouter } from "expo-router";
-import useAuthStore from "@/store";
-import LogOut from "@/assets/svg/LogOut";
-import useFetchCoop from "@/constants/useFetchCoop";
-import { useAxiosInstance } from "@/constants/axiosInstance";
+import useAuthStore from "../store";
+import LogOut from "../assets/svg/LogOut";
+import useFetchCoop from "../constants/useFetchCoop";
+import { useAxiosInstance } from "../constants/axiosInstance";
 import { useState } from "react";
 
 interface CustomSideModalProps {
@@ -33,7 +33,6 @@ const CustomSideModal: React.FC<CustomSideModalProps> = ({
     SetCoopUniqueId,
     setRole,
     setCooperativeEmail,
-    cooperativeUUID,
     logout,
   } = useAuthStore();
 
@@ -165,7 +164,7 @@ const CustomSideModal: React.FC<CustomSideModalProps> = ({
             className="flex gap-x-4 flex-row"
           >
             <Plus width={16} height={16} />
-            <Text className="text-white text-[14px] font-Onest  whitespace-nowrap">
+            <Text className="text-white text-[14px] font-Onest whitespace-nowrap">
               Register a cooperative
             </Text>
           </TouchableOpacity>

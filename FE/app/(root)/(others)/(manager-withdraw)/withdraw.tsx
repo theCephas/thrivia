@@ -1,18 +1,18 @@
-import ArrowBack from "@/assets/svg/ArrowBack";
-import Homeprofile from "@/assets/svg/Homeprofile";
-import CustomButton from "@/components/CustomButton";
-import FormLoader from "@/components/FormLoader";
-import PaymentInputField from "@/components/PaymentInputField";
-import useAuthStore from "@/store";
+import ArrowBack from "../../../../assets/svg/ArrowBack";
+import Homeprofile from "../../../../assets/svg/Homeprofile";
+import CustomButton from "../../../../components/CustomButton";
+import FormLoader from "../../../../components/FormLoader";
+import PaymentInputField from "../../../../components/PaymentInputField";
+import useAuthStore from "../../../../store";
 import { router, useLocalSearchParams } from "expo-router";
 import React, { useState } from "react";
-import { Alert, Text, Modal, TextInput, ToastAndroid } from "react-native";
+import { Alert, Text, TextInput } from "react-native";
 import { TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as SecureStore from "expo-secure-store";
-import { useAxiosInstance } from "@/constants/axiosInstance";
+import { useAxiosInstance } from "../../../../constants/axiosInstance";
 import Toast from "react-native-toast-message";
-import CustomModal from "@/components/CustomModal";
+import CustomModal from "../../../../components/CustomModal";
 
 const Withdraw = () => {
   const [value, setValue] = useState<number>(50);

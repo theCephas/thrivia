@@ -1,7 +1,7 @@
-import SelectBank from "@/assets/svg/SelectBank";
+import SelectBank from "../../assets/svg/SelectBank";
 import Dropdown from "../Dropdown";
-import Job from "@/assets/svg/Job";
-import Coins from "@/assets/svg/Coins";
+import Job from "../../assets/svg/Job";
+import Coins from "../../assets/svg/Coins";
 import { Text, TouchableOpacity, View } from "react-native";
 import { useState } from "react";
 

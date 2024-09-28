@@ -11,14 +11,19 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
-import { InputFieldProps } from "@/types/type"; // Adjust this import to your needs
-import { LinearGradient } from "expo-linear-gradient";
-import ArrowDown from "@/assets/svg/ArrowDown";
+import { InputFieldProps } from "../types/type";
+import ArrowDown from "../assets/svg/ArrowDown";
 import Modal from "react-native-modal";
 
 interface DropdownProps extends InputFieldProps {
   options: string[];
   onSelect: (value: string) => void;
+  placeholder?: any;
+  containerStyle?: any;
+  labelStyle?: any;
+  icon?: any;
+  iconStyle?: any;
+  value?: any;
 }
 
 const Dropdown = ({
@@ -43,11 +48,7 @@ const Dropdown = ({
       duration: 200,
       useNativeDriver: false,
     }).start();
-  }, [isFocused, value]);
-
-  const handleFocus = () => {
-    setIsFocused(true);
-  };
+  }, [animatedIsFocused, isFocused, value]);
 
   const handleBlur = () => {
     setIsFocused(false);

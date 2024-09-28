@@ -1,7 +1,7 @@
-import User from "@/assets/svg/User";
+import User from "../../assets/svg/User";
 import InputField from "../InputField";
 import DateInput from "../DateInput";
-import CoopIcon from "@/assets/svg/CoopIcon";
+import CoopIcon from "../../assets/svg/CoopIcon";
 
 interface StageOneProps {
   form: any;
@@ -15,22 +15,24 @@ const StageOne: React.FC<StageOneProps> = ({ form, setForm }) => {
         placeholder={`Cooperative Unique ID`}
         icon={CoopIcon}
         value={form.uniqueID}
-        onChangeText={(value) => setForm({ ...form, uniqueID: value })}
+        onChangeText={(value: any) => setForm({ ...form, uniqueID: value })}
       />
       {/* <InputField
         placeholder={`Membership number`}
         value={form.memberNum}
         icon={UserTag}
-        onChangeText={(value) => setForm({ ...form, memberNum: value })}
+        onChangeText={(value: any) => setForm({ ...form, memberNum: value })}
       /> */}
       <InputField
         placeholder={`Full name`}
         icon={User}
         value={form.fullName}
         keyboardType="default"
-        onChangeText={(value) => setForm({ ...form, fullName: value })}
+        onChangeText={(value: any) => setForm({ ...form, fullName: value })}
       />
-      <DateInput onChangeDate={(value) => setForm({ ...form, date: value })} />
+      <DateInput
+        onChangeDate={(value: any) => setForm({ ...form, date: value })}
+      />
     </>
   );
 };

@@ -1,6 +1,6 @@
-import ArrowDown from "@/assets/svg/ArrowDown";
-import BgStyling from "@/assets/svg/BgStyling";
-import Unsee from "@/assets/svg/Unsee";
+import ArrowDown from "../../assets/svg/ArrowDown";
+import BgStyling from "../../assets/svg/BgStyling";
+import Unsee from "../../assets/svg/Unsee";
 import { LinearGradient } from "expo-linear-gradient";
 import { Text, TouchableOpacity, View } from "react-native";
 import CustomButton from "../CustomButton";

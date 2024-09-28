@@ -1,10 +1,10 @@
 import React from "react";
 import InputField from "../InputField";
-import Call from "@/assets/svg/Call";
-import Email from "@/assets/svg/Email";
+import Call from "../../assets/svg/Call";
+import Email from "../../assets/svg/Email";
 import Dropdown from "../Dropdown";
-import RepayLoan from "@/assets/svg/RepayLoan";
-import RepayStartDate from "@/assets/svg/RepayStartDate";
+import RepayLoan from "../../assets/svg/RepayLoan";
+import RepayStartDate from "../../assets/svg/RepayStartDate";
 
 interface ApproveStageOneProps {
   form: any;
@@ -46,14 +46,14 @@ const ApproveStageOne: React.FC<ApproveStageOneProps> = ({ form, setForm }) => {
         icon={Email}
         value={form.email}
         keyboardType="email-address"
-        onChangeText={(value) => setForm({ ...form, email: value })}
+        onChangeText={(value: any) => setForm({ ...form, email: value })}
       />
       <InputField
         placeholder={`Contact Phone Number`}
         icon={Call}
         value={form.phoneNumber}
         keyboardType="number-pad"
-        onChangeText={(value) => setForm({ ...form, phoneNumber: value })}
+        onChangeText={(value: any) => setForm({ ...form, phoneNumber: value })}
       />
     </>
   );

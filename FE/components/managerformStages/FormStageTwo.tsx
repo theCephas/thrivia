@@ -1,10 +1,11 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
 import InputField from "../InputField";
-import SelectBank from "@/assets/svg/SelectBank";
-import OneTwoThree from "@/assets/svg/OneTwoThree";
-import AccountName from "@/assets/svg/AccountName";
+import SelectBank from "../../assets/svg/SelectBank";
+import OneTwoThree from "../../assets/svg/OneTwoThree";
+import AccountName from "../../assets/svg/AccountName";
 import Dropdown from "../Dropdown";
-import { useAxiosInstance } from "@/constants/axiosInstance";
+import { useAxiosInstance } from "../../constants/axiosInstance";
 import { Text } from "react-native";
 
 interface FormStageTwoProps {
@@ -31,13 +32,13 @@ const FormStageTwo: React.FC<FormStageTwoProps> = ({ form, setForm }) => {
 
         setBanks(bankList);
       } catch (error) {
-        // console.error("Error fetching banks:", error);
+        console.error("Error fetching banks:", error);
         setError("Failed to load banks");
       }
     };
 
     fetchBanks();
-  }, []);
+  }, [axiosInstance]);
 
   const setSelectedBank = (value: string) => {
     const selectedBank = banks.find((bank) => bank.name === value);
@@ -66,7 +67,7 @@ const FormStageTwo: React.FC<FormStageTwoProps> = ({ form, setForm }) => {
           setIsVerified(false);
         }
       } catch (error) {
-        // console.error("Error verifying account number:", error);
+        console.error("Error verifying account number:", error);
         setError("Invalid account number or bank.");
         setForm({ ...form, accName: "" });
         setIsVerified(false);

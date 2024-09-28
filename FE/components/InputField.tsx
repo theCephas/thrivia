@@ -10,7 +10,7 @@ import {
   StyleSheet,
   Text,
 } from "react-native";
-import { InputFieldProps } from "@/types/type";
+import { InputFieldProps } from "../types/type";
 
 const InputField = ({
   placeholder,
@@ -35,7 +35,7 @@ const InputField = ({
       duration: 200,
       useNativeDriver: false,
     }).start();
-  }, [isFocused, value]);
+  }, [animatedIsFocused, isFocused, value]);
 
   const handleFocus = () => {
     setIsFocused(true);

@@ -1,8 +1,7 @@
-import Homeprofile from "@/assets/svg/Homeprofile";
-import Notification from "@/assets/svg/Notification";
-import Settings from "@/assets/svg/Settings";
-import Unsee from "@/assets/svg/Unsee";
-import Swiper from "react-native-swiper";
+import Homeprofile from "../../../assets/svg/Homeprofile";
+import Notification from "../../../assets/svg/Notification";
+import Settings from "../../../assets/svg/Settings";
+import Unsee from "../../../assets/svg/Unsee";
 import {
   RefreshControl,
   ScrollView,
@@ -12,22 +11,22 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { format } from "date-fns";
-import BgStyling from "@/assets/svg/BgStyling";
-import CustomButton from "@/components/CustomButton";
-import InviteModal from "@/components/InviteModal";
-import { router, useLocalSearchParams, useRouter } from "expo-router";
-import useAuthStore from "@/store";
-import CustomSideModal from "@/components/CustomSideModal";
-import SwitchAccounts from "@/assets/svg/SwitchAccounts";
-import useFetchWallets from "@/constants/useFetchWallets";
-import useFetchCoop from "@/constants/useFetchCoop";
+import BgStyling from "../../../assets/svg/BgStyling";
+import CustomButton from "../../../components/CustomButton";
+import InviteModal from "../../../components/InviteModal";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import useAuthStore from "../../../store";
+import CustomSideModal from "../../../components/CustomSideModal";
+import SwitchAccounts from "../../../assets/svg/SwitchAccounts";
+import useFetchWallets from "../../../constants/useFetchWallets";
+import useFetchCoop from "../../../constants/useFetchCoop";
 import { ActivityIndicator } from "react-native";
-import { useAxiosInstance } from "@/constants/axiosInstance";
-import ArrowLeftBottom from "@/assets/svg/ArrowLeftBottom";
-import ArrowRightTop from "@/assets/svg/ArrowRightTop";
-import See from "@/assets/svg/See";
+import { useAxiosInstance } from "../../../constants/axiosInstance";
+import ArrowLeftBottom from "../../../assets/svg/ArrowLeftBottom";
+import ArrowRightTop from "../../../assets/svg/ArrowRightTop";
+import See from "../../../assets/svg/See";
 
 const Home = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -36,7 +35,7 @@ const Home = () => {
   const router = useRouter();
   const [transactions, setTransactions] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [, setError] = useState<string | null>(null);
   const axiosInstance = useAxiosInstance();
   const { cooperatives, loadingCoop } = useFetchCoop();
 
@@ -50,13 +49,7 @@ const Home = () => {
     setIsModalVisible(true);
   };
 
-  const {
-    cooperativeName,
-    logout,
-    token,
-    cooperativeUUID,
-    role,
-  } = useAuthStore();
+  const { cooperativeName, cooperativeUUID } = useAuthStore();
 
   const fetchTransactions = useCallback(
     async (walletUuid: string) => {
@@ -70,11 +63,12 @@ const Home = () => {
         setTransactions(response.data);
       } catch (err) {
         setError("Failed to load transactions");
+        console.error(err);
       } finally {
         setLoading(false);
       }
     },
-    [axiosInstance]
+    [axiosInstance, cooperativeUUID]
   );
 
   // Trigger the transaction fetch whenever the component mounts and wallets are available
@@ -89,7 +83,7 @@ const Home = () => {
     setRefreshing(true);
 
     fetchTransactions(wallets[0].uuid).finally(() => setRefreshing(false));
-  }, [wallets]);
+  }, [fetchTransactions, wallets]);
 
   const [see, setSee] = useState(true);
 
@@ -147,7 +141,7 @@ const Home = () => {
                 end={{ x: 1, y: 0 }}
                 className="rounded-[9px]"
               >
-                {wallets.map((item, index) => (
+                {wallets.map((item: any, index: any) => (
                   <View
                     key={index}
                     className="flex relative z-10 justify-center h-[168px] w-full rounded-[16px] p-4"
@@ -261,32 +255,38 @@ const Home = () => {
                       <ActivityIndicator size="large" color="#FFFFFF" />
                     </View>
                   ) : (
-                    <>
-                      <View className="flex flex-col mt-1">
-                        {transactions.length < 1 ? (
-                          <View>
-                            <Text className="text-white text-[16px] font-Onest text-center">
-                              Recent transactions history will appear here
-                            </Text>
-                            <CustomButton
-                              title={"Add Money"}
-                              onPress={() =>
-                                router.replace("/(root)/(others)/add-money")
-                              }
-                              className="mt-6"
-                            />
-                          </View>
-                        ) : (
-                          <>
-                            <View className="flex-1 flex-row items-center justify-between border-b border-[#939090] pb-1 ">
+                    <View className="flex-1 flex-col mt-1">
+                      {transactions.length < 1 ? (
+                        <View className="flex-1 justify-center items-center">
+                          <Text className="text-white text-[16px] font-Onest text-center">
+                            Recent transactions history will appear here
+                          </Text>
+                          <CustomButton
+                            title={"Add Money"}
+                            onPress={() =>
+                              router.replace("/(root)/(others)/add-money")
+                            }
+                            className="mt-6"
+                          />
+                        </View>
+                      ) : (
+                        <View className="h-screen">
+                          <ScrollView
+                            contentContainerStyle={{ paddingBottom: 120 }}
+                            refreshControl={
+                              <RefreshControl
+                                refreshing={refreshing}
+                                onRefresh={onRefresh}
+                              />
+                            }
+                          >
+                            <View className="flex-row items-center justify-between border-b border-[#939090] pb-1">
                               <Text className="text-white text-[18px] font-OnestSemiBold ">
                                 Transaction history
                               </Text>
-                              <Text className="text-primary text-[16px] font-OnestSemiBold  pl-12"></Text>
                             </View>
-                            <ScrollView
-                              contentContainerStyle={{ paddingBottom: 80 }}
-                            >
+
+                            <View className="flex flex-col w-full">
                               {transactions.map((item, index) => {
                                 const formattedDate = format(
                                   new Date(item.createdAt),
@@ -294,54 +294,49 @@ const Home = () => {
                                 );
 
                                 return (
-                                  <View key={index}>
-                                    <LinearGradient
-                                      key={index}
-                                      colors={["#F4F4F433", "#FFFFFF0B"]}
-                                      start={{ x: 0, y: 1.5 }}
-                                      end={{ x: 1, y: 0 }}
-                                      className="h-[70px] w-full p-[16px] mt-4 border-[#E8E7E780] border rounded-[8px] flex justify-between"
+                                  <LinearGradient
+                                    key={index}
+                                    colors={["#F4F4F433", "#FFFFFF0B"]}
+                                    start={{ x: 0, y: 1.5 }}
+                                    end={{ x: 1, y: 0 }}
+                                    className="h-[70px] w-full p-[16px] mt-4 border-[#E8E7E780] border rounded-[8px] flex justify-between"
+                                  >
+                                    <View
+                                      className={`absolute top-[20px] left-3 ${
+                                        item.type !== "credit"
+                                          ? "bg-red-500"
+                                          : "bg-green-500"
+                                      } rounded-full`}
                                     >
-                                      <View
-                                        className={`absolute top-[20px] left-3 ${
-                                          item.type !== "credit"
-                                            ? "bg-red-500"
-                                            : "bg-green-500"
-                                        }  rounded-full`}
-                                      >
-                                        {item.type === "credit" ? (
-                                          <ArrowLeftBottom />
-                                        ) : (
-                                          <ArrowRightTop />
-                                        )}
-                                      </View>
-                                      <View className="ml-7">
-                                        <Text className="text-white text-[14px] font-Onest font-semibold">
-                                          {item.type === "credit"
-                                            ? "You were credited"
-                                            : "You were debited"}
-                                        </Text>
-                                        <Text className="text-white pt-2 text-[12px] font-Onest">
-                                          {formattedDate}
-                                        </Text>
-                                      </View>
-                                      <View className="">
-                                        <Text className="text-white text-right font-OnestBold mt-[-30px] text-[16px]">
-                                          {see ? "****" : `₦${item.amount}`}
-                                        </Text>
-                                        {/* <Text className="text-white text-right   mt-[-30px] text-[15px]">
-{user.firstName}
-</Text> */}
-                                      </View>
-                                    </LinearGradient>
-                                  </View>
+                                      {item.type === "credit" ? (
+                                        <ArrowLeftBottom />
+                                      ) : (
+                                        <ArrowRightTop />
+                                      )}
+                                    </View>
+                                    <View className="ml-7">
+                                      <Text className="text-white text-[14px] font-Onest font-semibold">
+                                        {item.type === "credit"
+                                          ? "You were credited"
+                                          : "You were debited"}
+                                      </Text>
+                                      <Text className="text-white pt-2 text-[12px] font-Onest">
+                                        {formattedDate}
+                                      </Text>
+                                    </View>
+                                    <View>
+                                      <Text className="text-white text-right font-OnestBold mt-[-30px] text-[16px]">
+                                        {see ? "****" : `₦${item.amount}`}
+                                      </Text>
+                                    </View>
+                                  </LinearGradient>
                                 );
                               })}
-                            </ScrollView>
-                          </>
-                        )}
-                      </View>
-                    </>
+                            </View>
+                          </ScrollView>
+                        </View>
+                      )}
+                    </View>
                   )}
                 </View>
               )}

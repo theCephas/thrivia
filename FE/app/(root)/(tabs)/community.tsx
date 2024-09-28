@@ -1,30 +1,18 @@
-import Filter from "@/assets/svg/Filter";
-import Search from "@/assets/svg/Search";
-import { members } from "@/constants";
-import { LinearGradient } from "expo-linear-gradient";
-import { router } from "expo-router";
-import { useState } from "react";
-import {
-  ScrollView,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import { Checkbox } from "react-native-paper";
+import Filter from "../../../assets/svg/Filter";
+import Search from "../../../assets/svg/Search";
+import { ScrollView, Text, TextInput, View } from "react-native";
 
 const Community = () => {
-  const [checkedState, setCheckedState] = useState<boolean[]>(
-    new Array(members.length).fill(false)
-  );
-  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  // const [checkedState, setCheckedState] = useState<boolean[]>(
+  //   new Array(members.length).fill(false)
+  // );
 
-  const handleCheckboxChange = (index: number) => {
-    const updatedCheckedState = checkedState.map((item, idx) =>
-      idx === index ? !item : item
-    );
-    setCheckedState(updatedCheckedState);
-  };
+  // const handleCheckboxChange = (index: number) => {
+  //   const updatedCheckedState = checkedState.map((item, idx) =>
+  //     idx === index ? !item : item
+  //   );
+  //   setCheckedState(updatedCheckedState);
+  // };
 
   return (
     <View className="h-full bg-[#1d2128]">

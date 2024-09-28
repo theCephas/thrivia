@@ -1,9 +1,9 @@
-import Finance from "@/assets/svg/Finance";
-import HomeSvg from "@/assets/svg/Home";
-import People from "@/assets/svg/People";
-import Profile from "@/assets/svg/Profile";
-import useAuthStore from "@/store";
-import { Redirect, Tabs, useRouter } from "expo-router"; // import useRouter to navigate
+import Finance from "../../../assets/svg/Finance";
+import HomeSvg from "../../../assets/svg/Home";
+import People from "../../../assets/svg/People";
+import Profile from "../../../assets/svg/Profile";
+import useAuthStore from "../../../store";
+import { Tabs, useRouter } from "expo-router"; // import useRouter to navigate
 import { useEffect } from "react";
 import { Text, View } from "react-native";
 import { SvgProps } from "react-native-svg";
@@ -41,8 +41,13 @@ const TabIcon = ({
 );
 
 export default function Layout() {
-  const { user, logout, isTokenExpired } = useAuthStore();
+  const { user } = useAuthStore();
   const router = useRouter();
+  useEffect(() => {
+    if (!user) {
+      router.replace("/(auth)/(member)/sign-in");
+    }
+  }, [router, user]);
 
   return user?.activeCooperative ? (
     <Tabs

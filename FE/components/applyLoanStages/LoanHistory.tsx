@@ -1,11 +1,11 @@
-import { memberLoanHistory } from "@/constants";
+import { memberLoanHistory } from "../../constants";
 import { LinearGradient } from "expo-linear-gradient";
 import { Text, View } from "react-native";
 
 const LoanHistory = () => {
   return (
     <View className="flex h-full flex-col gap-y-6 p-4 pt-6">
-      {memberLoanHistory.map((item, index) => (
+      {memberLoanHistory.map((item: any, index: any) => (
         <LinearGradient
           key={index}
           colors={["#F4F4F433", "#FFFFFF0B"]}

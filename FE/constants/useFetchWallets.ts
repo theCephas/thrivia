@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { useAxiosInstance } from "./axiosInstance";
-import useAuthStore from "@/store";
+import useAuthStore from "../store";
 
 const useFetchWallets = (roles: string) => {
   const [wallets, setWallets] = useState<any[]>([]);

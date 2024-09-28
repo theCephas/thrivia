@@ -1,11 +1,11 @@
-import Thrivia from "@/assets/svg/Thrivia";
-import ApplyStageOne from "@/components/applyLoanStages/ApplyStageOne";
-import ApplyStageThree from "@/components/applyLoanStages/ApplyStageThree";
-import ApplyStageTwo from "@/components/applyLoanStages/ApplyStageTwo";
-import CircleProgress from "@/components/CircleProgress";
+import Thrivia from "../../../../assets/svg/Thrivia";
+import ApplyStageOne from "../../../../components/applyLoanStages/ApplyStageOne";
+import ApplyStageThree from "../../../../components/applyLoanStages/ApplyStageThree";
+import ApplyStageTwo from "../../../../components/applyLoanStages/ApplyStageTwo";
+import CircleProgress from "../../../../components/CircleProgress";
 
-import CustomButton from "@/components/CustomButton";
-import CustomModal from "@/components/CustomModal";
+import CustomButton from "../../../../components/CustomButton";
+import CustomModal from "../../../../components/CustomModal";
 
 import { router } from "expo-router";
 
@@ -77,6 +77,7 @@ const JoinStages = () => {
           <CustomButton
             title="Proceed"
             onPress={() => {
+              // eslint-disable-next-line no-unused-expressions
               currentStage === 3 ? onSubmit(1) : nextStage();
             }}
           />

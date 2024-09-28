@@ -20,10 +20,10 @@ const useFetchCoop = () => {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [axiosInstance]);
   useEffect(() => {
     fetchCooperatives();
-  }, []);
+  }, [fetchCooperatives]);
   return { loadingCoop, cooperatives, error };
 };
 

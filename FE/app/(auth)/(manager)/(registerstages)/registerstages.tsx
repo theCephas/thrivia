@@ -1,12 +1,13 @@
-import Thrivia from "@/assets/svg/Thrivia";
-import CircleProgress from "@/components/CircleProgress";
-import CustomButton from "@/components/CustomButton";
-import CustomModal from "@/components/CustomModal";
-import FormLoader from "@/components/FormLoader";
-import FormStageOne from "@/components/managerformStages/FormStageOne";
-import FormStageTwo from "@/components/managerformStages/FormStageTwo";
-import { useAxiosInstance } from "@/constants/axiosInstance";
-import useAuthStore from "@/store";
+/* eslint-disable import/no-unresolved */
+import Thrivia from "../../../../assets/svg/Thrivia";
+import CircleProgress from "../../../../components/CircleProgress";
+import CustomButton from "../../../../components/CustomButton";
+import CustomModal from "../../../../components/CustomModal";
+import FormLoader from "../../../../components/FormLoader";
+import FormStageOne from "../../../../components/managerformStages/FormStageOne";
+import FormStageTwo from "../../../../components/managerformStages/FormStageTwo";
+import { useAxiosInstance } from "../../../../constants/axiosInstance";
+import useAuthStore from "../../../../store";
 import { useState } from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import Toast from "react-native-toast-message";

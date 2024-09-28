@@ -1,6 +1,6 @@
-import ArrowBack from "@/assets/svg/ArrowBack";
-import CustomButton from "@/components/CustomButton";
-import CustomModal from "@/components/CustomModal";
+import ArrowBack from "../../../../assets/svg/ArrowBack";
+import CustomButton from "../../../../components/CustomButton";
+import CustomModal from "../../../../components/CustomModal";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import { useState } from "react";
@@ -80,7 +80,9 @@ const LoanRequestDetails = () => {
                 colors={["#F4F4F433", "#FFFFFF0B"]}
                 className="w-[112px] h-[28px] "
               >
-                <Text className="text-white  pl-1 py-2  ">Full name:</Text>
+                <Text className="text-white  pl-1 py-2 font-Onest text-[12px]  ">
+                  Full name:
+                </Text>
               </LinearGradient>
               <View className="border-l border-[#E8E7E780]">
                 <Text className="w-[155px] h-[28px] text-white pl-1 py-2 ">
@@ -93,7 +95,9 @@ const LoanRequestDetails = () => {
                 colors={["#F4F4F433", "#FFFFFF0B"]}
                 className="w-[112px] h-[28px] "
               >
-                <Text className="text-white  pl-1 py-2  ">Date of birth:</Text>
+                <Text className="text-white  pl-1 py-2 font-Onest text-[12px]  ">
+                  Date of birth:
+                </Text>
               </LinearGradient>
               <View className="border-l border-[#E8E7E780]">
                 <Text className="w-[155px] h-[28px] text-white pl-1 py-2 ">
@@ -106,7 +110,9 @@ const LoanRequestDetails = () => {
                 colors={["#F4F4F433", "#FFFFFF0B"]}
                 className="w-[112px] h-[28px] "
               >
-                <Text className="text-white  pl-1 py-2  ">Phone number:</Text>
+                <Text className="text-white  pl-1 py-2 font-Onest text-[12px]  ">
+                  Phone number:
+                </Text>
               </LinearGradient>
               <View className="border-l border-[#E8E7E780]">
                 <Text className="w-[155px] h-[28px] text-white pl-1 py-2 ">
@@ -119,7 +125,9 @@ const LoanRequestDetails = () => {
                 colors={["#F4F4F433", "#FFFFFF0B"]}
                 className="w-[112px] h-[28px] "
               >
-                <Text className="text-white  pl-1 py-2  ">Email address:</Text>
+                <Text className="text-white  pl-1 py-2 font-Onest text-[12px]  ">
+                  Email address:
+                </Text>
               </LinearGradient>
               <View className="border-l border-[#E8E7E780]">
                 <Text className="w-[155px] h-[28px] text-white pl-1 py-2 ">
@@ -132,7 +140,7 @@ const LoanRequestDetails = () => {
                 colors={["#F4F4F433", "#FFFFFF0B"]}
                 className="w-[112px] h-[28px] "
               >
-                <Text className="text-white  pl-1 py-2  ">
+                <Text className="text-white  pl-1 py-2 font-Onest text-[12px]  ">
                   Residential add:
                 </Text>
               </LinearGradient>
@@ -158,7 +166,9 @@ const LoanRequestDetails = () => {
                 colors={["#F4F4F433", "#FFFFFF0B"]}
                 className="w-[112px] h-[28px] "
               >
-                <Text className="text-white  pl-1 py-2  ">Amount:</Text>
+                <Text className="text-white  pl-1 py-2 font-Onest text-[12px]  ">
+                  Amount:
+                </Text>
               </LinearGradient>
               <View className="border-l border-[#E8E7E780]">
                 <Text className="w-[155px] h-[28px] text-white pl-1 py-2 ">
@@ -171,7 +181,9 @@ const LoanRequestDetails = () => {
                 colors={["#F4F4F433", "#FFFFFF0B"]}
                 className="w-[112px] h-[28px] "
               >
-                <Text className="text-white  pl-1 py-2  ">Loan purpose:</Text>
+                <Text className="text-white  pl-1 py-2 font-Onest text-[12px]  ">
+                  Loan purpose:
+                </Text>
               </LinearGradient>
               <View className="border-l border-[#E8E7E780]">
                 <Text className="w-[155px] h-[28px] text-white pl-1 py-2 ">
@@ -184,7 +196,9 @@ const LoanRequestDetails = () => {
                 colors={["#F4F4F433", "#FFFFFF0B"]}
                 className="w-[112px] h-[28px] "
               >
-                <Text className="text-white  pl-1 py-2  ">Loan term:</Text>
+                <Text className="text-white  pl-1 py-2 font-Onest text-[12px]  ">
+                  Loan term:
+                </Text>
               </LinearGradient>
               <View className="border-l border-[#E8E7E780]">
                 <Text className="w-[155px] h-[28px] text-white pl-1 py-2 ">
@@ -208,7 +222,9 @@ const LoanRequestDetails = () => {
                 colors={["#F4F4F433", "#FFFFFF0B"]}
                 className="w-[112px] h-[28px] "
               >
-                <Text className="text-white  pl-1 py-2  ">Income source:</Text>
+                <Text className="text-white  pl-1 py-2 font-Onest text-[12px]  ">
+                  Income source:
+                </Text>
               </LinearGradient>
               <View className="border-l border-[#E8E7E780]">
                 <Text className="w-[155px] h-[28px] text-white pl-1 py-2 ">
@@ -221,7 +237,7 @@ const LoanRequestDetails = () => {
                 colors={["#F4F4F433", "#FFFFFF0B"]}
                 className="w-[112px] h-[28px] "
               >
-                <Text className="text-white  pl-1 py-2  ">
+                <Text className="text-white  pl-1 py-2 font-Onest text-[12px]  ">
                   Employment type:
                 </Text>
               </LinearGradient>

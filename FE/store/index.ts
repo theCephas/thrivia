@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { persist, PersistOptions } from "zustand/middleware";
-import { useAxiosInstance } from "@/constants/axiosInstance";
+import { useAxiosInstance } from "../constants/axiosInstance";
 import { router } from "expo-router";
 
 interface AuthState {

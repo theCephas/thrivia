@@ -1,13 +1,15 @@
-import Thrivia from "@/assets/svg/Thrivia";
-import CircleProgress from "@/components/CircleProgress";
+/* eslint-disable no-unused-expressions */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import Thrivia from "../../../../assets/images/thrivia.png";
+import CircleProgress from "../../../../components/CircleProgress";
 
-import CustomButton from "@/components/CustomButton";
-import CustomModal from "@/components/CustomModal";
-import FormLoader from "@/components/FormLoader";
-import StageOne from "@/components/joinStages/StageOne";
-import StageTwo from "@/components/joinStages/StageTwo";
-import { useAxiosInstance } from "@/constants/axiosInstance";
-import useAuthStore from "@/store";
+import CustomButton from "../../../../components/CustomButton";
+import CustomModal from "../../../../components/CustomModal";
+import FormLoader from "../../../../components/FormLoader";
+import StageOne from "../../../../components/joinStages/StageOne";
+import StageTwo from "../../../../components/joinStages/StageTwo";
+import { useAxiosInstance } from "../../../../constants/axiosInstance";
+import useAuthStore from "../../../../store";
 
 import { router } from "expo-router";
 
@@ -17,7 +19,7 @@ import Toast from "react-native-toast-message";
 
 const JoinStages = () => {
   const [currentStage, setCurrentStage] = useState(1);
-  const { user, token, cooperativeName } = useAuthStore();
+  const { user, token } = useAuthStore();
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
     uniqueID: "",
