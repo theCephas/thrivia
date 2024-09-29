@@ -3,7 +3,7 @@ import { ConflictException, ForbiddenException, Injectable, NotFoundException } 
 import { Cooperatives, CooperativeUsers } from "../cooperatives/cooperatives.entity";
 import { EntityManager, EntityRepository } from "@mikro-orm/core";
 import { LoanHistory, Loans } from "./loans.entity";
-import { CancelLoanDto, CreateLoanDto, UpdateLoanDto } from "./loans.dto";
+import { CancelLoanDto, CreateLoanDto, LoanFilter, UpdateLoanDto } from "./loans.dto";
 import { IAuthContext, LoanStatus } from "src/types";
 import { v4 } from "uuid";
 
@@ -73,6 +73,7 @@ export class LoanService {
       if (loan.accountNumber) loanExists.accountNumber = loan.accountNumber;
       if (loan.accountName) loanExists.accountName = loan.accountName;
       if (loan.purpose) loanExists.purpose = loan.purpose;
+      loanExists.status = LoanStatus.PENDING;
       await em.flush();
     })
   }  
@@ -101,9 +102,17 @@ export class LoanService {
     return { ...loanExists, history: loanHistory } as any;
   }
 
-  async fetchLoans({ uuid }: IAuthContext) {
+  async fetchLoans(filter: LoanFilter, { uuid }: IAuthContext) {
     return this.loansRepository.find({
-      user: { uuid }
+      user: { uuid },
+      ...(filter?.status ? { status: filter?.status } : {})
     })
+  }
+
+  async fetchPendingLoans({ uuid }: IAuthContext) {
+    return this.loansRepository.find({
+      user: { uuid },
+      status: LoanStatus.PENDING
+    });
   }
 }

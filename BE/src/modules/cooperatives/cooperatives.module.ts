@@ -15,6 +15,7 @@ import { MonnifyConfiguration } from 'src/config/configuration';
 import { WalletsModule } from '../wallets/wallets.module';
 import { SharedModule } from '../shared/shared.module';
 import { Users } from '../users/users.entity';
+import { Loans } from '../loans/loans.entity';
 
 @Module({
   imports: [
@@ -27,7 +28,8 @@ import { Users } from '../users/users.entity';
         Transactions,
         Payments,
         WithdrawalRequests,
-        Users
+        Users,
+        Loans
       ],
     }),
     ConfigModule.forFeature(MonnifyConfiguration),

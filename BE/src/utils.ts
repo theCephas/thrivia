@@ -1,5 +1,6 @@
 import { UnauthorizedException } from '@nestjs/common';
 import otpGenerator from 'otp-generator';
+import { Wallets } from './modules/wallets/wallets.entity';
 
 export const replacer = (i: number, arr: any, str: string) => {
   const len = arr.length;
@@ -54,3 +55,33 @@ export const generateRandomDigits = () => {
   }
   return digits;
 };
+
+export const deductAmountFromWallets = (wallets: Wallets[], amount: number) => {
+  let remainingAmount = amount;
+  const walletsCharged: { wallet: Wallets, amount: number }[] = [];
+
+    for (let i = 0; i < wallets.length; i++) {
+        // If the wallet has enough balance to cover the remaining amount
+        if (wallets[i].availableBalance >= remainingAmount) {
+            wallets[i].availableBalance -= remainingAmount;
+            console.log(`Deducted ${remainingAmount} from wallet ${wallets[i].title}.`);
+          remainingAmount = 0;
+          walletsCharged.push({ wallet: wallets[i], amount: remainingAmount })
+            break;  // Exit once the full amount has been deducted
+        } else {
+            // Deduct what the wallet can cover and update the remaining amount
+            console.log(`Deducted ${wallets[i].availableBalance} from wallet ${wallets[i].title}.`);
+          remainingAmount -= wallets[i].availableBalance;
+          walletsCharged.push({ wallet: wallets[i], amount: remainingAmount })
+            wallets[i].availableBalance = 0;
+        }
+    }
+
+    // Check if the full amount was deducted
+    if (remainingAmount > 0) {
+        console.log(`Insufficient balance. ${remainingAmount} could not be deducted.`);
+    } else {
+        console.log(`Total amount ${amount} successfully deducted.`);
+    }
+  return walletsCharged;
+}

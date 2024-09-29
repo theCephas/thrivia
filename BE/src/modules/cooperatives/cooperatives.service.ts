@@ -28,12 +28,13 @@ import {
   ApplicationStatus,
   Currencies,
   IAuthContext,
+  LoanStatus,
   PaymentType,
   Role,
   TransactionType,
 } from 'src/types';
 import { v4 } from 'uuid';
-import { generateRandomDigits } from 'src/utils';
+import { deductAmountFromWallets, generateRandomDigits } from 'src/utils';
 import { Transactions, Wallets } from '../wallets/wallets.entity';
 import axios from 'axios';
 import { MonnifyConfiguration } from 'src/config/configuration';
@@ -43,6 +44,9 @@ import { nanoid } from 'nanoid';
 import PaymentFactory from '../shared/payment-providers/payment-provider.factory';
 import { PaymentProvider } from '../shared/payment-providers/payment-provider.contract';
 import { Users } from '../users/users.entity';
+import { LoanFilter } from '../loans/loans.dto';
+import { Loans } from '../loans/loans.entity';
+import moment from 'moment-timezone';
 
 @Injectable()
 export class CooperativesService {
@@ -65,6 +69,8 @@ export class CooperativesService {
     private readonly withdrawalRequestRepository: EntityRepository<WithdrawalRequests>,
     @InjectRepository(Users)
     private readonly usersRepository: EntityRepository<Users>,
+    @InjectRepository(Loans)
+    private readonly loansRepository: EntityRepository<Loans>,
     @Inject(MonnifyConfiguration.KEY)
     private readonly monnifyConfig: ConfigType<typeof MonnifyConfiguration>,
     private readonly em: EntityManager,
@@ -575,6 +581,123 @@ export class CooperativesService {
       }
     });
     return paymentModel;
+  }
+
+  async fetchLoans(cooperativeUuid: string, filter: LoanFilter, { uuid }: IAuthContext) {
+    await this.cooperativeGuard(cooperativeUuid, uuid);
+    return this.loansRepository.find({
+      cooperative: { uuid: cooperativeUuid },
+      ...(filter?.status ? { status: filter?.status } : {})
+    });
+  }
+
+  async fetchPendingLoans(cooperativeUuid: string, { uuid }: IAuthContext) {
+    await this.cooperativeGuard(cooperativeUuid, uuid);
+    return this.loansRepository.find({
+      cooperative: { uuid: cooperativeUuid },
+      status: LoanStatus.PENDING
+    });
+  }
+
+  async approveLoan(cooperativeUuid: string, loanUuid: string, { uuid }: IAuthContext) {
+    await this.cooperativeGuard(cooperativeUuid, uuid);
+    await this.em.transactional(async (em) => {
+      const loanExists = await this.loansRepository.findOne({
+        uuid: loanUuid,
+        cooperative: { uuid: cooperativeUuid }
+      });
+      if (!loanExists) throw new NotFoundException('Loan not found');
+      if (![LoanStatus.PENDING, LoanStatus.REJECTED].includes(loanExists.status)) throw new ForbiddenException(`Cannot update loan`);
+      const cooperativeWallets = await this.walletsRepository.find({
+        cooperative: loanExists.cooperative,
+        user: null,
+      });
+      const combinedBalances = cooperativeWallets.reduce((prev, cur) => {
+        prev += cur.availableBalance;
+        return prev;
+      }, 0);
+      if (loanExists.requestedAmount > combinedBalances) throw new NotAcceptableException('Insufficient balance');
+      const reference = nanoid();
+      const response = await this.paymentProvider.payout({
+        amount: loanExists.requestedAmount,
+        bankCode: loanExists.bankCode,
+        accountNumber: loanExists.accountNumber,
+        accountName: loanExists.accountName,
+        reference,
+        narration: `Loan from ${loanExists.cooperative.name} to ${loanExists.user.lastName} (${loanExists.user.phoneNumber})`,
+      });
+      console.log("response", response);
+      if (response.status === 'success') {
+        const walletsCharged = deductAmountFromWallets(cooperativeWallets, loanExists.requestedAmount);
+        const paymentUuid = v4();
+        const paymentModel = this.paymentRepository.create({
+          uuid: paymentUuid,
+          transactionId: reference,
+          status: 'successful',
+          amount: loanExists.requestedAmount,
+          channel: 'loan',
+          metadata: JSON.stringify(response.data),
+          type: PaymentType.OUTGOING,
+          currencies: Currencies.NGN,
+        });
+        for (const walletCharged of walletsCharged) {
+          const transactionModel = this.transactionRepository.create({
+            uuid: v4(),
+            type: TransactionType.DEBIT,
+            balanceBefore: walletCharged.wallet.totalBalance,
+            balanceAfter: walletCharged.wallet.totalBalance - walletCharged.amount,
+            amount: walletCharged.amount,
+            wallet: this.walletsRepository.getReference(walletCharged.wallet.uuid),
+            walletSnapshot: JSON.stringify(walletCharged),
+            payment: this.paymentRepository.getReference(paymentUuid),
+            user: this.usersRepository.getReference(uuid),
+            remark: `Loan from ${loanExists.cooperative.name} to ${loanExists.user.lastName} (${loanExists.user.phoneNumber})`,
+          });
+          em.persist(transactionModel);
+        }
+        loanExists.balance = loanExists.requestedAmount;
+        loanExists.startDate = moment().format("YYYY-MM-DD") as any;
+        loanExists.endDate = moment().add(1, "year").format("YYYY-MM-DD") as any;
+        loanExists.status = LoanStatus.ACTIVE;
+        loanExists.reviewedBy = this.usersRepository.getReference(uuid);
+        loanExists.reviewedAt = new Date();
+        em.persist(paymentModel);
+        await em.flush();
+      } else {
+        const paymentModel = this.paymentRepository.create({
+          uuid: v4(),
+          transactionId: reference,
+          status: 'failed',
+          amount: loanExists.requestedAmount,
+          channel: 'loan',
+          metadata: JSON.stringify(response.data),
+          type: PaymentType.OUTGOING,
+          currencies: Currencies.NGN,
+        });
+        em.persist(paymentModel);
+        await em.flush();
+        throw new HttpException(
+          'Transaction Failed',
+          HttpStatus.EXPECTATION_FAILED,
+        );
+      }
+    });
+  }
+
+  async rejectLoan(cooperativeUuid: string, loanUuid: string, { uuid }: IAuthContext) {
+    await this.cooperativeGuard(cooperativeUuid, uuid);
+    await this.em.transactional(async (em) => {
+      const loanExists = await this.loansRepository.findOne({
+        uuid: loanUuid,
+        cooperative: { uuid: cooperativeUuid }
+      });
+      if (!loanExists) throw new NotFoundException('Loan not found');
+      if (![LoanStatus.PENDING].includes(loanExists.status)) throw new ForbiddenException(`Cannot update loan`);
+      loanExists.status = LoanStatus.REJECTED;
+      loanExists.reviewedBy = this.usersRepository.getReference(uuid);
+      loanExists.reviewedAt = new Date();
+      await em.flush();
+    });
   }
 
   private async cooperativeGuard(cooperativeUuid: string, userUuid: string) {

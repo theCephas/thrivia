@@ -1,4 +1,5 @@
-import { IsNumber, IsOptional, IsString } from "class-validator";
+import { IsEnum, IsNumber, IsOptional, IsString, ValidateNested } from "class-validator";
+import { LoanStatus } from "src/types";
 
 export class CreateLoanDto {
   @IsNumber()
@@ -53,4 +54,16 @@ export class UpdateLoanDto {
   @IsString()
   @IsOptional()
   purpose: string;
+}
+
+export class LoanFilter {
+  @IsEnum(LoanStatus)
+  @IsOptional()
+  status?: LoanStatus;
+}
+
+export class LoanQuery {
+  @IsOptional()
+  @ValidateNested()
+  filter?: LoanFilter;
 }

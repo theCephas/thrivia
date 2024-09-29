@@ -4,6 +4,7 @@ import {
   Get,
   Param,
   Post,
+  Query,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -18,6 +19,7 @@ import { JwtAuthGuard } from 'src/guards/jwt-auth-guard';
 import { Request } from 'express';
 import { CooperativesService } from './cooperatives.service';
 import { ExpiredJwtAuthGuard } from 'src/guards/expired-jwt-auth-guard';
+import { LoanQuery } from '../loans/loans.dto';
 
 @Controller('cooperatives')
 @ApiTags('cooperatives')
@@ -193,5 +195,29 @@ export class CooperativesController {
   @UseGuards(JwtAuthGuard)
   withdraw(@Param('uuid') uuid: string, @Param('walletUuid') walletUuid: string, @Body() body: PaymentInfo, @Req() request: Request) {
     return this.cooperativesService.withdraw(uuid, walletUuid, body, request.user as any);
+  }
+
+  @Get(':uuid/loans')
+  @UseGuards(JwtAuthGuard)
+  fetchLoans(@Param('uuid') uuid: string, @Query() query: LoanQuery, @Req() request: Request) {
+    return this.cooperativesService.fetchLoans(uuid, query.filter, request.user as any);
+  }
+
+  @Get(':uuid/pending-loans')
+  @UseGuards(JwtAuthGuard)
+  fetchPendingLoans(@Param('uuid') uuid: string, @Req() request: Request) {
+    return this.cooperativesService.fetchPendingLoans(uuid, request.user as any);
+  }
+
+  @Post(':uuid/loans/:loanUuid/approve')
+  @UseGuards(JwtAuthGuard)
+  approveLoan(@Param('uuid') uuid: string, @Param('loanUuid') loanUuid: string, @Req() request: Request) {
+    return this.cooperativesService.approveLoan(uuid, loanUuid, request.user as any);
+  }
+
+  @Post(':uuid/loans/:loanUuid/reject')
+  @UseGuards(JwtAuthGuard)
+  rejectLoan(@Param('uuid') uuid: string, @Param('loanUuid') loanUuid: string, @Req() request: Request) {
+    return this.cooperativesService.rejectLoan(uuid, loanUuid, request.user as any);
   }
 }

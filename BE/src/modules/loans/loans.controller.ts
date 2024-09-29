@@ -1,8 +1,8 @@
-import { Body, Controller, Get, Param, Post, Put, Req, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, Param, Post, Put, Query, Req, UseGuards } from "@nestjs/common";
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { Request } from "express";
 import { JwtAuthGuard } from "src/guards/jwt-auth-guard";
-import { CancelLoanDto, CreateLoanDto, UpdateLoanDto } from "./loans.dto";
+import { CancelLoanDto, CreateLoanDto, LoanQuery, UpdateLoanDto } from "./loans.dto";
 import { LoanService } from "./loans.service";
 
 @Controller('loans')
@@ -37,7 +37,13 @@ export class LoansController {
 
   @Get()
   @UseGuards(JwtAuthGuard)
-  fetchLoans(@Req() request: Request) {
-    return this.loanService.fetchLoans(request.user as any);
+  fetchLoans(@Query() query: LoanQuery, @Req() request: Request) {
+    return this.loanService.fetchLoans(query.filter, request.user as any);
+  }
+
+  @Get('pending-loans')
+  @UseGuards(JwtAuthGuard)
+  fetchPendingLoans(@Req() request: Request) {
+    return this.loanService.fetchPendingLoans(request.user as any);
   }
 }

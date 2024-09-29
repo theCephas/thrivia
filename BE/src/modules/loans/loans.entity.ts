@@ -68,6 +68,7 @@ export class Loans extends Timestamp {
     joinColumn: 'uuid',
     columnType: 'varchar(255)',
     nullable: true,
+    eager: true
   })
   user: Users;
 
