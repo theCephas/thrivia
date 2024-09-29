@@ -1,8 +1,8 @@
-import OnboardingBg from "@/assets/svg/OnboardingBg";
-import Thrivia from "@/assets/svg/Thrivia";
-import CustomButton from "@/components/CustomButton";
-import { onboarding } from "@/constants";
-import useAuthStore from "@/store";
+import OnboardingBg from "../../assets/svg/OnboardingBg";
+import Thrivia from "../../assets/svg/Thrivia";
+import CustomButton from "../../components/CustomButton";
+import { onboarding } from "../../constants";
+import useAuthStore from "../../store";
 import { LinearGradient } from "expo-linear-gradient";
 import { Link, router } from "expo-router";
 import { useEffect, useRef, useState } from "react";
@@ -50,7 +50,7 @@ const Welcome = () => {
           }
           onIndexChanged={(index) => setActiveIndex(index)}
         >
-          {onboarding.map((item) => (
+          {onboarding.map((item: any) => (
             <View key={item.id} className="flex flex-col relative">
               <View className="absolute bottom-[-460px]">
                 <Text className="text-white font-OnestSemiBold text-[20px] text-left">

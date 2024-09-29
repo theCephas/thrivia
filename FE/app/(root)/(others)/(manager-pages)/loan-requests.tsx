@@ -1,7 +1,7 @@
-import ArrowBack from "@/assets/svg/ArrowBack";
-import Filter from "@/assets/svg/Filter";
-import Search from "@/assets/svg/Search";
-import { loanHistory } from "@/constants";
+import ArrowBack from "../../../../assets/svg/ArrowBack";
+import Filter from "../../../../assets/svg/Filter";
+import Search from "../../../../assets/svg/Search";
+import { loanHistory } from "../../../../constants";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import { useState } from "react";

@@ -1,9 +1,11 @@
-import ArrowBack from "@/assets/svg/ArrowBack";
-import Send from "@/assets/svg/Send";
-import CustomButton from "@/components/CustomButton";
-import CustomModal from "@/components/CustomModal";
-import { useAxiosInstance } from "@/constants/axiosInstance";
-import useAuthStore from "@/store";
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { err } from "react-native-svg";
+import ArrowBack from "../../../../assets/svg/ArrowBack";
+import Send from "../../../../assets/svg/Send";
+import CustomButton from "../../../../components/CustomButton";
+import CustomModal from "../../../../components/CustomModal";
+import { useAxiosInstance } from "../../../../constants/axiosInstance";
+import useAuthStore from "../../../../store";
 import { LinearGradient } from "expo-linear-gradient";
 import { router, useLocalSearchParams } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
@@ -39,12 +41,14 @@ const MembershipRequestDetails = () => {
       const data = await res.data;
 
       setDetails(data);
-    } catch (error) {}
-  }, []);
+    } catch (error) {
+      console.error(error);
+    }
+  }, [axiosInstance, cooperativeUUID, membershipRequestDetails, token]);
 
   useEffect(() => {
     getDetails();
-  }, []);
+  }, [getDetails]);
 
   const approveRequest = async () => {
     try {
@@ -161,10 +165,12 @@ const MembershipRequestDetails = () => {
                 colors={["#F4F4F433", "#FFFFFF0B"]}
                 className="w-[112px] "
               >
-                <Text className="text-white  pl-1 py-2  ">Full name:</Text>
+                <Text className="text-white  pl-1 py-2 font-Onest text-[12px]  ">
+                  Full name:
+                </Text>
               </LinearGradient>
               <View className="border-l border-[#E8E7E780]">
-                <Text className="w-[155px] text-white pl-1 py-2 ">
+                <Text className="w-[155px] text-white pl-1 py-2 font-Onest text-[12px] ">
                   {details.fullName}
                 </Text>
               </View>
@@ -174,10 +180,12 @@ const MembershipRequestDetails = () => {
                 colors={["#F4F4F433", "#FFFFFF0B"]}
                 className="w-[112px] "
               >
-                <Text className="text-white  pl-1 py-2  ">Date of birth:</Text>
+                <Text className="text-white  pl-1 py-2 font-Onest text-[12px]  ">
+                  Date of birth:
+                </Text>
               </LinearGradient>
               <View className="border-l border-[#E8E7E780]">
-                <Text className="w-[155px] text-white pl-1 py-2 ">
+                <Text className="w-[155px] text-white pl-1 py-2 font-Onest text-[12px] ">
                   {details.dateOfBirth}
                 </Text>
               </View>
@@ -187,10 +195,12 @@ const MembershipRequestDetails = () => {
                 colors={["#F4F4F433", "#FFFFFF0B"]}
                 className="w-[112px] "
               >
-                <Text className="text-white  pl-1 py-2  ">Phone number:</Text>
+                <Text className="text-white  pl-1 py-2 font-Onest text-[12px]  ">
+                  Phone number:
+                </Text>
               </LinearGradient>
               <View className="border-l border-[#E8E7E780]">
-                <Text className="w-[155px] text-white pl-1 py-2 ">
+                <Text className="w-[155px] text-white pl-1 py-2 font-Onest text-[12px] ">
                   {details?.phoneNumber?.replace("234", "0")}
                 </Text>
               </View>
@@ -200,10 +210,12 @@ const MembershipRequestDetails = () => {
                 colors={["#F4F4F433", "#FFFFFF0B"]}
                 className="w-[112px] "
               >
-                <Text className="text-white  pl-1 py-2  ">Email address:</Text>
+                <Text className="text-white  pl-1 py-2 font-Onest text-[12px]  ">
+                  Email address:
+                </Text>
               </LinearGradient>
               <View className="border-l border-[#E8E7E780]">
-                <Text className="w-[155px] text-white pl-1 py-2 ">
+                <Text className="w-[155px] text-white pl-1 py-2 font-Onest text-[12px] ">
                   {details.email}
                 </Text>
               </View>
@@ -213,12 +225,12 @@ const MembershipRequestDetails = () => {
                 colors={["#F4F4F433", "#FFFFFF0B"]}
                 className="w-[112px] "
               >
-                <Text className="text-white  pl-1 py-2  ">
+                <Text className="text-white  pl-1 py-2 font-Onest text-[12px]  ">
                   Residential add:
                 </Text>
               </LinearGradient>
               <View className="border-l border-[#E8E7E780]">
-                <Text className="w-[155px] text-white pl-1 py-2 ">
+                <Text className="w-[155px] text-white pl-1 py-2 font-Onest text-[12px] ">
                   {details.address}
                 </Text>
               </View>

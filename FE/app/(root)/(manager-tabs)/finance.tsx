@@ -9,16 +9,15 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
-import { useAxiosInstance } from "@/constants/axiosInstance";
-import useAuthStore from "@/store";
-import CustomModal from "@/components/CustomModal";
-import Send from "@/assets/svg/Send";
+import { useAxiosInstance } from "../../../constants/axiosInstance";
+import useAuthStore from "../../../store";
+import CustomModal from "../../../components/CustomModal";
+import Send from "../../../assets/svg/Send";
 import { router } from "expo-router";
 import { ActivityIndicator } from "react-native";
 
 const Finance = () => {
   const [withdrawalRequests, setWithdrawalRequests] = useState<any[]>([]);
-  const [selectedRequest, setSelectedRequest] = useState<any | null>(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [rejectionReason, setRejectionReason] = useState("");
   const [currentRequestUuid, setCurrentRequestUuid] = useState<string | null>(

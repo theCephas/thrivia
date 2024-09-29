@@ -1,10 +1,10 @@
-import Dot from "@/assets/svg/Dot";
-import Filter from "@/assets/svg/Filter";
-import Search from "@/assets/svg/Search";
-import CustomButton from "@/components/CustomButton";
-import InviteModal from "@/components/InviteModal";
-import { useAxiosInstance } from "@/constants/axiosInstance";
-import useAuthStore from "@/store";
+import Dot from "../../../assets/svg/Dot";
+import Filter from "../../../assets/svg/Filter";
+import Search from "../../../assets/svg/Search";
+import CustomButton from "../../../components/CustomButton";
+import InviteModal from "../../../components/InviteModal";
+import { useAxiosInstance } from "../../../constants/axiosInstance";
+import useAuthStore from "../../../store";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
@@ -159,7 +159,7 @@ const Community = () => {
               if (activeNav === "requests") {
                 router.navigate(`/(others)/(manager-pages)/${item.uuid}`);
               } else {
-                "";
+                return;
               }
             }}
             className="text-white text-[15px] font-Onest z-50   w-full"
@@ -223,7 +223,7 @@ const Community = () => {
               <MemberItem item={item} index={index} key={index} />
             ))
           ) : (
-            <Text className="text-white text-center pt-5">
+            <Text className="text-white font-Onest text-center pt-5">
               {activeNav === "members"
                 ? "No members for now..."
                 : "No requests yet..."}

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React from "react";
 import Svg, { Circle, Text } from "react-native-svg";
 import { View, Text as RNText } from "react-native";

@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import Modal from "react-native-modal";
 import CustomButton from "./CustomButton";
 
@@ -67,36 +67,5 @@ const CustomModal: React.FC<CustomModalProps> = ({
     </Modal>
   );
 };
-
-const styles = StyleSheet.create({
-  //   modalContainer: {
-  //     backgroundColor: "#1d2128",
-  //     padding: 20,
-  //     borderRadius: 10,
-  //     alignItems: "center",
-  //   },
-  //   modalTitle: {
-  //     fontSize: 20,
-  //     fontWeight: "bold",
-  //     marginBottom: 10,
-  //     color: "white",
-  //   },
-  //   modalMessage: {
-  //     fontSize: 16,
-  //     marginBottom: 20,
-  //     color: "white",
-  //     textAlign: "center",
-  //   },
-  //   button: {
-  //     backgroundColor: "#ff6347",
-  //     paddingVertical: 10,
-  //     paddingHorizontal: 20,
-  //     borderRadius: 8,
-  //   },
-  //   buttonText: {
-  //     color: "white",
-  //     fontSize: 16,
-  //   },
-});
 
 export default CustomModal;

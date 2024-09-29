@@ -1,5 +1,5 @@
 import axios from "axios";
-import useAuthStore from "@/store";
+import useAuthStore from "../store";
 
 // Create an Axios instance
 const axiosInstance = axios.create({

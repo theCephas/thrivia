@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { View, TextInput, Platform, Text, StyleSheet } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import Calendar from "@/assets/svg/Calendar";
-import ArrowDown from "@/assets/svg/ArrowDown";
+import Calendar from "../assets/svg/Calendar";
+import ArrowDown from "../assets/svg/ArrowDown";
 
 interface Props {
   onChangeDate: (value: any) => void;

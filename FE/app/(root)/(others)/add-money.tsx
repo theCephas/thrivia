@@ -1,8 +1,8 @@
-import ArrowBack from "@/assets/svg/ArrowBack";
-import Homeprofile from "@/assets/svg/Homeprofile";
-import CustomButton from "@/components/CustomButton";
-import PaymentInputField from "@/components/PaymentInputField";
-import useAuthStore from "@/store";
+import ArrowBack from "../../../assets/svg/ArrowBack";
+import Homeprofile from "../../../assets/svg/Homeprofile";
+import CustomButton from "../../../components/CustomButton";
+import PaymentInputField from "../../../components/PaymentInputField";
+import useAuthStore from "../../../store";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useState } from "react";
 import {
@@ -13,21 +13,15 @@ import {
   Alert,
 } from "react-native";
 import Monnify from "@adsesugh/monnify-react-native";
-import FormLoader from "@/components/FormLoader";
-import { useAxiosInstance } from "@/constants/axiosInstance";
-import Success from "@/assets/svg/Success";
+import FormLoader from "../../../components/FormLoader";
+import { useAxiosInstance } from "../../../constants/axiosInstance";
+import Success from "../../../assets/svg/Success";
 
 const AddMoney = () => {
   const router = useRouter();
   const { role, walletUuid } = useLocalSearchParams();
   const [value, setValue] = useState<number>(200.0);
-  const {
-    cooperativeName,
-    user,
-    cooperativeEmail,
-    token,
-    coopUuid,
-  } = useAuthStore();
+  const { cooperativeName, user, cooperativeEmail, coopUuid } = useAuthStore();
   const [modalVisible, setModalVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const [transactionSuccess, setTransactionSuccess] = useState(false); // New state for success screen

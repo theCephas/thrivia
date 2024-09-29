@@ -1,13 +1,13 @@
-import Call from "@/assets/svg/Call";
-import Email from "@/assets/svg/Email";
-import Lock from "@/assets/svg/Lock";
-import Thrivia from "@/assets/svg/Thrivia";
-import User from "@/assets/svg/User";
-import CustomButton from "@/components/CustomButton";
-import FormLoader from "@/components/FormLoader";
-import InputField from "@/components/InputField";
-import { useAxiosInstance } from "@/constants/axiosInstance";
-import useAuthStore from "@/store";
+import Call from "../../../assets/svg/Call";
+import Email from "../../../assets/svg/Email";
+import Lock from "../../../assets/svg/Lock";
+import Thrivia from "../../../assets/svg/Thrivia";
+import User from "../../../assets/svg/User";
+import CustomButton from "../../../components/CustomButton";
+import FormLoader from "../../../components/FormLoader";
+import InputField from "../../../components/InputField";
+import { useAxiosInstance } from "../../../constants/axiosInstance";
+import useAuthStore from "../../../store";
 import { Link, router } from "expo-router";
 import { useEffect, useState } from "react";
 import { SafeAreaView, ScrollView, Text, View } from "react-native";
@@ -130,34 +130,40 @@ const SignUp = () => {
               placeholder={`First Name`}
               icon={User}
               value={form.firstName}
-              onChangeText={(value) => setForm({ ...form, firstName: value })}
+              onChangeText={(value: any) =>
+                setForm({ ...form, firstName: value })
+              }
             />
             <InputField
               placeholder={`Last Name`}
               icon={User}
               value={form.lastName}
-              onChangeText={(value) => setForm({ ...form, lastName: value })}
+              onChangeText={(value: any) =>
+                setForm({ ...form, lastName: value })
+              }
             />
             <InputField
               placeholder={`Email`}
               icon={Email}
               value={form.email}
               keyboardType="email-address"
-              onChangeText={(value) => setForm({ ...form, email: value })}
+              onChangeText={(value: any) => setForm({ ...form, email: value })}
             />
             <InputField
               placeholder={`Phone Number`}
               icon={Call}
               value={form.phoneNumber}
               keyboardType="number-pad"
-              onChangeText={(value) => setForm({ ...form, phoneNumber: value })}
+              onChangeText={(value: any) =>
+                setForm({ ...form, phoneNumber: value })
+              }
             />
             <InputField
               placeholder={`Create Password`}
               secureTextEntry={true}
               value={form.createPassword}
               icon={Lock}
-              onChangeText={(value) =>
+              onChangeText={(value: any) =>
                 setForm({ ...form, createPassword: value })
               }
             />
@@ -166,7 +172,7 @@ const SignUp = () => {
               secureTextEntry={true}
               icon={Lock}
               value={form.confirmPassword}
-              onChangeText={(value) =>
+              onChangeText={(value: any) =>
                 setForm({ ...form, confirmPassword: value })
               }
             />

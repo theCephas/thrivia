@@ -1,6 +1,7 @@
-import ArrowBack from "@/assets/svg/ArrowBack";
-import { useAxiosInstance } from "@/constants/axiosInstance";
-import useAuthStore from "@/store";
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import ArrowBack from "../../../../assets/svg/ArrowBack";
+import { useAxiosInstance } from "../../../../constants/axiosInstance";
+import useAuthStore from "../../../../store";
 import { LinearGradient } from "expo-linear-gradient";
 import { router, useLocalSearchParams } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
@@ -31,11 +32,11 @@ const WithdrawDetails = () => {
 
       setDetails(data);
     } catch (error) {}
-  }, []);
+  }, [axiosInstance, cooperativeUUID, token, withdrawDetails]);
 
   useEffect(() => {
     getDetails();
-  }, []);
+  }, [getDetails]);
   return (
     <SafeAreaView className="h-full bg-[#1d2128]">
       <TouchableOpacity
@@ -60,10 +61,10 @@ const WithdrawDetails = () => {
               colors={["#F4F4F433", "#FFFFFF0B"]}
               className="w-[112px] "
             >
-              <Text className="text-white  pl-1 py-2  ">Full name:</Text>
+              <Text className="text-white  pl-1 py-2 font-Onest text-[12px]  ">Full name:</Text>
             </LinearGradient>
             <View className="border-l border-[#E8E7E780]">
-              <Text className="w-[155px] text-white pl-1 py-2 ">
+              <Text className="w-[155px] text-white pl-1 py-2 font-Onest text-[12px] ">
                 {details.createdBy.firstName} {details.createdBy.lastName}
               </Text>
             </View>
@@ -73,10 +74,12 @@ const WithdrawDetails = () => {
               colors={["#F4F4F433", "#FFFFFF0B"]}
               className="w-[112px] "
             >
-              <Text className="text-white  pl-1 py-2  ">Bank name:</Text>
+              <Text className="text-white  pl-1 py-2 font-Onest text-[12px]  ">
+                Bank name:
+              </Text>
             </LinearGradient>
             <View className="border-l border-[#E8E7E780]">
-              <Text className="w-[155px] text-white pl-1 py-2 ">
+              <Text className="w-[155px] text-white pl-1 py-2 font-Onest text-[12px] ">
                 {details.bankName}
               </Text>
             </View>
@@ -86,10 +89,12 @@ const WithdrawDetails = () => {
               colors={["#F4F4F433", "#FFFFFF0B"]}
               className="w-[112px] "
             >
-              <Text className="text-white  pl-1 py-2  ">Account number:</Text>
+              <Text className="text-white  pl-1 py-2 font-Onest text-[12px]  ">
+                Account number:
+              </Text>
             </LinearGradient>
             <View className="border-l border-[#E8E7E780]">
-              <Text className="w-[155px] text-white pl-1 py-2 ">
+              <Text className="w-[155px] text-white pl-1 py-2 font-Onest text-[12px] ">
                 {details.accountNumber}
               </Text>
             </View>
@@ -99,10 +104,12 @@ const WithdrawDetails = () => {
               colors={["#F4F4F433", "#FFFFFF0B"]}
               className="w-[112px] "
             >
-              <Text className="text-white  pl-1 py-2  ">Account Name:</Text>
+              <Text className="text-white  pl-1 py-2 font-Onest text-[12px]  ">
+                Account Name:
+              </Text>
             </LinearGradient>
             <View className="border-l border-[#E8E7E780]">
-              <Text className="w-[155px] text-white pl-1 py-2 ">
+              <Text className="w-[155px] text-white pl-1 py-2 font-Onest text-[12px] ">
                 {details.accountName}
               </Text>
             </View>
@@ -112,10 +119,12 @@ const WithdrawDetails = () => {
               colors={["#F4F4F433", "#FFFFFF0B"]}
               className="w-[112px] "
             >
-              <Text className="text-white  pl-1 py-2  ">Amount:</Text>
+              <Text className="text-white  pl-1 py-2 font-Onest text-[12px]  ">
+                Amount:
+              </Text>
             </LinearGradient>
             <View className="border-l border-[#E8E7E780]">
-              <Text className="w-[155px] text-white pl-1 py-2 ">
+              <Text className="w-[155px] text-white pl-1 py-2 font-Onest text-[12px] ">
                 ₦{details.amount}
               </Text>
             </View>
@@ -125,10 +134,12 @@ const WithdrawDetails = () => {
               colors={["#F4F4F433", "#FFFFFF0B"]}
               className="w-[112px] "
             >
-              <Text className="text-white  pl-1 py-2  ">Purpose:</Text>
+              <Text className="text-white  pl-1 py-2 font-Onest text-[12px]  ">
+                Purpose:
+              </Text>
             </LinearGradient>
             <View className="border-l border-[#E8E7E780]">
-              <Text className="w-[155px] text-white pl-1 py-2 ">
+              <Text className="w-[155px] text-white pl-1 py-2 font-Onest text-[12px] ">
                 {details.purpose === null ? "No purpose" : details.purpose}
               </Text>
             </View>
@@ -138,7 +149,9 @@ const WithdrawDetails = () => {
               colors={["#F4F4F433", "#FFFFFF0B"]}
               className="w-[112px] "
             >
-              <Text className="text-white  pl-1 py-2  ">Status:</Text>
+              <Text className="text-white  pl-1 py-2 font-Onest text-[12px]  ">
+                Status:
+              </Text>
             </LinearGradient>
             <View className="border-l border-[#E8E7E780]">
               <Text

@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import InputField from "../InputField";
-import Email from "@/assets/svg/Email";
-import Address from "@/assets/svg/Address";
-import Call from "@/assets/svg/Call";
+import Email from "../../assets/svg/Email";
+import Address from "../../assets/svg/Address";
+import Call from "../../assets/svg/Call";
 
 interface StageTwoProps {
   form: any;
@@ -20,21 +21,21 @@ const StageTwo: React.FC<StageTwoProps> = ({ form, setForm }) => {
         icon={Call}
         value={form.phoneNumber}
         keyboardType="number-pad"
-        onChangeText={(value) => setForm({ ...form, phoneNumber: value })}
+        onChangeText={(value: any) => setForm({ ...form, phoneNumber: value })}
       />
       <InputField
         placeholder={`Email Address`}
         icon={Email}
         value={form.email}
         keyboardType="email-address"
-        onChangeText={(value) => setForm({ ...form, email: value })}
+        onChangeText={(value: any) => setForm({ ...form, email: value })}
       />
       <InputField
         placeholder={`Residential Address`}
         icon={Address}
         value={form.add}
         keyboardType="default"
-        onChangeText={(value) => setForm({ ...form, address: value })}
+        onChangeText={(value: any) => setForm({ ...form, address: value })}
       />
     </>
   );

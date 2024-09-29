@@ -1,7 +1,7 @@
-import Finance from "@/assets/svg/Finance";
-import HomeSvg from "@/assets/svg/Home";
-import People from "@/assets/svg/People";
-import Profile from "@/assets/svg/Profile";
+import Finance from "../../../assets/svg/Finance";
+import HomeSvg from "../../../assets/svg/Home";
+import People from "../../../assets/svg/People";
+import Profile from "../../../assets/svg/Profile";
 import { Tabs } from "expo-router";
 import { Text, View } from "react-native";
 import { SvgProps } from "react-native-svg";
@@ -49,7 +49,7 @@ export default function Layout() {
           backgroundColor: "#0D1015",
           paddingBottom: 0, // ios only
           overflow: "hidden",
-          height: 70,
+          height: 78,
           borderTopLeftRadius: 30,
           borderTopRightRadius: 30,
           width: "100%",

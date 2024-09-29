@@ -1,7 +1,7 @@
-import ArrowBack from "@/assets/svg/ArrowBack";
-import ApproveStageOne from "@/components/approveLoanStages/ApproveStageOne";
-import ApproveStageTwo from "@/components/approveLoanStages/ApproveStageTwo";
-import CustomButton from "@/components/CustomButton";
+import ArrowBack from "../../../../assets/svg/ArrowBack";
+import ApproveStageOne from "../../../../components/approveLoanStages/ApproveStageOne";
+import ApproveStageTwo from "../../../../components/approveLoanStages/ApproveStageTwo";
+import CustomButton from "../../../../components/CustomButton";
 import { router } from "expo-router";
 import { useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
@@ -23,7 +23,7 @@ const ApproveLoan = () => {
       setCurrentStage(currentStage - 1);
     }
   };
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [, setIsModalVisible] = useState(false);
 
   const onSubmit = () => {
     setIsModalVisible(true);

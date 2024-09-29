@@ -1,8 +1,7 @@
-import Homeprofile from "@/assets/svg/Homeprofile";
-import Notification from "@/assets/svg/Notification";
-import Settings from "@/assets/svg/Settings";
-import Unsee from "@/assets/svg/Unsee";
-import Swiper from "react-native-swiper";
+import Homeprofile from "../../../assets/svg/Homeprofile";
+import Notification from "../../../assets/svg/Notification";
+import Settings from "../../../assets/svg/Settings";
+import Unsee from "../../../assets/svg/Unsee";
 import {
   ActivityIndicator,
   RefreshControl,
@@ -12,27 +11,26 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { publicBalance, publicBlDeets } from "@/constants";
-import BgStyling from "@/assets/svg/BgStyling";
-import CustomSideModal from "@/components/CustomSideModal";
-import CustomButton from "@/components/CustomButton";
-import { Link, router, useRouter } from "expo-router";
-import useAuthStore from "@/store";
-import useFetchCoop from "@/constants/useFetchCoop";
-import SwitchAccounts from "@/assets/svg/SwitchAccounts";
-import useFetchWallets from "@/constants/useFetchWallets";
-import { useAxiosInstance } from "@/constants/axiosInstance";
+import { useCallback, useEffect, useState } from "react";
+import BgStyling from "../../../assets/svg/BgStyling";
+import CustomSideModal from "../../../components/CustomSideModal";
+import CustomButton from "../../../components/CustomButton";
+import { useRouter } from "expo-router";
+import useAuthStore from "../../../store";
+import useFetchCoop from "../../../constants/useFetchCoop";
+import SwitchAccounts from "../../../assets/svg/SwitchAccounts";
+import useFetchWallets from "../../../constants/useFetchWallets";
+import { useAxiosInstance } from "../../../constants/axiosInstance";
 import { format } from "date-fns";
-import ArrowRightTop from "@/assets/svg/ArrowRightTop";
-import ArrowLeftBottom from "@/assets/svg/ArrowLeftBottom";
+import ArrowRightTop from "../../../assets/svg/ArrowRightTop";
+import ArrowLeftBottom from "../../../assets/svg/ArrowLeftBottom";
 import { ScrollView } from "react-native";
-import See from "@/assets/svg/See";
+import See from "../../../assets/svg/See";
 
 const Home = () => {
   const [transactions, setTransactions] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [, setError] = useState<string | null>(null);
   const axiosInstance = useAxiosInstance();
   const [refreshing, setRefreshing] = useState(false);
 
@@ -79,6 +77,7 @@ const Home = () => {
         setTransactions(response.data);
       } catch (err) {
         setError("Failed to load transactions");
+        console.error(err);
       } finally {
         setLoading(false);
       }
@@ -116,7 +115,7 @@ const Home = () => {
             </TouchableOpacity>
             <View>
               <Text className="text-white text-[25px] font-OnestSemiBold">
-                {user?.activeCooperative ? cooperativeName : user?.firstName}
+                {user?.activeCooperative && cooperativeName}
               </Text>
             </View>
           </View>
@@ -129,25 +128,25 @@ const Home = () => {
         <View className="flex-1 relative mt-6">
           {user?.activeCooperative ? (
             <>
-              {/* {role !== "MANAGER" ? (
+              {role !== "MANAGER" ? (
                 ""
-              ) : ( */}
-              <TouchableOpacity
-                onPress={() =>
-                  router.replace(
-                    `/(root)/(manager-tabs)/${user.activeCooperative}`
-                  )
-                }
-                className="flex flex-row justify-end items-center h-[40px] gap-x-3"
-              >
-                <Text className="text-white mb-4 font-Onest">
-                  Switch to manager's view
-                </Text>
-                <View className="mt-[-15px]">
-                  <SwitchAccounts />
-                </View>
-              </TouchableOpacity>
-              {/* )} */}
+              ) : (
+                <TouchableOpacity
+                  onPress={() =>
+                    router.replace(
+                      `/(root)/(manager-tabs)/${user?.activeCooperative}`
+                    )
+                  }
+                  className="flex flex-row justify-end items-center h-[40px] gap-x-3"
+                >
+                  <Text className="text-white mb-4 font-Onest">
+                    Switch to manager's view
+                  </Text>
+                  <View className="mt-[-15px]">
+                    <SwitchAccounts />
+                  </View>
+                </TouchableOpacity>
+              )}
               <ScrollView
                 contentContainerStyle={{ paddingBottom: 80 }}
                 refreshControl={
@@ -272,68 +271,75 @@ const Home = () => {
           <>
             {transactions.length > 0 ? (
               <View className="absolute top-[320px] w-full pl-4">
-                <View className="flex-1 flex-row items-center justify-between border-b border-[#939090] pb-1 ">
-                  <Text className="text-white text-[18px] font-OnestSemiBold ">
-                    Transaction history
-                  </Text>
-                  <Text className="text-primary text-[16px] font-OnestSemiBold  pl-12"></Text>
-                </View>
+                <ScrollView
+                  contentContainerStyle={{ paddingBottom: 80 }}
+                  refreshControl={
+                    <RefreshControl
+                      refreshing={refreshing}
+                      onRefresh={onRefresh}
+                    />
+                  }
+                >
+                  <View className="flex-1 flex-row items-center justify-between border-b border-[#939090] pb-1 ">
+                    <Text className="text-white text-[18px] font-OnestSemiBold ">
+                      Transaction history
+                    </Text>
+                    <Text className="text-primary text-[16px] font-OnestSemiBold  pl-12"></Text>
+                  </View>
 
-                <View className="flex flex-col gap-y-3 mt-[1px]">
-                  {transactions.map((item, index) => {
-                    const formattedDate = format(
-                      new Date(item.createdAt),
-                      "d, EEEE yyyy - p"
-                    );
+                  <View className="flex flex-col gap-y-3 mt-[1px]">
+                    {transactions.map((item, index) => {
+                      const formattedDate = format(
+                        new Date(item.createdAt),
+                        "d, EEEE yyyy - p"
+                      );
 
-                    return (
-                      <LinearGradient
-                        key={index}
-                        colors={["#F4F4F433", "#FFFFFF0B"]}
-                        start={{ x: 0, y: 1.5 }}
-                        end={{ x: 1, y: 0 }}
-                        className="h-[70px] w-full p-[16px] border-[#E8E7E780] border rounded-[8px] flex justify-between"
-                      >
-                        <View
-                          className={`absolute top-[20px] left-3 ${
-                            item.type !== "credit"
-                              ? "bg-red-500"
-                              : "bg-green-500"
-                          }  rounded-full`}
+                      return (
+                        <LinearGradient
+                          key={index}
+                          colors={["#F4F4F433", "#FFFFFF0B"]}
+                          start={{ x: 0, y: 1.5 }}
+                          end={{ x: 1, y: 0 }}
+                          className="h-[70px] w-full p-[16px] border-[#E8E7E780] border rounded-[8px] flex justify-between"
                         >
-                          {item.type === "credit" ? (
-                            <ArrowLeftBottom />
-                          ) : (
-                            <ArrowRightTop />
-                          )}
-                        </View>
-                        <View className="ml-7">
-                          <Text className="text-white text-[14px] font-Onest font-semibold">
-                            {item.type === "credit"
-                              ? "You were credited"
-                              : "You were debited"}
-                          </Text>
-                          <Text className="text-white pt-2 font-Onest text-[12px]">
-                            {formattedDate}
-                          </Text>
-                        </View>
-                        <View className="">
-                          <Text className="text-white text-right font-OnestBold mt-[-30px] text-[15px]">
-                            {see ? "****" : `₦${item.amount}`}
-                          </Text>
-                          {/* <Text className="text-white text-right   mt-[-30px] text-[15px]">
-                        {user.firstName}
-                      </Text> */}
-                        </View>
-                      </LinearGradient>
-                    );
-                  })}
-                </View>
+                          <View
+                            className={`absolute top-[20px] left-3 ${
+                              item.type !== "credit"
+                                ? "bg-red-500"
+                                : "bg-green-500"
+                            }  rounded-full`}
+                          >
+                            {item.type === "credit" ? (
+                              <ArrowLeftBottom />
+                            ) : (
+                              <ArrowRightTop />
+                            )}
+                          </View>
+                          <View className="ml-7">
+                            <Text className="text-white text-[14px] font-Onest font-semibold">
+                              {item.type === "credit"
+                                ? "You were credited"
+                                : "You were debited"}
+                            </Text>
+                            <Text className="text-white pt-2 font-Onest text-[12px]">
+                              {formattedDate}
+                            </Text>
+                          </View>
+                          <View className="">
+                            <Text className="text-white text-right font-OnestBold mt-[-30px] text-[15px]">
+                              {see ? "****" : `₦${item.amount}`}
+                            </Text>
+                          </View>
+                        </LinearGradient>
+                      );
+                    })}
+                  </View>
+                </ScrollView>
               </View>
             ) : (
               <View
                 className={`absolute  w-full pr-4 pl-10  ${
-                  user.activeCooperative ? "top-[370px]" : "top-[300px]"
+                  user?.activeCooperative ? "top-[370px]" : "top-[300px]"
                 }`}
               >
                 {loadingCoop ? (
@@ -373,7 +379,7 @@ const Home = () => {
                     )}
                   </>
                 )}
-                {!user.activeCooperative && (
+                {!user?.activeCooperative && (
                   <TouchableOpacity
                     onPress={() =>
                       router.replace(

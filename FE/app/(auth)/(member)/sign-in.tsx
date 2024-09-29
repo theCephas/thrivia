@@ -1,12 +1,12 @@
-import Call from "@/assets/svg/Call";
-import Lock from "@/assets/svg/Lock";
-import Thrivia from "@/assets/svg/Thrivia";
-import CustomButton from "@/components/CustomButton";
-import FormLoader from "@/components/FormLoader";
-import InputField from "@/components/InputField";
-import { useAxiosInstance } from "@/constants/axiosInstance";
+import Call from "../../../assets/svg/Call";
+import Lock from "../../../assets/svg/Lock";
+import Thrivia from "../../../assets/svg/Thrivia";
+import CustomButton from "../../../components/CustomButton";
+import FormLoader from "../../../components/FormLoader";
+import InputField from "../../../components/InputField";
+import { useAxiosInstance } from "../../../constants/axiosInstance";
 
-import useAuthStore from "@/store";
+import useAuthStore from "../../../store";
 import * as SecureStore from "expo-secure-store";
 import { Link, router } from "expo-router";
 import { useState } from "react";
@@ -17,7 +17,6 @@ const SignIn = () => {
   const axiosInstance = useAxiosInstance();
   const {
     login,
-    token,
     setUserUuid,
     setCooperativeUUID,
     setCooperativeName,
@@ -72,7 +71,7 @@ const SignIn = () => {
         login(accessToken, expiresIn, user);
 
         setUserUuid(user.uuid);
-        const userActCoop = user.activeCooperative;
+        const userActCoop = user?.activeCooperative;
 
         await savePassword(form.password);
 
@@ -82,7 +81,7 @@ const SignIn = () => {
           SetCoopUniqueId(userActCoop.uniqueId);
           setCooperativeEmail(userActCoop.contactEmail);
           router.replace(
-            `/(root)/(manager-tabs)/${user.activeCooperative.uuid}`
+            `/(root)/(manager-tabs)/${user?.activeCooperative.uuid}`
           );
         } else {
           router.replace("/(root)/(tabs)/home");
@@ -115,7 +114,7 @@ const SignIn = () => {
           icon={Call}
           value={form.email}
           keyboardType="email-address"
-          onChangeText={(value) => setForm({ ...form, email: value })}
+          onChangeText={(value: any) => setForm({ ...form, email: value })}
         />
         <InputField
           placeholder={`Password`}
@@ -123,7 +122,7 @@ const SignIn = () => {
           value={form.password}
           icon={Lock}
           keyboardType="default"
-          onChangeText={(value) => setForm({ ...form, password: value })}
+          onChangeText={(value: any) => setForm({ ...form, password: value })}
         />
 
         <View className="mt-[270px]">

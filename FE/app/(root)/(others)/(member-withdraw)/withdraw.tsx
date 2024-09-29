@@ -1,14 +1,17 @@
-import InputField from "@/components/InputField";
-import Dropdown from "@/components/Dropdown";
-import CustomButton from "@/components/CustomButton";
-import CustomModal from "@/components/CustomModal";
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable import/no-unresolved */
+import InputField from "../../../../components/InputField";
+import Dropdown from "../../../../components/Dropdown";
+import CustomButton from "../../../../components/CustomButton";
+import CustomModal from "../../../../components/CustomModal";
 import React, { useState, useEffect } from "react";
-import SelectBank from "@/assets/svg/SelectBank";
-import OneTwoThree from "@/assets/svg/OneTwoThree";
-import AccountName from "@/assets/svg/AccountName";
-import Coins from "@/assets/svg/Coins";
-import Help from "@/assets/svg/Help";
-import { useAxiosInstance } from "@/constants/axiosInstance";
+import SelectBank from "../../../../assets/svg/SelectBank";
+import OneTwoThree from "../../../../assets/svg/OneTwoThree";
+import AccountName from "../../../../assets/svg/AccountName";
+// eslint-disable-next-line import/no-unresolved
+import Coins from "../../../../assets/svg/Coins";
+import Help from "../../../../assets/svg/Help";
+import { useAxiosInstance } from "../../../../constants/axiosInstance";
 import {
   Text,
   View,
@@ -18,9 +21,9 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router, useLocalSearchParams } from "expo-router";
-import ArrowBack from "@/assets/svg/ArrowBack";
+import ArrowBack from "../../../../assets/svg/ArrowBack";
 import Toast from "react-native-toast-message";
-import useAuthStore from "@/store";
+import useAuthStore from "../../../../store";
 import * as SecureStore from "expo-secure-store";
 
 const Withdraw = () => {
@@ -59,7 +62,7 @@ const Withdraw = () => {
     };
 
     fetchBanks();
-  }, []);
+  }, [axiosInstance]);
 
   const setSelectedBank = (value: string) => {
     const selectedBank = banks.find((bank) => bank.name === value);
@@ -113,6 +116,7 @@ const Withdraw = () => {
     if (form.accountNumber.length === 10) {
       verifyAccountNumber();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [form.accountNumber, form.bankCode]);
 
   const handleAccountNumberChange = (value: string) => {

@@ -4,7 +4,7 @@
     "slug": "thrivia",
     "version": "1.0.0",
     "orientation": "portrait",
-
+    "icon": "./assets/images/thriviaicon.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "splash": {
@@ -17,7 +17,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/thrivia.png",
+        "foregroundImage": "./assets/images/thriviaicon.png",
         "backgroundColor": "#1D2128"
       },
       "package": "com.thecephas.thrivia"
@@ -32,6 +32,8 @@
     },
     "description": "A cooperative application",
     "extra": {
+      "EXPO_PUBLIC_MONNIFY_KEY": "@env:EXPO_PUBLIC_MONNIFY_KEY",
+      "EXPO_PUBLIC_CONTRACT_CODE": "@env:EXPO_PUBLIC_CONTRACT_CODE",
       "router": {
         "origin": false
       },

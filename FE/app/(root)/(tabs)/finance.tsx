@@ -8,9 +8,9 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
-import { useAxiosInstance } from "@/constants/axiosInstance";
-import useAuthStore from "@/store";
-import useFetchWallets from "@/constants/useFetchWallets";
+import { useAxiosInstance } from "../../../constants/axiosInstance";
+import useAuthStore from "../../../store";
+import useFetchWallets from "../../../constants/useFetchWallets";
 
 const Finance = () => {
   const [withdrawalRequests, setWithdrawalRequests] = useState<any[]>([]);
