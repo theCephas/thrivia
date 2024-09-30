@@ -4,12 +4,14 @@ import { Cooperatives, CooperativeUsers } from "../cooperatives/cooperatives.ent
 import { LoanHistory, Loans } from "./loans.entity";
 import { LoansController } from "./loans.controller";
 import { LoanService } from "./loans.service";
+import { Users } from "../users/users.entity";
 
 @Module({
   imports: [MikroOrmModule.forFeature({
     entities: [
       Cooperatives,
       CooperativeUsers,
+      Users,
       Loans,
       LoanHistory
     ],

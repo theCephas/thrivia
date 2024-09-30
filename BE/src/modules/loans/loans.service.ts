@@ -6,6 +6,7 @@ import { LoanHistory, Loans } from "./loans.entity";
 import { CancelLoanDto, CreateLoanDto, LoanFilter, UpdateLoanDto } from "./loans.dto";
 import { IAuthContext, LoanStatus } from "src/types";
 import { v4 } from "uuid";
+import { Users } from "../users/users.entity";
 
 @Injectable()
 export class LoanService {
@@ -14,6 +15,8 @@ export class LoanService {
     private readonly cooperativesRepository: EntityRepository<Cooperatives>,
     @InjectRepository(CooperativeUsers)
     private readonly cooperativesUsersRepository: EntityRepository<CooperativeUsers>,
+    @InjectRepository(Users)
+    private readonly usersRepository: EntityRepository<Users>,
     @InjectRepository(Loans)
     private readonly loansRepository: EntityRepository<Loans>,
     @InjectRepository(LoanHistory)
@@ -30,9 +33,9 @@ export class LoanService {
       });
       if (!userExistsInCooperative) throw new ForbiddenException(`Not a member of provided cooperative`);
       const userHasActiveOrPendingLoan = await this.loansRepository.findOne([
-        { status: LoanStatus.PENDING },
-        { status: LoanStatus.ACTIVE },
-        { status: LoanStatus.REJECTED }
+        { status: LoanStatus.PENDING, user: { uuid }, cooperative: { uuid: loan.cooperativeUuid } },
+        { status: LoanStatus.ACTIVE, user: { uuid }, cooperative: { uuid: loan.cooperativeUuid } },
+        { status: LoanStatus.REJECTED, user: { uuid }, cooperative: { uuid: loan.cooperativeUuid } }
       ]);
       if (userHasActiveOrPendingLoan) throw new ConflictException(`Can only have one active or pending loan at a time`);
       // TODO: Ideally we are suppose to calculate user's loan eligibility based on certain factors
@@ -41,6 +44,7 @@ export class LoanService {
         uuid: v4(),
         requestedAmount: loan.amount,
         cooperative: this.cooperativesRepository.getReference(loan.cooperativeUuid),
+        user: this.usersRepository.getReference(uuid),
         bankCode: loan.bankCode,
         bankName: loan.bankName,
         accountNumber: loan.accountNumber,
