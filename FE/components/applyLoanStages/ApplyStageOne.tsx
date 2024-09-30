@@ -1,10 +1,7 @@
 import React from "react";
-import Address from "../../assets/svg/Address";
-import Call from "../../assets/svg/Call";
-import Email from "../../assets/svg/Email";
-import User from "../../assets/svg/User";
 import InputField from "../InputField";
-import DateInput from "../DateInput";
+import Money from "../../assets/svg/Money";
+import LoanIcon from "../../assets/svg/LoanIcon";
 
 interface Props {
   form: any;
@@ -15,35 +12,18 @@ const ApplyStageOne: React.FC<Props> = ({ form, setForm }) => {
   return (
     <>
       <InputField
-        placeholder={`Full name`}
-        icon={User}
-        value={form.fullName}
-        keyboardType="default"
-        onChangeText={(value: any) => setForm({ ...form, fullName: value })}
-      />
-      <DateInput
-        onChangeDate={(value: any) => setForm({ ...form, date: value })}
-      />
-      <InputField
-        placeholder={`Phone Number`}
-        icon={Call}
-        value={form.phoneNumber}
+        placeholder="Amount"
+        icon={Money}
+        value={form.amount}
         keyboardType="number-pad"
-        onChangeText={(value: any) => setForm({ ...form, phoneNumber: value })}
+        onChangeText={(value: any) => setForm({ ...form, amount: value })}
       />
       <InputField
-        placeholder={`Email Address`}
-        icon={Email}
-        value={form.email}
-        keyboardType="email-address"
-        onChangeText={(value: any) => setForm({ ...form, email: value })}
-      />
-      <InputField
-        placeholder={`Residential Address`}
-        icon={Address}
-        value={form.add}
+        placeholder="Loan purpose"
+        icon={LoanIcon}
+        value={form.purpose}
         keyboardType="default"
-        onChangeText={(value: any) => setForm({ ...form, address: value })}
+        onChangeText={(value: any) => setForm({ ...form, purpose: value })}
       />
     </>
   );

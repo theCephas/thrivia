@@ -5,38 +5,23 @@ import { LinearGradient } from "expo-linear-gradient";
 import { Text, TouchableOpacity, View } from "react-native";
 import CustomButton from "../CustomButton";
 import { useRouter } from "expo-router";
+import { useEffect, useState } from "react";
+import See from "../../assets/svg/See";
 
 interface Props {
-  activeNav: number;
-  setActiveNav: React.Dispatch<React.SetStateAction<number>>;
-  setViewPage: React.Dispatch<React.SetStateAction<string>>;
+  // activeNav: number;
+  // setActiveNav: React.Dispatch<React.SetStateAction<number>>;
+  // setViewPage: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const LoanMain = ({ activeNav, setActiveNav, setViewPage }: Props) => {
+const LoanMain = () => {
   const router = useRouter();
-  const hasPendingLoan = true;
+  const [see, setSee] = useState(false);
+
+  useEffect(() => {}, []);
+
   return (
-    <View>
-      <View className="w-full flex flex-row justify-between px-28">
-        {["Loans", "Savings"].map((text, i) => (
-          <TouchableOpacity
-            key={i}
-            onPress={() => setActiveNav(i)}
-            className="pt-8 flex flex-col items-center"
-          >
-            <Text className={`text-white text-[16px] font-Onest px-3`}>
-              {text}
-            </Text>
-
-            <View
-              className={`h-1 mt-1 w-full bg-primary rounded-t-[50px] transition-opacity duration-500 ${
-                activeNav === i ? "opacity-100" : "opacity-0"
-              }`}
-            />
-          </TouchableOpacity>
-        ))}
-      </View>
-
+    <View className="w-full">
       <View className="w-full px-4 mt-4 ">
         <LinearGradient
           colors={["#3C2A07", "#92822E", "#4C4611"]}
@@ -47,40 +32,34 @@ const LoanMain = ({ activeNav, setActiveNav, setViewPage }: Props) => {
           <View className="absolute top-0 z-50 right-0">
             <BgStyling />
           </View>
-          <Text className="text-white text-[20px] font-[400]">
+          <Text className="text-white text-xl font-OnestSemiBold">
             Loan balance
           </Text>
           <View className="py-4 flex flex-row items-center gap-3">
-            <Text className="text-white text-4xl   tracking-widest">₦0.00</Text>
-            <Unsee />
-          </View>
-          <TouchableOpacity
-            onPress={() => {}}
-            className="flex flex-row items-center"
-          >
-            <Text className="text-white text-lg font-Onest   pr-1">
-              Transaction history
+            <Text className="text-white text-4xl   tracking-widest">
+              ₦{see ? "0.00" : "***"}
             </Text>
-            <View className="-rotate-90 scale-90">
-              <ArrowDown />
-            </View>
-          </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => setSee((prev) => !prev)}
+              className="ml-3 mt-1"
+            >
+              {see ? <See /> : <Unsee />}
+            </TouchableOpacity>
+          </View>
         </LinearGradient>
       </View>
 
       <View className="px-4 flex flex-row justify-between mt-4">
         <CustomButton
-          title="Repay loan"
-          onPress={() => {}}
+          title="Apply for loan"
+          onPress={() =>
+            router.replace("/(root)/(others)/(member-loan)/loan-stages")
+          }
           className="w-[48%]"
         />
-        <TouchableOpacity
+        {/* <TouchableOpacity
           className={`w-[48%] mb-5 rounded-full  border border-white overflow-hidden`}
-          onPress={() =>
-            hasPendingLoan
-              ? setViewPage("view-application")
-              : router.replace("/(root)/(others)/(member-loan)/loan-stages")
-          }
+          onPress={() => {}}
         >
           <LinearGradient
             colors={["rgba(244, 244, 244, 0.2)", "rgba(255, 255, 255, 0.044)"]}
@@ -89,10 +68,16 @@ const LoanMain = ({ activeNav, setActiveNav, setViewPage }: Props) => {
             className="w-full flex flex-row justify-center items-center"
           >
             <Text className="text-white text-lg font-Onest   p-3">
-              {hasPendingLoan ? "View application" : "Apply for loan"}
+              View application
             </Text>
           </LinearGradient>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
+      </View>
+
+      <View className="px-4 flex flex-col gap-6 mt-1">
+        <Text className="text-white text-[18px] font-OnestSemiBold border-b border-[#939090] pb-2">
+          Loan history
+        </Text>
       </View>
     </View>
   );
