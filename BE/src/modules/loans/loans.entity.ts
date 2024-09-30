@@ -20,10 +20,10 @@ export class Loans extends Timestamp {
   @Property({ type: 'decimal', precision: 10, scale: 2, default: 0 })
   balance: number;
 
-  @Property({ type: 'date' })
+  @Property({ type: 'date', nullable: true })
   startDate: Date;
 
-  @Property({ type: 'date' })
+  @Property({ type: 'date', nullable: true })
   endDate: Date;
 
   @Enum({ items: () => LoanStatus })

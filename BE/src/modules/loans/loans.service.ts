@@ -25,7 +25,8 @@ export class LoanService {
     let loanModel: Loans;
     await this.em.transactional(async (em) => {
       const userExistsInCooperative = await this.cooperativesUsersRepository.findOne({
-        user: { uuid }
+        user: { uuid },
+        cooperative: loan.cooperativeUuid,
       });
       if (!userExistsInCooperative) throw new ForbiddenException(`Not a member of provided cooperative`);
       const userHasActiveOrPendingLoan = await this.loansRepository.findOne([
@@ -39,7 +40,7 @@ export class LoanService {
       loanModel = this.loansRepository.create({
         uuid: v4(),
         requestedAmount: loan.amount,
-        cooperative: this.cooperativesRepository.getReference(uuid),
+        cooperative: this.cooperativesRepository.getReference(loan.cooperativeUuid),
         bankCode: loan.bankCode,
         bankName: loan.bankName,
         accountNumber: loan.accountNumber,
