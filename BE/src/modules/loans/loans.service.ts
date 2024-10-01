@@ -1,12 +1,15 @@
 import { InjectRepository } from "@mikro-orm/nestjs";
 import { ConflictException, ForbiddenException, Injectable, NotFoundException } from "@nestjs/common";
-import { Cooperatives, CooperativeUsers } from "../cooperatives/cooperatives.entity";
+import { Cooperatives, CooperativeUsers, Payments } from "../cooperatives/cooperatives.entity";
 import { EntityManager, EntityRepository } from "@mikro-orm/core";
 import { LoanHistory, Loans } from "./loans.entity";
 import { CancelLoanDto, CreateLoanDto, LoanFilter, UpdateLoanDto } from "./loans.dto";
 import { IAuthContext, LoanStatus } from "src/types";
 import { v4 } from "uuid";
 import { Users } from "../users/users.entity";
+import { DepositMoneyDto } from "../cooperatives/cooperatives.dto";
+import { Transactions, Wallets } from "../wallets/wallets.entity";
+import { WalletsService } from "../wallets/wallets.service";
 
 @Injectable()
 export class LoanService {
@@ -21,7 +24,14 @@ export class LoanService {
     private readonly loansRepository: EntityRepository<Loans>,
     @InjectRepository(LoanHistory)
     private readonly loanHistoryRepository: EntityRepository<LoanHistory>,
+    @InjectRepository(Payments)
+    private readonly paymentRepository: EntityRepository<Payments>,
+    @InjectRepository(Transactions)
+    private readonly transactionRepository: EntityRepository<Transactions>,
+    @InjectRepository(Wallets)
+    private readonly walletsRepository: EntityRepository<Wallets>,
     private readonly em: EntityManager,
+    private readonly walletService: WalletsService
   ) { }
   
   async createLoanApplication(loan: CreateLoanDto, { uuid }: IAuthContext) {
@@ -82,6 +92,41 @@ export class LoanService {
       await em.flush();
     })
   }  
+
+  async repayLoan(loanUuid: string, { paymentUuid }: DepositMoneyDto, { uuid }: IAuthContext) {
+    await this.em.transactional(async (em) => {
+      const loanExists = await this.loansRepository.findOne({
+        uuid: loanUuid,
+        user: { uuid }
+      });
+      if (!loanExists) throw new NotFoundException('Loan not found');
+      if (![LoanStatus.OVERDUE, LoanStatus.ACTIVE].includes(loanExists.status)) throw new ForbiddenException('Cannot update loan');
+      const paymentExists = await this.paymentRepository.findOne({ uuid: paymentUuid });
+      if (!paymentExists) throw new NotFoundException('Payment not found');
+      const transactionExists = await this.transactionRepository.findOne({
+        payment: { uuid: paymentUuid },
+      });
+      if (transactionExists) throw new ConflictException('Duplicate payment');
+      const cooperativeWallet = await this.walletsRepository.findOne({
+        createdBy: loanExists.cooperative.createdBy,
+        cooperative: loanExists.cooperative,
+        user: null,
+      });
+      await this.walletService.creditWallet({
+        walletUuid: cooperativeWallet.uuid,
+        amount: paymentExists.amount,
+        paymentUuid: paymentExists.uuid,
+        userUuid: uuid,
+        remark: `Loan repayment for: ${loanUuid}`,
+      });
+      loanExists.balance -= paymentExists.amount;
+      if (loanExists.balance <= 0) {
+        loanExists.endDate = new Date();
+        loanExists.status = LoanStatus.CLOSED;
+      }
+      await em.flush();
+    });
+  }
 
   async cancelLoanApplication(loanUuid: string, { reason }: CancelLoanDto, { uuid }: IAuthContext) {
     await this.em.transactional(async (em) => {

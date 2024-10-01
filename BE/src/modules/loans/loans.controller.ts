@@ -4,6 +4,7 @@ import { Request } from "express";
 import { JwtAuthGuard } from "src/guards/jwt-auth-guard";
 import { CancelLoanDto, CreateLoanDto, LoanQuery, UpdateLoanDto } from "./loans.dto";
 import { LoanService } from "./loans.service";
+import { DepositMoneyDto } from "../cooperatives/cooperatives.dto";
 
 @Controller('loans')
 @ApiTags('loans')
@@ -21,6 +22,12 @@ export class LoansController {
   @UseGuards(JwtAuthGuard)
   cancelLoanApplication(@Param('uuid') uuid: string, @Body() body: CancelLoanDto, @Req() request: Request) {
     return this.loanService.cancelLoanApplication(uuid, body, request.user as any);
+  }
+
+  @Put('repay/:uuid')
+  @UseGuards(JwtAuthGuard)
+  repayLoan(@Param('uuid') uuid: string, @Body() body: DepositMoneyDto, @Req() request: Request) {
+    return this.loanService.repayLoan(uuid, body, request.user as any);
   }
 
   @Put(':uuid')
