@@ -1,6 +1,5 @@
 import Thrivia from "../../../../assets/svg/Thrivia";
 import ApplyStageOne from "../../../../components/applyLoanStages/ApplyStageOne";
-import ApplyStageThree from "../../../../components/applyLoanStages/ApplyStageThree";
 import ApplyStageTwo from "../../../../components/applyLoanStages/ApplyStageTwo";
 import CircleProgress from "../../../../components/CircleProgress";
 
@@ -20,7 +19,7 @@ const JoinStages = () => {
   const [banks, setBanks] = useState<any[]>([]);
   const [isVerifying, setIsVerifying] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  // const [error, setError] = useState<string | null>(null);
   const axiosInstance = useAxiosInstance();
   const [form, setForm] = useState({
     accName: "",
@@ -77,11 +76,11 @@ const JoinStages = () => {
           });
           setIsVerified(true);
         } else {
-          setError("Account name not found");
+          // setError("Account name not found");
           setIsVerified(false);
         }
       } catch (error) {
-        setError("Invalid account number or bank.");
+        // setError("Invalid account number or bank.");
         setForm((prevForm) => ({
           ...prevForm,
           accountName: "",
@@ -91,7 +90,7 @@ const JoinStages = () => {
         setIsVerifying(false);
       }
     } else {
-      setError("Account number must be exactly 10 digits");
+      // setError("Account number must be exactly 10 digits");
     }
   };
 
@@ -120,7 +119,7 @@ const JoinStages = () => {
       console.log(data);
       Toast.show({
         type: "success",
-        text1: `${data.message}`,
+        text1: `Loan request sent successfully`,
       });
       setIsModalVisible(num);
     } catch (err) {

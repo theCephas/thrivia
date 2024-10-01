@@ -162,7 +162,7 @@ const WithdrawDetails = () => {
                       : details.status === "APPROVED"
                       ? "text-green-400"
                       : "text-red-400"
-                  } w-[155px] pl-1 py-2
+                  } w-[155px] font-Onest pl-1 py-2
                 `}
               >
                 {details.status}
