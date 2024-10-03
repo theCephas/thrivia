@@ -4,6 +4,8 @@ import User from "../../assets/svg/User";
 import SelectBank from "../../assets/svg/SelectBank";
 import { Text } from "react-native";
 import OneTwoThree from "../../assets/svg/OneTwoThree";
+import { useState } from "react";
+import FormLoader from "../FormLoader";
 
 interface Props {
   form: any;
@@ -20,13 +22,22 @@ const ApplyStageTwo: React.FC<Props> = ({
   isVerified,
   isVerifying,
 }) => {
+  const [loading, setLoading] = useState(false);
+
   const setSelectedBank = (value: string) => {
-    const selectedBank = banks.find((bank) => bank.name === value);
-    setForm({
-      ...form,
-      bankName: value,
-      bankCode: selectedBank?.code || "",
-    });
+    setLoading(true);
+    try {
+      const selectedBank = banks.find((bank) => bank.name === value);
+      setForm({
+        ...form,
+        bankName: value,
+        bankCode: selectedBank?.code || "",
+      });
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -38,6 +49,7 @@ const ApplyStageTwo: React.FC<Props> = ({
         onSelect={setSelectedBank}
         icon={SelectBank}
       />
+
       <InputField
         placeholder={`Account Number`}
         icon={OneTwoThree}
@@ -54,6 +66,7 @@ const ApplyStageTwo: React.FC<Props> = ({
         keyboardType="default"
         onChangeText={(value: any) => setForm({ ...form, accName: value })}
       />
+      {loading && <FormLoader />}
     </>
   );
 };

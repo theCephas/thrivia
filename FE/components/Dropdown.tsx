@@ -106,7 +106,10 @@ const Dropdown = ({
               >
                 {value || ""}
               </Text>
-              <View>
+              <View
+                className={`transition-all duration-500 ${isOpen &&
+                  "-rotate-180"}`}
+              >
                 <ArrowDown />
               </View>
             </View>
