@@ -1,25 +1,57 @@
 import { LinearGradient } from "expo-linear-gradient";
-import { SetStateAction } from "react";
+import { SetStateAction, useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
+import CustomButton from "./CustomButton";
+import CustomModal from "./CustomModal";
+import Toast from "react-native-toast-message";
+import { useAxiosInstance } from "../constants/axiosInstance";
+import InputField from "./InputField";
 
 interface Props {
-  viewLoan: number | null;
   loan: any;
   setShowDetails: React.Dispatch<SetStateAction<boolean>>;
   formattedDate: (date: string) => string;
+  getLoans: () => void;
 }
 
 const MembersLoanDetails = ({
-  viewLoan,
   loan,
   setShowDetails,
   formattedDate,
+  getLoans,
 }: Props) => {
+  const [alertModal, setAlertModal] = useState<string | null>(null);
+  const axiosInstance = useAxiosInstance();
+  const [reason, setReason] = useState("");
+
+  const handleReject = async () => {
+    console.log("first");
+    try {
+      const res = await axiosInstance.put(`/loans/cancel/${loan.uuid}`, {
+        reason: reason,
+      });
+      console.log(res);
+      Toast.show({
+        type: "success",
+        text1: `Loan request Canceled`,
+      });
+      getLoans();
+      setShowDetails(false);
+    } catch (err) {
+      console.log(err);
+      Toast.show({
+        type: "error",
+        text1: `${err}`,
+      });
+    } finally {
+      setAlertModal(null);
+    }
+  };
   return (
-    <View className="h-[60vh] bg-[#1d2128] rounded-xl px-4">
+    <View className="bg-[#1d2128] rounded-xl px-4 py-6">
       <TouchableOpacity
         onPress={() => setShowDetails(false)}
-        className="mt-4 w-full flex flex-row gap-x-3"
+        className="my-4 w-full flex flex-row gap-x-3"
       >
         {/* < /> */}
         <Text className="text-lg text-white font-OnestSemiBold h-6 w-6 flex flex-row items-center text-center border border-white rounded-full">
@@ -133,6 +165,33 @@ const MembersLoanDetails = ({
           </View>
         </View>
       </View>
+      <CustomButton
+        title="Cancel"
+        onPress={() => setAlertModal("cancel")}
+        className="mt-8 !bg-red-400"
+      />
+      <CustomModal
+        isVisible={alertModal === "cancel"}
+        OnNext={handleReject}
+        title="Cancel Loan Request"
+        message="Are you sure want to cancel this request? This action can't be reversed!"
+        buttonText="Yes"
+        buttonTextCancel="No"
+        onButtonPress={() => setAlertModal(null)}
+        UI={
+          <View className="flex flex-col gap-y-2 mt-3">
+            <Text className="text-xl">Reason</Text>
+            <View className="border border-primary rounded-2xl h-14">
+              <InputField
+                value={reason}
+                keyboardType="default"
+                onChangeText={(val) => setReason(val)}
+                className="text-primary"
+              />
+            </View>
+          </View>
+        }
+      />
     </View>
   );
 };

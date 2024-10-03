@@ -1,10 +1,16 @@
 import BgStyling from "../../assets/svg/BgStyling";
 import Unsee from "../../assets/svg/Unsee";
 import { LinearGradient } from "expo-linear-gradient";
-import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import {
+  RefreshControl,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import CustomButton from "../CustomButton";
 import { useRouter } from "expo-router";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import See from "../../assets/svg/See";
 import { useAxiosInstance } from "../../constants/axiosInstance";
 import Toast from "react-native-toast-message";
@@ -19,32 +25,47 @@ const LoanMain = () => {
   const [loans, setLoans] = useState<any[]>([]);
   const [showDetails, setShowDetails] = useState(false);
   const [viewLoan, setViewLoan] = useState<number | null>(null);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const getLoans = useCallback(async () => {
+    try {
+      const res = await axiosInstance.get("/loans");
+      const data = await res.data;
+      console.log(data);
+      setLoans(data);
+    } catch (err) {
+      console.log(err);
+      Toast.show({
+        type: "error",
+        text1: `${err}`,
+      });
+    }
+  }, [axiosInstance]);
 
   useEffect(() => {
-    const getLoans = async () => {
-      try {
-        const res = await axiosInstance.get("/loans");
-        const data = await res.data;
-        console.log(data);
-        setLoans(data);
-      } catch (err) {
-        console.log(err);
-        Toast.show({
-          type: "error",
-          text1: `${err}`,
-        });
-      }
-    };
-
     getLoans();
-  }, [axiosInstance]);
+  }, [getLoans]);
 
   const formattedDate = (date: any) => {
     return format(new Date(date), "d, MMMM yyyy - p");
   };
 
+  const onRefreshLoans = useCallback(async () => {
+    setRefreshing(true);
+    try {
+      await getLoans();
+    } finally {
+      setRefreshing(false);
+    }
+  }, [getLoans]);
+
   return (
-    <View className="w-full">
+    <ScrollView
+      className="w-full"
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefreshLoans} />
+      }
+    >
       <View className="w-full px-4 mt-4 ">
         <LinearGradient
           colors={["#3C2A07", "#92822E", "#4C4611"]}
@@ -153,12 +174,12 @@ const LoanMain = () => {
       >
         <MembersLoanDetails
           loan={viewLoan !== null ? loans[viewLoan] : {}}
-          viewLoan={viewLoan}
           setShowDetails={setShowDetails}
           formattedDate={formattedDate}
+          getLoans={getLoans}
         />
       </Modal>
-    </View>
+    </ScrollView>
   );
 };
 

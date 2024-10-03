@@ -189,18 +189,20 @@ const LoanDetails = ({
           </View>
         </View>
       </View>
-      <View className="w-full flex flex-row gap-x-4 mt-8">
-        <CustomButton
-          title="Reject"
-          onPress={() => setAlertModal("reject")}
-          className="w-[48%] !bg-red-400"
-        />
-        <CustomButton
-          title="Approve"
-          onPress={() => setAlertModal("approve")}
-          className="w-[48%]"
-        />
-      </View>
+      {loan.status !== "REJECTED" && (
+        <View className="w-full flex flex-row gap-x-4 mt-8">
+          <CustomButton
+            title="Reject"
+            onPress={() => setAlertModal("reject")}
+            className="w-[48%] !bg-red-400"
+          />
+          <CustomButton
+            title="Approve"
+            onPress={() => setAlertModal("approve")}
+            className="w-[48%]"
+          />
+        </View>
+      )}
       <Toast />
       <CustomModal
         isVisible={alertModal === "approve"}
