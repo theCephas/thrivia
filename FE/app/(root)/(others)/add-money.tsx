@@ -34,8 +34,8 @@ const AddMoney = () => {
     reference: `${Date.now()}`,
     customerFullName: `${role === "MANAGER" ? cooperativeName : user.name}`,
     customerEmail: `${role === "MANAGER" ? cooperativeEmail : user.email}`,
-    apiKey: "MK_PROD_GSXRRTTKLT",
-    contractCode: "896041207144",
+    apiKey: process.env.EXPO_PUBLIC_MONNIFY_KEY!,
+    contractCode: process.env.EXPO_PUBLIC_CONTRACT_CODE!,
     paymentDescription: "Payment for savings",
     mode: "LIVE",
   };
