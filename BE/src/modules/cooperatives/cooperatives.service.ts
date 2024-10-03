@@ -661,6 +661,7 @@ export class CooperativesService {
         loanExists.status = LoanStatus.ACTIVE;
         loanExists.reviewedBy = this.usersRepository.getReference(uuid);
         loanExists.reviewedAt = new Date();
+        loanExists.rejectionReason = null;
         em.persist(paymentModel);
         await em.flush();
       } else {
@@ -684,7 +685,7 @@ export class CooperativesService {
     });
   }
 
-  async rejectLoan(cooperativeUuid: string, loanUuid: string, { uuid }: IAuthContext) {
+  async rejectLoan(cooperativeUuid: string, loanUuid: string, { reason }: RejectApplicationDto, { uuid }: IAuthContext) {
     await this.cooperativeGuard(cooperativeUuid, uuid);
     await this.em.transactional(async (em) => {
       const loanExists = await this.loansRepository.findOne({
@@ -696,6 +697,7 @@ export class CooperativesService {
       loanExists.status = LoanStatus.REJECTED;
       loanExists.reviewedBy = this.usersRepository.getReference(uuid);
       loanExists.reviewedAt = new Date();
+      loanExists.rejectionReason = reason;
       await em.flush();
     });
   }

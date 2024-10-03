@@ -217,7 +217,7 @@ export class CooperativesController {
 
   @Post(':uuid/loans/:loanUuid/reject')
   @UseGuards(JwtAuthGuard)
-  rejectLoan(@Param('uuid') uuid: string, @Param('loanUuid') loanUuid: string, @Req() request: Request) {
-    return this.cooperativesService.rejectLoan(uuid, loanUuid, request.user as any);
+  rejectLoan(@Param('uuid') uuid: string, @Param('loanUuid') loanUuid: string, @Body() body: RejectApplicationDto, @Req() request: Request) {
+    return this.cooperativesService.rejectLoan(uuid, loanUuid, body, request.user as any);
   }
 }

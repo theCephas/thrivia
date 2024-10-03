@@ -48,6 +48,12 @@ export class LoansController {
     return this.loanService.fetchLoans(query.filter, request.user as any);
   }
 
+  @Get('active-loan')
+  @UseGuards(JwtAuthGuard)
+  fetchActiveLoan(@Req() request: Request) {
+    return this.loanService.fetchActiveLoan(request.user as any);
+  }
+
   @Get('pending-loans')
   @UseGuards(JwtAuthGuard)
   fetchPendingLoans(@Req() request: Request) {

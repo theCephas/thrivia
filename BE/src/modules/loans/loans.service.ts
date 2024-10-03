@@ -155,8 +155,15 @@ export class LoanService {
   async fetchLoans(filter: LoanFilter, { uuid }: IAuthContext) {
     return this.loansRepository.find({
       user: { uuid },
-      ...(filter?.status ? { status: filter?.status } : {})
+      ...(filter?.status ? { status: { $in: filter?.status.split(',') as any } } : {})
     })
+  }
+
+  async fetchActiveLoan({ uuid }: IAuthContext) {
+    return this.loansRepository.find({ 
+      user: { uuid },
+      status: { $in: [LoanStatus.ACTIVE, LoanStatus.OVERDUE] }
+     });
   }
 
   async fetchPendingLoans({ uuid }: IAuthContext) {
