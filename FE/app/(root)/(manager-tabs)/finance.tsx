@@ -15,6 +15,8 @@ import CustomModal from "../../../components/CustomModal";
 import Send from "../../../assets/svg/Send";
 import { router } from "expo-router";
 import { ActivityIndicator } from "react-native";
+import { format } from "date-fns";
+import ManagerLoanMain from "../../../components/ManagerLoanMain";
 
 const Finance = () => {
   const [withdrawalRequests, setWithdrawalRequests] = useState<any[]>([]);
@@ -27,6 +29,8 @@ const Finance = () => {
   const axiosInstance = useAxiosInstance();
   const [refreshing, setRefreshing] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [options, setOptions] = useState("Withdrawal Requests");
+  const [loans, setLoans] = useState<any[]>([]);
 
   // Fetch withdrawal requests
   const getWithdrawalRequests = useCallback(async () => {
@@ -111,6 +115,25 @@ const Finance = () => {
     }
   };
 
+  // Get loans
+  const getLoans = useCallback(async () => {
+    try {
+      const res = await axiosInstance.get(
+        `/cooperatives/${cooperativeUUID}/loans`
+      );
+
+      const data = await res.data;
+      console.log(data);
+      setLoans(data);
+    } catch (err) {
+      console.log(err);
+      Toast.show({
+        type: "error",
+        text1: "Unable to fetch loans",
+      });
+    }
+  }, [axiosInstance, cooperativeUUID]);
+
   // Open modal and store the current request uuid
   const openRejectionModal = (uuid: string) => {
     setCurrentRequestUuid(uuid);
@@ -126,6 +149,10 @@ const Finance = () => {
     getWithdrawalRequests();
   }, [getWithdrawalRequests]);
 
+  useEffect(() => {
+    getLoans();
+  }, [getLoans]);
+
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
     try {
@@ -135,102 +162,138 @@ const Finance = () => {
     }
   }, [getWithdrawalRequests]);
 
+  const onRefreshLoans = useCallback(async () => {
+    setRefreshing(true);
+    try {
+      await getLoans();
+    } finally {
+      setRefreshing(false);
+    }
+  }, [getLoans]);
+
+  const formattedDate = (date: any) => {
+    return format(new Date(date), "d, MMMM yyyy - p");
+  };
+
   return (
     <SafeAreaView className="flex-1 flex items-center flex-col bg-[#1d2128]">
-      <View className="flex-row flex justify-between items-center p-4">
-        <Text className="text-white font-OnestSemiBold mt-5 text-center text-[15px]">
-          Withdrawal Requests
-        </Text>
+      <View className="flex-row flex items-center gap-6 p-4">
+        {["Withdrawal Requests", "Loans"].map((text) => (
+          <TouchableOpacity key={text} onPress={() => setOptions(text)}>
+            <Text
+              className={`text-white font-OnestSemiBold mt-5 text-center text-[15px] pb-1 border-b-2 ease-linear duration-500 ${
+                options === text ? "border-primary" : "border-transparent"
+              }`}
+            >
+              {text}
+            </Text>
+          </TouchableOpacity>
+        ))}
       </View>
 
-      <ScrollView
-        contentContainerStyle={{ paddingBottom: 80 }}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-        className="w-full p-4"
-      >
-        {loading ? (
-          <View className=" w-full pl-4">
-            <ActivityIndicator size="large" color="#FFFFFF" />
-          </View>
-        ) : withdrawalRequests.length === 0 ? (
-          <View className="w-full flex items-center mt-10">
-            <Text className="text-white text-lg font-Onest">
-              No withdrawal requests yet
-            </Text>
-          </View>
-        ) : (
-          <View className="">
-            {withdrawalRequests.map((request, index) => (
-              <View key={index} className="bg-[#2d3038] p-4 mb-4 rounded-lg">
-                <Text className="text-white font-OnestSemiBold text-[16px]">
-                  {request.accountName} | <Text>{request.bankName}</Text>
-                </Text>
-                <Text className="text-white/90 mt-2 font-Onest text-[14px]">
-                  Member Name: {request.wallet.cooperative.createdBy.firstName}{" "}
-                  {request.wallet.cooperative.createdBy.lastName}
-                </Text>
-                <Text className="text-white/90 mt-2 font-Onest text-[14px]">
-                  Amount:{" "}
-                  <Text className="font-OnestSemiBold">₦{request.amount}</Text>
-                </Text>
-                <Text className={`text-white/90 mt-1 font-Onest text-[14px]`}>
-                  Status:{" "}
-                  <Text
-                    className={`${
-                      request.status === "PENDING"
-                        ? "text-amber-400"
-                        : request.status === "APPROVED"
-                        ? "text-green-400"
-                        : "text-red-400"
-                    } font-OnestSemiBold
-                    `}
-                  >
-                    {request.status}
+      {options === "Withdrawal Requests" && (
+        <ScrollView
+          contentContainerStyle={{ paddingBottom: 80 }}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
+          className="w-full p-4"
+        >
+          {loading ? (
+            <View className=" w-full pl-4">
+              <ActivityIndicator size="large" color="#FFFFFF" />
+            </View>
+          ) : withdrawalRequests.length === 0 ? (
+            <View className="w-full flex items-center mt-10">
+              <Text className="text-white text-lg font-Onest">
+                No withdrawal requests yet
+              </Text>
+            </View>
+          ) : (
+            <View className="">
+              {withdrawalRequests.map((request, index) => (
+                <View key={index} className="bg-[#2d3038] p-4 mb-4 rounded-lg">
+                  <Text className="text-white font-OnestSemiBold text-[16px]">
+                    {request.accountName} | <Text>{request.bankName}</Text>
                   </Text>
-                </Text>
-                <View className="mt-4 flex-row justify-between">
-                  {request.status === "PENDING" && (
-                    <>
-                      <TouchableOpacity
-                        className="bg-green-600 w-[80px] h-[30px] flex items-center justify-center rounded-[6px]"
-                        onPress={() => approveRequest(request.uuid)}
-                      >
-                        <Text className="text-white font-OnestSemiBold text-[12px]">
-                          Approve
-                        </Text>
-                      </TouchableOpacity>
-
-                      <TouchableOpacity
-                        className="bg-red-600 w-[80px] h-[30px] flex items-center justify-center rounded-[6px]"
-                        onPress={() => openRejectionModal(request.uuid)}
-                      >
-                        <Text className="text-white font-OnestSemiBold text-[12px]">
-                          Reject
-                        </Text>
-                      </TouchableOpacity>
-                    </>
-                  )}
-
-                  <TouchableOpacity
-                    className="bg-blue-600 w-[80px] h-[30px] flex items-center justify-center rounded-[6px]"
-                    onPress={() =>
-                      router.navigate(
-                        `/(others)/(member-withdraw)/${request.uuid}`
-                      )
-                    }
-                  >
-                    <Text className="text-white font-OnestSemiBold text-[12px]">
-                      View Details
+                  <Text className="text-white/90 mt-2 font-Onest text-[14px]">
+                    Member Name:{" "}
+                    {request.wallet.cooperative.createdBy.firstName}{" "}
+                    {request.wallet.cooperative.createdBy.lastName}
+                  </Text>
+                  <Text className="text-white/90 mt-2 font-Onest text-[14px]">
+                    Amount:{" "}
+                    <Text className="font-OnestSemiBold">
+                      ₦{request.amount}
                     </Text>
-                  </TouchableOpacity>
+                  </Text>
+                  <Text className={`text-white/90 mt-1 font-Onest text-[14px]`}>
+                    Status:{" "}
+                    <Text
+                      className={`${
+                        request.status === "PENDING"
+                          ? "text-amber-400"
+                          : request.status === "APPROVED"
+                          ? "text-green-400"
+                          : "text-red-400"
+                      } font-OnestSemiBold
+                    `}
+                    >
+                      {request.status}
+                    </Text>
+                  </Text>
+                  <View className="mt-4 flex-row justify-between">
+                    {request.status === "PENDING" && (
+                      <>
+                        <TouchableOpacity
+                          className="bg-green-600 w-[80px] h-[30px] flex items-center justify-center rounded-[6px]"
+                          onPress={() => approveRequest(request.uuid)}
+                        >
+                          <Text className="text-white font-OnestSemiBold text-[12px]">
+                            Approve
+                          </Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                          className="bg-red-600 w-[80px] h-[30px] flex items-center justify-center rounded-[6px]"
+                          onPress={() => openRejectionModal(request.uuid)}
+                        >
+                          <Text className="text-white font-OnestSemiBold text-[12px]">
+                            Reject
+                          </Text>
+                        </TouchableOpacity>
+                      </>
+                    )}
+
+                    <TouchableOpacity
+                      className="bg-blue-600 w-[80px] h-[30px] flex items-center justify-center rounded-[6px]"
+                      onPress={() =>
+                        router.navigate(
+                          `/(others)/(member-withdraw)/${request.uuid}`
+                        )
+                      }
+                    >
+                      <Text className="text-white font-OnestSemiBold text-[12px]">
+                        View Details
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
                 </View>
-              </View>
-            ))}
-          </View>
-        )}
-      </ScrollView>
+              ))}
+            </View>
+          )}
+        </ScrollView>
+      )}
+
+      {options === "Loans" && (
+        <ManagerLoanMain
+          onRefreshLoans={onRefreshLoans}
+          loans={loans}
+          formattedDate={formattedDate}
+          refreshing={refreshing}
+          getLoans={getLoans}
+        />
+      )}
 
       {/* Modal for rejection */}
       <CustomModal

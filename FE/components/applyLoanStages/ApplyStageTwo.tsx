@@ -1,9 +1,9 @@
 import Dropdown from "../Dropdown";
 import InputField from "../InputField";
 import User from "../../assets/svg/User";
-import Call from "../../assets/svg/Call";
 import SelectBank from "../../assets/svg/SelectBank";
 import { Text } from "react-native";
+import OneTwoThree from "../../assets/svg/OneTwoThree";
 
 interface Props {
   form: any;
@@ -40,7 +40,7 @@ const ApplyStageTwo: React.FC<Props> = ({
       />
       <InputField
         placeholder={`Account Number`}
-        icon={Call}
+        icon={OneTwoThree}
         value={form.accNumber}
         keyboardType="number-pad"
         onChangeText={(value: any) => setForm({ ...form, accNumber: value })}

@@ -10,6 +10,7 @@ import { useAxiosInstance } from "../../constants/axiosInstance";
 import Toast from "react-native-toast-message";
 import Modal from "react-native-modal";
 import { format } from "date-fns";
+import MembersLoanDetails from "../MembersLoanDetails";
 
 const LoanMain = () => {
   const router = useRouter();
@@ -36,7 +37,7 @@ const LoanMain = () => {
     };
 
     getLoans();
-  }, []);
+  }, [axiosInstance]);
 
   const formattedDate = (date: any) => {
     return format(new Date(date), "d, MMMM yyyy - p");
@@ -107,13 +108,14 @@ const LoanMain = () => {
             key={i}
             className="w-full flex flex-row justify-between p-2 py-4 border border-[#939090]/75 rounded-lg"
             onPress={() => {
+              // console.log(loans[i]);
               setViewLoan(i);
               setShowDetails(true);
             }}
           >
             <View className="flex flex-col gap-y-1">
               <Text className="text-white text-base font-OnestSemiBold">
-                {loan.requestedAmount} -{" "}
+                ₦{loan.requestedAmount} -{" "}
                 <Text className="text-sm text-white font-Onest">
                   {loan.cooperative.name}
                 </Text>
@@ -146,103 +148,15 @@ const LoanMain = () => {
         isVisible={showDetails}
         onBackdropPress={() => setShowDetails(false)}
         onBackButtonPress={() => setShowDetails(false)}
-        animationIn="slideInUp"
-        animationOut="slideOutDown"
+        animationIn="pulse"
         className="relative"
       >
-        <View className="h-[60vh] bg-black rounded-xl px-4">
-          <TouchableOpacity
-            onPress={() => setShowDetails(false)}
-            className="mt-4 w-full flex flex-row gap-x-3"
-          >
-            {/* < /> */}
-            <Text className="text-lg text-white font-OnestSemiBold h-6 w-6 flex flex-col items-center text-center border border-white rounded-full">
-              X
-            </Text>
-            <Text className="text-2xl text-white font-OnestSemiBold">
-              Loan details
-            </Text>
-          </TouchableOpacity>
-          <View className="flex flex-col gap-y-1 w-full mt-3">
-            <View className="flex flex-row border border-[#E8E7E780] rounded-[2px]">
-              <LinearGradient
-                colors={["#F4F4F433", "#FFFFFF0B"]}
-                className="w-[112px] "
-              >
-                <Text className=" pl-1 py-2 font-Onest text-[12px] text-white">
-                  Amount:
-                </Text>
-              </LinearGradient>
-              {/*  */}
-              <View className="border-l border-[#E8E7E780]">
-                <Text className="w-[155px] pl-1 py-2 font-Onest text-[12px] text-white">
-                  {viewLoan && loans[viewLoan].requestedAmount}
-                </Text>
-              </View>
-            </View>
-            <View className="flex flex-row border border-[#E8E7E780] rounded-[2px]">
-              <LinearGradient
-                colors={["#F4F4F433", "#FFFFFF0B"]}
-                className="w-[112px] "
-              >
-                <Text className=" pl-1 py-2 font-Onest text-[12px] text-white">
-                  Purpose:
-                </Text>
-              </LinearGradient>
-              {/*  */}
-              <View className="border-l border-[#E8E7E780]">
-                <Text className="w-[155px] pl-1 py-2 font-Onest text-[12px] text-white">
-                  {viewLoan && loans[viewLoan].purpose}
-                </Text>
-              </View>
-            </View>
-            <View className="flex flex-row border border-[#E8E7E780] rounded-[2px]">
-              <LinearGradient
-                colors={["#F4F4F433", "#FFFFFF0B"]}
-                className="w-[112px] "
-              >
-                <Text className=" pl-1 py-2 font-Onest text-[12px] text-white">
-                  Cooperative:
-                </Text>
-              </LinearGradient>
-              <View className="border-l border-[#E8E7E780]">
-                <Text className="w-[155px] pl-1 py-2 font-Onest text-[12px] text-white">
-                  {viewLoan && loans[viewLoan].cooperative.name}
-                </Text>
-              </View>
-            </View>
-            <View className="flex flex-row border border-[#E8E7E780] rounded-[2px]">
-              <LinearGradient
-                colors={["#F4F4F433", "#FFFFFF0B"]}
-                className="w-[112px] "
-              >
-                <Text className=" pl-1 py-2 font-Onest text-[12px] text-white">
-                  Status:
-                </Text>
-              </LinearGradient>
-              <View className="border-l border-[#E8E7E780]">
-                <Text className="w-[155px] pl-1 py-2 font-Onest text-[12px] text-white">
-                  {viewLoan && loans[viewLoan].status}
-                </Text>
-              </View>
-            </View>
-            <View className="flex flex-row border border-[#E8E7E780] rounded-[2px]">
-              <LinearGradient
-                colors={["#F4F4F433", "#FFFFFF0B"]}
-                className="w-[112px] "
-              >
-                <Text className=" pl-1 py-2 font-Onest text-[12px] text-white">
-                  Time:
-                </Text>
-              </LinearGradient>
-              <View className="border-l border-[#E8E7E780]">
-                <Text className="w-[155px] pl-1 py-2 font-Onest text-[12px] text-white">
-                  {viewLoan && formattedDate(loans[viewLoan].updatedAt)}
-                </Text>
-              </View>
-            </View>
-          </View>
-        </View>
+        <MembersLoanDetails
+          loan={viewLoan !== null ? loans[viewLoan] : {}}
+          viewLoan={viewLoan}
+          setShowDetails={setShowDetails}
+          formattedDate={formattedDate}
+        />
       </Modal>
     </View>
   );

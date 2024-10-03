@@ -6,7 +6,7 @@ import CircleProgress from "../../../../components/CircleProgress";
 import CustomButton from "../../../../components/CustomButton";
 import CustomModal from "../../../../components/CustomModal";
 
-import { router } from "expo-router";
+import { useRouter } from "expo-router";
 
 import { useEffect, useState } from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
@@ -19,7 +19,6 @@ const JoinStages = () => {
   const [banks, setBanks] = useState<any[]>([]);
   const [isVerifying, setIsVerifying] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
-  // const [error, setError] = useState<string | null>(null);
   const axiosInstance = useAxiosInstance();
   const [form, setForm] = useState({
     accName: "",
@@ -30,6 +29,7 @@ const JoinStages = () => {
     bankCode: "",
   });
   const { cooperativeName, coopUuid } = useAuthStore();
+  const router = useRouter();
 
   useEffect(() => {
     const fetchBanks = async () => {
@@ -42,7 +42,7 @@ const JoinStages = () => {
 
         setBanks(bankList);
       } catch (error) {
-        // setError("Failed to load banks");
+        console.log(error);
       }
     };
 
@@ -76,11 +76,10 @@ const JoinStages = () => {
           });
           setIsVerified(true);
         } else {
-          // setError("Account name not found");
           setIsVerified(false);
         }
       } catch (error) {
-        // setError("Invalid account number or bank.");
+        console.log(error);
         setForm((prevForm) => ({
           ...prevForm,
           accountName: "",
@@ -89,8 +88,6 @@ const JoinStages = () => {
       } finally {
         setIsVerifying(false);
       }
-    } else {
-      // setError("Account number must be exactly 10 digits");
     }
   };
 
@@ -122,6 +119,7 @@ const JoinStages = () => {
         text1: `Loan request sent successfully`,
       });
       setIsModalVisible(num);
+      router.replace("/(root)/(tabs)/finance");
     } catch (err) {
       console.log(err);
       Toast.show({
