@@ -4,7 +4,6 @@ import useAuthStore from "../store";
 // Create an Axios instance
 const axiosInstance = axios.create({
   baseURL: "https://thrivia.homease.ng",
-  timeout: 10000,
   headers: {
     "Content-Type": "application/json",
   },

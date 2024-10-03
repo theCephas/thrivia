@@ -5,12 +5,14 @@ import {
   View,
   RefreshControl,
   ActivityIndicator,
+  TouchableOpacity,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
 import { useAxiosInstance } from "../../../constants/axiosInstance";
 import useAuthStore from "../../../store";
 import useFetchWallets from "../../../constants/useFetchWallets";
+import LoanMain from "../../../components/applyLoanStages/LoanMain";
 
 const Finance = () => {
   const [withdrawalRequests, setWithdrawalRequests] = useState<any[]>([]);
@@ -22,6 +24,7 @@ const Finance = () => {
   const [refreshing, setRefreshing] = useState(false);
   const [loading, setLoading] = useState(false);
   const { wallets } = useFetchWallets("member");
+  const [options, setOptions] = useState("Withdrawal Requests");
 
   // Fetch withdrawal requests
   const getWithdrawalRequests = useCallback(async () => {
@@ -103,68 +106,80 @@ const Finance = () => {
     <>
       {role === "MEMBER" ? (
         <SafeAreaView className="flex-1 flex items-center flex-col bg-[#1d2128]">
-          <View className="flex-row flex justify-between items-center p-4">
-            <Text className="text-white font-OnestSemiBold mt-5 text-center text-[15px]">
-              Withdrawal Requests
-            </Text>
-          </View>
-          <ScrollView
-            contentContainerStyle={{ paddingBottom: 80 }}
-            refreshControl={
-              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-            }
-            className="w-full p-4"
-          >
-            {loading ? (
-              <View className="w-full pl-4">
-                <ActivityIndicator size="large" color="#FFFFFF" />
-              </View>
-            ) : membersWithdrawalRequests.length === 0 ? (
-              <View className="w-full flex items-center mt-10">
-                <Text className="text-white text-lg font-Onest">
-                  No withdrawal requests yet
+          <View className="flex-row flex items-center gap-6 p-4">
+            {["Withdrawal Requests", "Loans"].map((text) => (
+              <TouchableOpacity key={text} onPress={() => setOptions(text)}>
+                <Text
+                  className={`text-white font-OnestSemiBold mt-5 text-center text-[15px] pb-1 border-b-2 ease-linear duration-500 ${
+                    options === text ? "border-primary" : "border-transparent"
+                  }`}
+                >
+                  {text}
                 </Text>
-              </View>
-            ) : (
-              <View className="">
-                {membersWithdrawalRequests.map((request, index) => (
-                  <View
-                    key={index}
-                    className="bg-[#2d3038] p-4 mb-4 rounded-lg"
-                  >
-                    <Text className="text-white font-OnestSemiBold text-[16px]">
-                      {request.accountName} | <Text>{request.bankName}</Text>
-                    </Text>
-                    <Text className="text-white/90 mt-2 font-Onest text-[14px]">
-                      Member Name:{" "}
-                      {request.wallet.cooperative.createdBy.firstName}{" "}
-                      {request.wallet.cooperative.createdBy.lastName}
-                    </Text>
-                    <Text className="text-white/90 mt-2 font-Onest text-[14px]">
-                      Amount: <Text className=" ">₦{request.amount}</Text>
-                    </Text>
-                    <Text
-                      className={`text-white/90 mt-1 font-Onest text-[14px]`}
+              </TouchableOpacity>
+            ))}
+          </View>
+
+          {options === "Withdrawal Requests" && (
+            <ScrollView
+              contentContainerStyle={{ paddingBottom: 80 }}
+              refreshControl={
+                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+              }
+              className="w-full p-4"
+            >
+              {loading ? (
+                <View className="w-full pl-4">
+                  <ActivityIndicator size="large" color="#FFFFFF" />
+                </View>
+              ) : membersWithdrawalRequests.length === 0 ? (
+                <View className="w-full flex items-center mt-10">
+                  <Text className="text-white text-lg font-Onest">
+                    No withdrawal requests yet
+                  </Text>
+                </View>
+              ) : (
+                <View className="">
+                  {membersWithdrawalRequests.map((request, index) => (
+                    <View
+                      key={index}
+                      className="bg-[#2d3038] p-4 mb-4 rounded-lg"
                     >
-                      Status:{" "}
-                      <Text
-                        className={`${
-                          request.status === "PENDING"
-                            ? "text-amber-400"
-                            : request.status === "APPROVED"
-                            ? "text-green-400"
-                            : "text-red-400"
-                        } font-OnestSemiBold
-                    `}
-                      >
-                        {request.status}
+                      <Text className="text-white font-OnestSemiBold text-[16px]">
+                        {request.accountName} | <Text>{request.bankName}</Text>
                       </Text>
-                    </Text>
-                  </View>
-                ))}
-              </View>
-            )}
-          </ScrollView>
+                      <Text className="text-white/90 mt-2 font-Onest text-[14px]">
+                        Member Name:{" "}
+                        {request.wallet.cooperative.createdBy.firstName}{" "}
+                        {request.wallet.cooperative.createdBy.lastName}
+                      </Text>
+                      <Text className="text-white/90 mt-2 font-Onest text-[14px]">
+                        Amount: <Text className=" ">₦{request.amount}</Text>
+                      </Text>
+                      <Text
+                        className={`text-white/90 mt-1 font-Onest text-[14px]`}
+                      >
+                        Status:{" "}
+                        <Text
+                          className={`${
+                            request.status === "PENDING"
+                              ? "text-amber-400"
+                              : request.status === "APPROVED"
+                              ? "text-green-400"
+                              : "text-red-400"
+                          } font-OnestSemiBold
+                    `}
+                        >
+                          {request.status}
+                        </Text>
+                      </Text>
+                    </View>
+                  ))}
+                </View>
+              )}
+            </ScrollView>
+          )}
+          {options === "Loans" && <LoanMain />}
         </SafeAreaView>
       ) : (
         <SafeAreaView className="flex-1 flex items-center flex-col bg-[#1d2128]">
@@ -173,6 +188,7 @@ const Finance = () => {
               Withdrawal Requests
             </Text>
           </View>
+
           <ScrollView
             contentContainerStyle={{ paddingBottom: 80 }}
             refreshControl={

@@ -1,21 +1,22 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import Thrivia from "../../../../assets/images/thrivia.png";
+
 import CircleProgress from "../../../../components/CircleProgress";
 
 import CustomButton from "../../../../components/CustomButton";
 import CustomModal from "../../../../components/CustomModal";
 import FormLoader from "../../../../components/FormLoader";
 import StageOne from "../../../../components/joinStages/StageOne";
-import StageTwo from "../../../../components/joinStages/StageTwo";
 import { useAxiosInstance } from "../../../../constants/axiosInstance";
 import useAuthStore from "../../../../store";
 
 import { router } from "expo-router";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import Toast from "react-native-toast-message";
+import StageTwo from "../../../../components/joinStages/StageTwo";
+import Thrivia from "../../../../assets/svg/Thrivia";
 
 const JoinStages = () => {
   const [currentStage, setCurrentStage] = useState(1);
@@ -24,11 +25,11 @@ const JoinStages = () => {
   const [form, setForm] = useState({
     uniqueID: "",
     memberNum: "",
-    fullName: `${user.firstName}${user.lastName}`,
+    fullName: `${user.firstName} ${user.lastName}`,
     date: "",
     address: "",
     email: user.email,
-    phoneNumber: user.phoneNumber,
+    phoneNumber: `${user.phoneNumber}`,
   });
   const axiosInstance = useAxiosInstance();
 
@@ -142,7 +143,7 @@ const JoinStages = () => {
           )}
           {currentStage < 2 && (
             <TouchableOpacity
-              onPress={() => router.push("/(root)/(tabs)/home")}
+              onPress={() => router.replace("/(root)/(tabs)/home")}
               className={`w-full p-3 mb-5 rounded-full flex flex-row justify-center items-center h-[44px] border border-white`}
             >
               <Text className="text-white font-Onest">Go home</Text>

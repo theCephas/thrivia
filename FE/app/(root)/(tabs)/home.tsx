@@ -291,7 +291,7 @@ const Home = () => {
                     {transactions.map((item, index) => {
                       const formattedDate = format(
                         new Date(item.createdAt),
-                        "d, EEEE yyyy - p"
+                        "d, MMMM yyyy - p"
                       );
 
                       return (

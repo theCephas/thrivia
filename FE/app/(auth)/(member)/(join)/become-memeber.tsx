@@ -43,9 +43,7 @@ const BecomeMemeber = () => {
         <View className="mt-[270px]">
           <CustomButton
             title="Proceed"
-            onPress={() =>
-              router.replace("/(auth)/(member)/(join)/join-stages")
-            }
+            onPress={() => router.push("/(auth)/(join)/join-stages")}
             className="mt-6"
           />
           <TouchableOpacity

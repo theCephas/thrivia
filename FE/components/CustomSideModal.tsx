@@ -41,8 +41,8 @@ const CustomSideModal: React.FC<CustomSideModalProps> = ({
   const [selectedCoop, setSelectedCoop] = useState<any>(null); // State to track the selected cooperative
 
   const handleLogout = async () => {
-    logout();
     router.replace("/(auth)/(member)/sign-in");
+    logout();
   };
 
   const handleCooperativeSelect = (coop: any) => {
@@ -149,7 +149,7 @@ const CustomSideModal: React.FC<CustomSideModalProps> = ({
         {/* Bottom Buttons */}
         <View className="absolute flex flex-col gap-y-5 bottom-0 px-3 bg-[#1D2128] border-t border-gray-300/50 w-full h-[150px]">
           <TouchableOpacity
-            onPress={() => router.push("/(auth)/(member)/(join)/join-stages")}
+            onPress={() => router.push("/(auth)/(join)/join-stages")}
             className="flex gap-x-4 flex-row"
           >
             <Plus width={16} height={16} />

@@ -27,7 +27,7 @@ const AddMoney = () => {
   const [transactionSuccess, setTransactionSuccess] = useState(false); // New state for success screen
   const [authorizedAmount, setAuthorizedAmount] = useState<number | null>(null); // Store authorized amount
   const axiosInstance = useAxiosInstance();
-
+  console.log(walletUuid);
   const paymentParameters = {
     amount: value,
     currency: "NGN",
@@ -44,12 +44,18 @@ const AddMoney = () => {
     try {
       const { transactionReference, authorizedAmount } = response;
       setAuthorizedAmount(authorizedAmount);
-
       const {
         data,
       } = await axiosInstance.post(
         `/cooperatives/verify-transaction/${transactionReference}`,
         { amount: authorizedAmount }
+      );
+
+      console.log(
+        "WALLET/PAYMENT: ",
+        data.uuid,
+        transactionReference,
+        walletUuid
       );
 
       if (role === "MEMBER") {
@@ -64,11 +70,13 @@ const AddMoney = () => {
       }
 
       if (data.amount) {
+        console.log(data);
         setTransactionSuccess(true); // Set success state to true to trigger success screen
       } else {
         Alert.alert("Error", "Transaction verification failed.");
       }
     } catch (error) {
+      console.log("err", error);
       console.error("Verification Error:", (error as any).response);
       Alert.alert(
         "Error",
@@ -80,6 +88,7 @@ const AddMoney = () => {
   };
 
   const onError = (response: any) => {
+    console.log("Payment failed: ", response);
     Alert.alert("Payment Failed", "The payment could not be completed.");
   };
 
